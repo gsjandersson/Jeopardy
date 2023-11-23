@@ -76,7 +76,7 @@ export default {
     text-transform: uppercase;
     letter-spacing: 0.25em;
     font-size: 2.5rem;
-    color: white;
+    color: red;
     padding-top:0.2em;
   }
   .logo img {
