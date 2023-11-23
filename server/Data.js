@@ -13,6 +13,11 @@ prototype of the Data object/class
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 ***********************************************/
 
+Data.prototype.getQuestions = function () {
+  const questions = readFileSync("./server/data/preparedquestions.json");
+  return JSON.parse(questions);
+}
+
 Data.prototype.getUILabels = function (lang = "en") {
   const labels = readFileSync("./server/data/labels-" + lang + ".json");
   return JSON.parse(labels);
