@@ -26,6 +26,7 @@
     <!-- Links for 'About' and 'FAQ' -->
     <a href="">{{ uiLabels.about }}</a>
     <a href="">FAQ</a>
+    <router-link to="/test/">Test</router-link>
   </ResponsiveNav>
 
   <!-- Headings and input for poll ID -->

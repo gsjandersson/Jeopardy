@@ -30,6 +30,11 @@ const router = createRouter({
       path: '/result/:id',
       name: 'ResultView',
       component: () => import('../views/ResultView.vue') // Route for viewing poll results, dynamically loading the ResultView component
+    },
+    {
+      path: '/test',
+      name: 'TestView',
+      component: () => import('../views/TestView.vue')
     }
   ]
 });
