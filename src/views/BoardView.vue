@@ -1,13 +1,20 @@
 <template>
   <header>
     <h1>Create the board</h1>
+    <button class="exit-button" @click="exitCreatorMode">Exit Creator Mode</button>
   </header>
 
   <main>
     <div class="jeopardy-board">
       <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
         <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square" @click="handleClick(indexRow, indexCol)">
-          {{ col.question || 'Click to Add Question' }}
+          <div v-if="!col.question">
+            Click to Add Question
+          </div>
+          <div v-else>
+            <div>Q: {{ col.question }}</div>
+            <div>A: {{ col.answer }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -22,17 +29,26 @@
 export default {
   data() {
     return {
-      questions: Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => ({ question: '' }))),
+      questions: Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => ({
+        question: '',
+        answer: ''
+      }))),
     };
   },
   methods: {
     handleClick(row, col) {
       const newQuestion = prompt('Enter the question:');
-      if (newQuestion !== null) {
+      const newAnswer = prompt('Enter the correct answer:');
+  
+      if (newQuestion !== null && newAnswer !== null) {
         this.questions[row][col].question = newQuestion;
+        this.questions[row][col].answer = newAnswer;
       }
-    }
-  }
+    },
+    exitCreatorMode() {
+      this.$router.push('/jstartview'); 
+    },
+  },
 };
 </script>
 
@@ -52,6 +68,10 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+  }
+
+  .exit-button{
+  background-color: yellow;
   }
 
   .jeopardy-board {
