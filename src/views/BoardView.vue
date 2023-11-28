@@ -1,5 +1,14 @@
 <template>
-<main>
+  
+<header>
+<h1> Create the board  
+</h1>
+
+</header>
+
+<body>
+    
+    <main>
     <div class="jeopardy-board">
       <div v-for="(row, indexRow) in 5" :key="indexRow" class="jeopardy-row">
         <div v-for="(col, indexCol) in 5" :key="indexCol" class="jeopardy-square" @click="handleClick(indexRow, indexCol)">
@@ -8,6 +17,12 @@
       </div>
     </div>
 </main>
+</body>
+
+
+<footer>
+Have fun 
+</footer>
   </template>
 
   
@@ -35,11 +50,21 @@
   };
   </script>
   
-  <style>
+  <style >
+  
+  header{background-color: #bdb3b3 ;}
 
-main {background-color: blue;
-    color: yellow;}
+   body {background-color: #073763ff;}
 
+main {
+    color: yellow;
+margin: 300px;
+}
+
+.jeopardy-board{width: 150%;}
+
+
+template { color: #000; }
 
   /* Add your CSS styles for the board, rows, and squares here */
   .jeopardy-board {
