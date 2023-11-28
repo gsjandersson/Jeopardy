@@ -27,7 +27,10 @@
     <a href="">{{ uiLabels.about }}</a>
     <a href="">FAQ</a>
     <router-link to="/test/">Test</router-link>
+    <router-link to="/board/">Board</router-link>
   </ResponsiveNav>
+
+
 
   <!-- Headings and input for poll ID -->
   <h1>{{ uiLabels["sales-pitch"] }}</h1>

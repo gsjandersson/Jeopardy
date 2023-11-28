@@ -1,49 +1,62 @@
 <template>
-    <div :style="{ backgroundColor: backgroundColor }">
-      <h1 :style="{ fontSize: fontSize + 'px' }">Hello World!</h1>
-      <input type="text" v-model="inputText" @input="handleInput">
-      <button :style="{ color: buttonColor }" @click="handleClick">{{ buttonText }}</button>
-      <button @click="resetButton">Reset</button>
+<main>
+    <div class="jeopardy-board">
+      <div v-for="(row, indexRow) in 5" :key="indexRow" class="jeopardy-row">
+        <div v-for="(col, indexCol) in 5" :key="indexCol" class="jeopardy-square" @click="handleClick(indexRow, indexCol)">
+          {{ questions[indexRow][indexCol].question || 'Click to Add Question' }}
+        </div>
+      </div>
     </div>
+</main>
   </template>
+
   
   <script>
   export default {
-    name: 'tView',
     data() {
       return {
-        buttonText: 'Click me',
-        buttonColor: 'black',
-        backgroundColor: 'white',
-        inputText: '',
-        fontSize: 16
-      }
+        questions: [
+          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
+          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
+          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
+          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
+          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }]
+        ]
+      };
     },
     methods: {
-      handleClick() {
-        this.buttonText = 'You clicked me!';
-        this.buttonColor = this.getRandomColor();
-        this.backgroundColor = this.getRandomColor();
-      },
-      handleInput() {
-        this.buttonColor = this.getRandomColor();
-        this.fontSize++;
-      },
-      resetButton() {
-        this.buttonText = 'Click me';
-        this.buttonColor = 'black';
-        this.fontSize = 16;
-        this.backgroundColor = 'white';
-        this.inputText = '';
-      },
-      getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
+      handleClick(row, col) {
+        const newQuestion = prompt('Enter the question:');
+        if (newQuestion !== null) {
+          this.questions[row][col].question = newQuestion;
         }
-        return color;
       }
     }
-  }
+  };
   </script>
+  
+  <style>
+
+main {background-color: blue;
+    color: yellow;}
+
+
+  /* Add your CSS styles for the board, rows, and squares here */
+  .jeopardy-board {
+    /* Style for the entire board */
+  }
+  .jeopardy-row {
+    /* Style for each row */
+    display: flex;
+  }
+  .jeopardy-square {
+    /* Style for each square */
+    border: 1px solid #000;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  </style>
