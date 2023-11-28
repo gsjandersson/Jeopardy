@@ -1,33 +1,44 @@
 <template>
   <div>
-    {{question}}
+    <!-- Display the current question -->
+    {{ question }}
   </div>
-  <BarsComponent v-bind:data="submittedAnswers"/>
 
-  <span>{{submittedAnswers}}</span>
+  <!-- Include the BarsComponent and bind data prop -->
+  <BarsComponent v-bind:data="submittedAnswers" />
+
+  <!-- Display submitted answers -->
+  <span>{{ submittedAnswers }}</span>
 </template>
 
 <script>
-// @ is an alias to /src
+// Import required modules
 import BarsComponent from '@/components/BarsComponent.vue';
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
+  // Component name and imported components
   name: 'ResultView',
   components: {
     BarsComponent
   },
+
+  // Initial data properties
   data: function () {
     return {
       question: "",
-      submittedAnswers: {
-      }
+      submittedAnswers: {}
     }
   },
+
+  // Lifecycle hook - component creation
   created: function () {
+    // Set pollId from route parameters and join the poll
     this.pollId = this.$route.params.id
     socket.emit('joinPoll', this.pollId)
+
+    // Listen for data updates and new questions from the server
     socket.on("dataUpdate", (update) => {
       this.submittedAnswers = update.a;
       this.question = update.q;
