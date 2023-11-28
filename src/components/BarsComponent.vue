@@ -1,4 +1,5 @@
 <template>
+<!-- En komponent i result view -->
 <div class="wrapper">
   <div class="bar" v-for="(item, key) in data" v-bind:key="key">
     <div v-bind:style="{height: item + 'px'}">

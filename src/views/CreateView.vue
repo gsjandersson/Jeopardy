@@ -21,11 +21,12 @@
     <button v-on:click="addQuestion">
       Add question
     </button>
-    <input type="number" v-model="questionNumber">
+    <input type="number" v-model="questionNumber" min="1">
     <button v-on:click="runQuestion">
       Run question
     </button>
     {{data}}
+    <!-- Tar en till result view -->
     <router-link v-bind:to="'/result/'+pollId">Check result</router-link>
   </div>
 </template>
@@ -42,7 +43,7 @@ export default {
       pollId: "",
       question: "",
       answers: ["", ""],
-      questionNumber: 0,
+      questionNumber: 1,
       data: {},
       uiLabels: {}
     }
@@ -75,3 +76,26 @@ export default {
   }
 }
 </script>
+
+<style>
+div {
+  margin: 1em;
+}
+
+input {
+  margin: 4px;
+}
+
+button {
+  margin: 4px;
+}
+
+button:hover {
+  background-color: lightgrey;
+  cursor: pointer;
+}
+
+
+
+
+</style>

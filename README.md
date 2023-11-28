@@ -19,13 +19,14 @@ npm install
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+npm run dev ## använd localhost:5173 tror jag
 ```
 
 ### Compile and Minify for Production
 
 ```sh
 npm run build
+    
 ```
 
 ### Lint with [ESLint](https://eslint.org/)

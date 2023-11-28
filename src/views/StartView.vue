@@ -1,14 +1,20 @@
 <template>
+
+  <!-- Det som står längst upp på sidan -->
   <header>
+    <!-- Navigeringen länst upp till vänster, kallas hamburger -->
     <div v-bind:class="['hamburger', {'close': !hideNav}]" 
          v-on:click="toggleNav">
+         <!-- öppnar och stänger navigeringen-->
     </div>
     <div class="logo">
-      <img src="/img/logo.png">
-      Polly polling tool 
+      <img src="/img/jeopardy.png">
+      Welcome to Jeopardy
       <img src="../assets/logo.svg">
     </div>
   </header>
+
+  <!-- ResponsiveNav component med möjlighet för eng och sve -->
   <ResponsiveNav v-bind:hideNav="hideNav">
     <button v-on:click="switchLanguage">{{uiLabels.changeLanguage}}</button>
     <router-link to="/create/">{{uiLabels.createPoll}}</router-link>
@@ -104,6 +110,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 1em 1em 1em 1em;
   }
   .hamburger::before {
     content: "☰";
