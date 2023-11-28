@@ -1,10 +1,9 @@
 <template>
   <div>
-    {{pollId}}
-    <QuestionComponent v-bind:question="question"
-              v-on:answer="submitAnswer($event)"/>
+    {{ pollId }}
+    <QuestionComponent v-bind:question="question" v-on:answer="submitAnswer($event)" />
 
-              <span>{{submittedAnswers}}</span>
+    <span>{{ submittedAnswers }}</span>
   </div>
 </template>
 
@@ -15,7 +14,7 @@ import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
-  name: 'PollView',
+  name: 'Poll VIEWWWWWW',
   components: {
     QuestionComponent
   },
@@ -41,7 +40,7 @@ export default {
   },
   methods: {
     submitAnswer: function (answer) {
-      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer})
+      socket.emit("submitAnswer", { pollId: this.pollId, answer: answer })
     }
   }
 }

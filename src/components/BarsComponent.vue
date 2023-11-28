@@ -8,8 +8,8 @@
     <div> 
       {{key}}
     </div>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -23,10 +23,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 span {
-  color:var(--background-color);
+  color: var(--background-color);
 }
+
 .bar {
   display: inline-block;
   width: 50px;
@@ -37,23 +37,27 @@ span {
   position: relative;
   top: -1.2em;
 }
+
 .bar:nth-child(1) div:nth-child(1) {
-  background-color:red;
+  background-color: red;
 }
+
 .bar:nth-child(2) div:nth-child(1) {
-  background-color:blue;
+  background-color: blue;
 }
+
 .bar:nth-child(3) div:nth-child(1) {
-  background-color:teal;
+  background-color: teal;
 }
+
 .bar:nth-child(4) div:nth-child(1) {
-  background-color:purple;
+  background-color: purple;
 }
+
 .bar:nth-child(5) div:nth-child(1) {
-  background-color:yellow;
+  background-color: yellow;
 }
 
 .wrapper {
-  padding:3em;
-}
-</style>
+  padding: 3em;
+}</style>

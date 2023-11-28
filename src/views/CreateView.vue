@@ -1,18 +1,16 @@
 <template>
   <div>
-    Poll link: 
+    Poll link:
     <input type="text" v-model="pollId">
     <button v-on:click="createPoll">
       Create poll
     </button>
     <div>
-      {{uiLabels.question}}:
+      {{ uiLabels.question }}:
       <input type="text" v-model="question">
       <div>
         Answers:
-        <input v-for="(_, i) in answers" 
-               v-model="answers[i]" 
-               v-bind:key="'answer'+i">
+        <input v-for="(_, i) in answers" v-model="answers[i]" v-bind:key="'answer' + i">
         <button v-on:click="addAnswer">
           Add answer alternative
         </button>
@@ -62,16 +60,16 @@ export default {
   },
   methods: {
     createPoll: function () {
-      socket.emit("createPoll", {pollId: this.pollId, lang: this.lang })
+      socket.emit("createPoll", { pollId: this.pollId, lang: this.lang })
     },
     addQuestion: function () {
-      socket.emit("addQuestion", {pollId: this.pollId, q: this.question, a: this.answers } )
+      socket.emit("addQuestion", { pollId: this.pollId, q: this.question, a: this.answers })
     },
     addAnswer: function () {
       this.answers.push("");
     },
     runQuestion: function () {
-      socket.emit("runQuestion", {pollId: this.pollId, questionNumber: this.questionNumber})
+      socket.emit("runQuestion", { pollId: this.pollId, questionNumber: this.questionNumber })
     }
   }
 }
