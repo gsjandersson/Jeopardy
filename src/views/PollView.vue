@@ -1,10 +1,9 @@
 <template>
   <div>
-    {{pollId}}
-    <QuestionComponent v-bind:question="question"
-              v-on:answer="submitAnswer($event)"/>
+    {{ pollId }}
+    <QuestionComponent v-bind:question="question" v-on:answer="submitAnswer($event)" />
 
-              <span>{{submittedAnswers}}</span>
+    <span>{{ submittedAnswers }}</span>
   </div>
 </template>
 
@@ -41,7 +40,7 @@ export default {
   },
   methods: {
     submitAnswer: function (answer) {
-      socket.emit("submitAnswer", {pollId: this.pollId, answer: answer})
+      socket.emit("submitAnswer", { pollId: this.pollId, answer: answer })
     }
   }
 }
