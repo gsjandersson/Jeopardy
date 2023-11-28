@@ -19,7 +19,7 @@
     <button v-on:click="addQuestion">
       Add question
     </button>
-    <input type="number" v-model="questionNumber" min="1">
+    <input type="number" v-model="questionNumber" min="0">
     <button v-on:click="runQuestion">
       Run question
     </button>
@@ -41,7 +41,7 @@ export default {
       pollId: "",
       question: "",
       answers: ["", ""],
-      questionNumber: 1,
+      questionNumber: 0,
       data: {},
       uiLabels: {}
     }
