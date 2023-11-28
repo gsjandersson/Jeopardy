@@ -45,6 +45,12 @@ const router = createRouter({
       path: '/board',
       name: 'BoardView',
       component: () => import('../views/BoardView.vue')
+      
+    },
+    {
+      path: '/quiz-id-view',
+      name: 'QuizIDView',
+      component: () => import('../views/QuizIDView.vue')
     }
   ]
 });
