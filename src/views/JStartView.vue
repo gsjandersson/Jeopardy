@@ -1,130 +1,157 @@
 <template>
+<main>
 
-  <!-- Det som står längst upp på sidan -->
+  <div> 
+    <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
+    <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
+  </div>
+
   <header>
-    <!-- Navigeringen länst upp till vänster, kallas hamburger -->
-    <div v-bind:class="['hamburger', {'close': !hideNav}]" 
-         v-on:click="toggleNav">
-         <!-- öppnar och stänger navigeringen-->
-    </div>
-    <div class="logo">
-      <img src="/img/jeopardy.png">
-      Welcome to Jeopardy
-      <img src="../assets/logo.svg">
-    </div>
+    <img src="/img/jeopardy.png" style="width: 50vw">
+    <h2 style="margin:1em">{{ uiLabels["sales-pitch"] }}</h2>
+    <h3 style="margin:1em">{{ uiLabels.subHeading }}</h3>
   </header>
 
-  <!-- ResponsiveNav component med möjlighet för eng och sve -->
-  <ResponsiveNav v-bind:hideNav="hideNav">
-    <button v-on:click="switchLanguage">{{ uiLabels.changeLanguage }}</button>
-    <router-link to="/create/">{{ uiLabels.createPoll }}</router-link>
-    <a href="">{{ uiLabels.about }}</a>
-    <a href="">FAQ</a>
-  </ResponsiveNav>
-  <h1>{{ uiLabels["sales-pitch"] }}</h1>
-  <h2>{{ uiLabels.subHeading }}</h2>
-  <label>
-    Write poll id:
-    <input type="text" v-model="id">
-  </label>
-  <router-link v-bind:to="'/poll/' + id">{{ uiLabels.participatePoll }}</router-link>
+  <body class="buttonContainer">
+    <div>
+      <button id="playButton"> 
+        <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/poll/' + id">{{ uiLabels.participatePoll }}</router-link> 
+      </button>
+    </div>
+    <div>
+      <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/create/' + id">{{ uiLabels.createPoll }}</router-link> </button>
+    </div>
+  </body>
+    
+    
+
+</main>
+
+  
+
 </template>
 
 <script>
+// Importing components and libraries
 import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
+  // Component name and imported components
   name: 'StartView',
   components: {
     ResponsiveNav
   },
+
+  // Initial data properties
   data: function () {
     return {
-      uiLabels: {},
-      id: "",
-      lang: localStorage.getItem("lang") || "en",
-      hideNav: true
+      uiLabels: {}, // Object for storing UI labels
+      id: "", // Input for poll ID
+      lang: localStorage.getItem("lang") || "en", // Language setting
+      hideNav: true // Flag for hiding the navigation menu
     }
   },
+
+  // Lifecycle hook - component creation
   created: function () {
+    // Emitting an event when the page is loaded and listening for initialization data
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels
     })
   },
+
+  // Methods for language switching and toggling the navigation menu
   methods: {
-    switchLanguage: function () {
-      if (this.lang === "en") {
-        this.lang = "sv"
-      }
-      else {
+    switchLanguageEnglish: function () {
+      if (this.lang === "sv") {
         this.lang = "en"
       }
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang)
     },
+    switchLanguageSwedish: function () {
+      if (this.lang === "en") {
+        this.lang = "sv"
+      }
+      localStorage.setItem("lang", this.lang);
+      socket.emit("switchLanguage", this.lang)
+    },
+
     toggleNav: function () {
       this.hideNav = !this.hideNav;
     }
   }
 }
 </script>
+
 <style scoped>
-header {
-  background-color: gray;
-  width: 100%;
+/* Scoped styles for the component */
+
+main {
+  background-color: #073763ff;
+  color: #ffff00;
+}
+
+body {
   display: grid;
   grid-template-columns: 2em auto;
 }
 
-.logo {
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  font-size: 2.5rem;
-  color: red;
-  padding-top: 0.2em;
+#UKflagga {
+  background-image: url(/img/UKflagga.png);
+  background-size: 100px 50px;
+  margin: 25px 10px 0 0;
+  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
+  top: 0; /* Position at the top of the viewport */
+  right: 15px; /* Position at the right of the viewport */
+  width: 100px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
 }
 
-.logo img {
-  height: 2.5rem;
-  vertical-align: bottom;
-  margin-right: 0.5rem;
+#sverigeflagga {
+  background-image: url(/img/sverigeflagga.png);
+  background-size: 100px 50px;
+  margin: 25px 10px 0 0;
+  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
+  top: 0; /* Position at the top of the viewport */
+  right: 125px; /* Position at the right of the viewport */
+  width: 100px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
 }
 
-.hamburger {
-  color: white;
-  width: 1em;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  padding: 0.5rem;
-  top: 0;
-  left: 0;
-  height: 2rem;
+header {
+  margin-bottom: 50px;
+}
+
+header img {
+  margin-top: 100px;
+}
+
+.buttonContainer{
+  display: grid;
+  grid-template-columns: 50vw 50vw;
+}
+
+button {
+  background-color: #073763ff;
+  margin-bottom: 200px;
+  padding: 1em;
+  width: 10em;
+}
+
+#playButton{
+  margin-left: 10px;
+}
+
+#createButton{
+  margin-right: 10px;
+}
+
+button:hover{
   cursor: pointer;
-  font-size: 1.5rem;
 }
 
-@media screen and (max-width:50em) {
-  .logo {
-    font-size: 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1em 1em 1em 1em;
-  }
-
-  .hamburger::before {
-    content: "☰";
-  }
-
-  .close::before {
-    content: "✕";
-  }
-
-  .hide {
-    left: -12em;
-  }
-}</style>
+</style>
