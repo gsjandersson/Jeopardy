@@ -29,7 +29,7 @@
             <div v-else-if="!col.question && this.lang=='sv'" >
               Klicka för att Lägga till Fråga
             </div>
-            <div v-else>
+            <div>
               <div>Q: {{ col.question }}</div>
               <div>A: {{ col.answer }}</div>
             </div>
