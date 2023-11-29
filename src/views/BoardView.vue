@@ -55,26 +55,10 @@ export default {
 
 <style>
 
-<<<<<<< HEAD
-main {
-    color: yellow;
-margin: 300px;
-}
-
-
-
-
-template { color: #000; }
-
-  /* Add your CSS styles for the board, rows, and squares here */
-  .jeopardy-board {
-    /* Style for the entire board */
-=======
   body {
     background-color: #073763ff;
     margin: 0;
     font-family: Arial, sans-serif;
->>>>>>> 642e22599a523eea6df013f18dff14c594aad2a5
   }
 
   main {
@@ -111,11 +95,6 @@ template { color: #000; }
     align-items: center;
     justify-content: center;
     cursor: pointer;
-<<<<<<< HEAD
-    width: 150%;
-   
-=======
     margin: 5px;
->>>>>>> 642e22599a523eea6df013f18dff14c594aad2a5
   }
 </style>
