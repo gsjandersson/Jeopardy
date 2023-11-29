@@ -4,7 +4,7 @@
     <h1>Create the board!</h1>
   </header>
   
-  <button @click="exitCreatorMode">Exit Creator Mode</button>
+  <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
   <button v-on:click="createPoll"> Create poll </button>
 
   <main>
