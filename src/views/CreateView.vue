@@ -122,7 +122,6 @@ button {
 }
 
 button:hover {
-  background-color: lightgrey;
   cursor: pointer;
 }
 </style>

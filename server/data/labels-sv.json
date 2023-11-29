@@ -1,10 +1,10 @@
 {
-	"sales-pitch": "Vad. Är. Frågan",
+	"sales-pitch": "Vad. Är. Frågan.",
 	"subHeading": "Klassiskt jeopardy men med dina vänner",
 	"invite": "Bjud in deltagare med den här länken:",
-	"createPoll": "Skapa quiz",
-	"participatePoll": "Delta i quiz",
+	"createPoll": "SKAPA",
+	"participatePoll": "SPELA",
 	"question": "Fråga",
-	"changeLanguage": "Change to English",
+	"changeLanguage": "",
 	"about": "Om oss"
 }

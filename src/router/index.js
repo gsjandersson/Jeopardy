@@ -37,9 +37,19 @@ const router = createRouter({
       component: () => import('../views/TestView.vue')
     },
     {
+      path: '/jStartView',
+      name: 'JStartView',
+      component: () => import('../views/JStartView.vue')
+    },
+    { 
       path: '/board',
       name: 'BoardView',
       component: () => import('../views/BoardView.vue')
+    },
+    { 
+      path: '/jCreateInfo',
+      name: 'JCreateInfo',
+      component: () => import('../views/JCreateInfo.vue')
     }
   ]
 });

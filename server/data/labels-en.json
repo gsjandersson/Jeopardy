@@ -1,10 +1,10 @@
 {
-	"sales-pitch": "What's. The. Question",
+	"sales-pitch": "What's. The. Question.",
 	"subHeading": "Classic Jeopardy but with your friends",
 	"invite": "Invite participants with this link:",
-	"createPoll": "Create quiz",
-	"participatePoll": "Participate in quix",
+	"createPoll": "CREATE",
+	"participatePoll": "PLAY",
 	"question": "Question",
-	"changeLanguage": "Byt till svenska",
+	"changeLanguage": "",
 	"about": "About"
 }

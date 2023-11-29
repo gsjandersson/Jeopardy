@@ -28,6 +28,7 @@
     <a href="">FAQ</a>
     <router-link to="/test/">Test</router-link>
     <router-link to="/board/">Board</router-link>
+    <router-link to="/JStartView/">J Start View</router-link>
   </ResponsiveNav>
 
 
