@@ -36,7 +36,7 @@
       </ol>
     </div>
 
-    <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/create/' + id">{{ uiLabels.createPoll }}</router-link> </button>
+    <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/BoardViewSteph/' + id">{{ uiLabels.createPoll }}</router-link> </button>
     
 </body>
 
