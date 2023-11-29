@@ -27,7 +27,7 @@
               <div v-if="this.lang=='en'">Click to add question</div>
               <div v-if="this.lang=='sv'">Klicka för att lägga till fråga</div>
             </div>
-            <div>
+            <div v-else>
               <div>Q: {{ col.question }}</div>
               <div>A: {{ col.answer }}</div>
             </div>
