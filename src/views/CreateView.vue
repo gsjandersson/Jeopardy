@@ -1,8 +1,7 @@
 <template>
   <div>
     <!-- Poll link input field -->
-    Poll link:
-    <input type="text" v-model="pollId">
+    Poll ID: {{ pollId }}
 
     <!-- Create poll button -->
     <button v-on:click="createPoll">
@@ -63,6 +62,13 @@ export default {
     }
   },
   created: function () {
+    // Fetch the pollId from the server
+    fetch('../../server/data/pollId.json')
+      .then(response => response.json())
+      .then(data => {
+        this.pollId = data.pollId;
+        console.log(this.pollId);
+      });
     // Lifecycle hook - component creation
     this.id = this.$route.params.id;
 
@@ -119,8 +125,4 @@ button:hover {
   background-color: lightgrey;
   cursor: pointer;
 }
-
-
-
-
 </style>
