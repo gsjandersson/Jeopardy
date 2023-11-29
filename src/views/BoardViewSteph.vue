@@ -1,22 +1,22 @@
 <template>
-<body>
-  <header>
-    <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-    <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-  </header>
+  <body>
+    <header>
+      <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
+      <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
+    </header>
 
-  <h1 v-if="this.lang=='en'">Create the board!</h1>
-  <h1 v-if="this.lang=='sv'">Skapa brädan!</h1>
-  
-  <div v-if="this.lang=='en'">
-    <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
-    <button v-on:click="createPoll"> Create Jeopardy Quiz</button>
-  </div>
+    <h1 v-if="this.lang == 'en'">Create the board!</h1>
+    <h1 v-if="this.lang == 'sv'">Skapa brädan!</h1>
 
-  <div v-if="this.lang=='sv'">
-    <button v-on:click="exitCreatorMode">Lämna Skaparläge</button>
-    <button v-on:click="createPoll"> Skapa Jeopardy Quiz</button>
-  </div>
+    <div v-if="this.lang == 'en'">
+      <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
+      <button v-on:click="createPoll"> Create Jeopardy Quiz</button>
+    </div>
+
+    <div v-if="this.lang == 'sv'">
+      <button v-on:click="exitCreatorMode">Lämna Skaparläge</button>
+      <button v-on:click="createPoll"> Skapa Jeopardy Quiz</button>
+    </div>
 
     <main>
       <div class="jeopardy-board">
@@ -37,8 +37,8 @@
     </main>
 
     <footer>
-      <p v-if="this.lang=='en'">Have fun!! </p>
-      <p v-if="this.lang=='sv'">Ha det så kul!! </p>
+      <p v-if="this.lang == 'en'">Have fun!! </p>
+      <p v-if="this.lang == 'sv'">Ha det så kul!! </p>
     </footer>
   </body>
 </template>
@@ -58,18 +58,20 @@ export default {
       }))),
     };
   },
-  created: function () {
+  methods: {
+    created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels
     })
-  },
-  methods: {
-      handleClick(row, col) {
+    },
+    handleClick(row, col) {
       const newQuestion = prompt('Enter the question:');
-      const newAnswer = prompt('Enter the correct answer:');
-  
+      if (newQuestion !== null) {
+        const newAnswer = prompt('Enter the correct answer:');
+      }
+
       if (newQuestion !== null && newAnswer !== null) {
         this.questions[row][col].question = newQuestion;
         this.questions[row][col].answer = newAnswer;
@@ -105,6 +107,8 @@ body {
   margin: 0;
   color: #ffff00;
   font-family: Arial, sans-serif;
+  padding: 0;
+  height: 100vh;
 }
 
 main {
@@ -121,7 +125,7 @@ h1 {
   background-image: url(/img/UKflagga.png);
   background-size: 100px 50px;
   margin: 25px 10px 0 0;
-  position: absolute; /* Fixed position allows the image to stay in the same place even when scrolling */
+  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
   top: 0; /* Position at the top of the viewport */
   right: 15px; /* Position at the right of the viewport */
   width: 100px; /* Adjust the width as needed */
@@ -132,7 +136,7 @@ h1 {
   background-image: url(/img/sverigeflagga.png);
   background-size: 100px 50px;
   margin: 25px 10px 0 0;
-  position: absolute; /* Fixed position allows the image to stay in the same place even when scrolling */
+  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
   top: 0; /* Position at the top of the viewport */
   right: 125px; /* Position at the right of the viewport */
   width: 100px; /* Adjust the width as needed */
@@ -169,5 +173,4 @@ button {
   justify-content: center;
   cursor: pointer;
   margin: 5px;
-}
-</style>
+}</style>
