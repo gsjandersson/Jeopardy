@@ -2,31 +2,43 @@
   <body>
     <main>
 
-      <div style="margin: 0; padding: 0;">
+      <div>
         <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
         <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
       </div>
 
       <header>
-        <img src="/img/jeopardy.png" style="width: 50vw">
-        <h2 style="margin:1em">{{ uiLabels["sales-pitch"] }}</h2>
-        <h3 style="margin:1em">{{ uiLabels.subHeading }}</h3>
+        <h1 v-if="this.lang == 'en'">HOW TO CREATE A QUIZ</h1>
+        <h1 v-if="this.lang == 'sv'">HUR SKAPAR DU ETT QUIZ</h1>
       </header>
 
-      <div class="buttonContainer">
-        <div>
-          <button id="playButton">
-            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/poll/' + id">{{ uiLabels.participatePoll
-            }}</router-link>
-          </button>
-        </div>
-        <div>
-          <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em"
-              v-bind:to="'/JCreateInfo/' + id">{{ uiLabels.createPoll }}</router-link> </button>
-        </div>
+
+      <div>
+        <ol v-if="this.lang == 'en'">
+          <li>Write 5 topics</li>
+          <li>Click on each $ box to create a new question</li>
+          <li>Type the question</li>
+          <li>Click on YES or NO to mark the right answer</li>
+          <li>Press Complete and return to Jeopardy Board to lock in the answer</li>
+          <li>The completed questions will be marked with a lighter colour</li>
+          <li>Continue to fill in the rest of the questions</li>
+          <li>Great job, you have created your own Jeopardy!</li>
+        </ol>
+
+        <ol v-if="this.lang == 'sv'">
+          <li>Skriv 5 ämnen</li>
+          <li>Klicka på de olika $ i tabellen för att skapa nya frågor</li>
+          <li>Skiv ut frågan</li>
+          <li>Klicka på JA eller NEJ för att märkera rätt svar</li>
+          <li>Tryck klar och returnera till Jeopardy brädan för att låsa in svaret</li>
+          <li>De klarskrivna frågorna märkeras med en ljusare färg</li>
+          <li>Fortsätt att fylla i resten av frågorna</li>
+          <li>Bra jobbat, du har skapat ditt eget Jeopardy!</li>
+        </ol>
       </div>
 
-
+      <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em"
+          v-bind:to="'/BoardViewSteph/' + id">{{ uiLabels.createPoll }}</router-link> </button>
     </main>
   </body>
 </template>
@@ -39,7 +51,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'StartView',
+  name: 'JCreateInfoSwe',
   components: {
     ResponsiveNav
   },
@@ -99,10 +111,6 @@ body {
   height: 100vh;
 }
 
-main {
-  display: grid;
-  grid-template-columns: 2em auto;
-}
 
 #UKflagga {
   background-image: url(/img/UKflagga.png);
@@ -137,33 +145,31 @@ main {
 }
 
 header {
-  margin-bottom: 50px;
+  background-color: #073763ff;
+  margin: 0; /* Set margin to 0 to remove any default margin */
+  padding-top: 100px; /* Set padding to 0 to remove any default padding */
 }
 
-header img {
-  margin-top: 100px;
-}
-
-.buttonContainer {
-  display: grid;
-  grid-template-columns: 50vw 50vw;
+h1 {
+  background-color: #073763ff;
+  margin: 0; /* Set margin to 0 to remove any default margin */
+  padding: 0; /* Set padding to 0 to remove any default padding */
 }
 
 button {
   background-color: #073763ff;
-  margin-bottom: 200px;
-  padding: 1em;
   width: 10em;
-}
-
-#playButton {
-  margin-left: 10px;
-}
-
-#createButton {
-  margin-right: 10px;
+  margin: 0; /* Set margin to 0 to remove any default margin */
+  padding: 0; /* Set padding to 0 to remove any default padding */
 }
 
 button:hover {
   cursor: pointer;
+}
+
+ol {
+  text-align: left;
+  display: inline-block;
+  margin: 0; /* Set margin to 0 to remove any default margin */
+  padding: 50px; /* Set padding to 0 to remove any default padding */
 }</style>

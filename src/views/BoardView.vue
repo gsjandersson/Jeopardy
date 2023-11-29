@@ -1,61 +1,61 @@
 <template>
+  <header>
+    <h1>Create the board!</h1>
+  </header>
   
-<header>
-<h1> Create the board  
-</h1>
+  <button class="exit-button" @click="exitCreatorMode">Exit Creator Mode</button>
 
-</header>
-
-<body>
-    
-    <main>
+  <main>
     <div class="jeopardy-board">
-      <div v-for="(row, indexRow) in 5" :key="indexRow" class="jeopardy-row">
-        <div v-for="(col, indexCol) in 5" :key="indexCol" class="jeopardy-square" @click="handleClick(indexRow, indexCol)">
-          {{ questions[indexRow][indexCol].question || 'Click to Add Question' }}
+      <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
+        <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square" @click="handleClick(indexRow, indexCol)">
+          <div v-if="!col.question">
+            Click to Add Question
+          </div>
+          <div v-else>
+            <div>Q: {{ col.question }}</div>
+            <div>A: {{ col.answer }}</div>
+          </div>
         </div>
       </div>
     </div>
-</main>
-</body>
+  </main>
 
+  <footer>
+    Have fun!!
+  </footer>
+</template>
 
-<footer>
-Have fun 
-</footer>
-  </template>
-
+<script>
+export default {
+  data() {
+    return {
+      questions: Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => ({
+        question: '',
+        answer: ''
+      }))),
+    };
+  },
+  methods: {
+    handleClick(row, col) {
+      const newQuestion = prompt('Enter the question:');
+      const newAnswer = prompt('Enter the correct answer:');
   
-  <script>
-  export default {
-    data() {
-      return {
-        questions: [
-          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
-          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
-          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
-          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }],
-          [{ question: '' }, { question: '' }, { question: '' }, { question: '' }, { question: '' }]
-        ]
-      };
-    },
-    methods: {
-      handleClick(row, col) {
-        const newQuestion = prompt('Enter the question:');
-        if (newQuestion !== null) {
-          this.questions[row][col].question = newQuestion;
-        }
+      if (newQuestion !== null && newAnswer !== null) {
+        this.questions[row][col].question = newQuestion;
+        this.questions[row][col].answer = newAnswer;
       }
-    }
-  };
-  </script>
-  
-  <style >
-  
-  header{background-color: #bdb3b3 ;}
+    },
+    exitCreatorMode() {
+      this.$router.push('/jstartview'); 
+    },
+  },
+};
+</script>
 
-   body {background-color: #073763ff;}
+<style>
 
+<<<<<<< HEAD
 main {
     color: yellow;
 margin: 300px;
@@ -69,21 +69,53 @@ template { color: #000; }
   /* Add your CSS styles for the board, rows, and squares here */
   .jeopardy-board {
     /* Style for the entire board */
+=======
+  body {
+    background-color: #073763ff;
+    margin: 0;
+    font-family: Arial, sans-serif;
+>>>>>>> 642e22599a523eea6df013f18dff14c594aad2a5
   }
+
+  main {
+    color: yellow;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .exit-button {
+  color: yellow;
+  font-size: 1em;
+  background-color: #073763ff;
+  padding: 1em;
+  width: 10em;
+  text-decoration: underline;
+  }
+
+  .jeopardy-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .jeopardy-row {
-    /* Style for each row */
     display: flex;
   }
+
   .jeopardy-square {
-    /* Style for each square */
     border: 1px solid #000;
-    width: 100px;
+    width: 250px;
     height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+<<<<<<< HEAD
     width: 150%;
    
+=======
+    margin: 5px;
+>>>>>>> 642e22599a523eea6df013f18dff14c594aad2a5
   }
-  </style>
+</style>
