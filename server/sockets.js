@@ -13,13 +13,6 @@ function sockets(io, socket, data) {
 
   socket.on('createPoll', function (d) {
     socket.emit('pollCreated', data.createPoll(d.pollId, d.lang));
-
-    // Increase the pollId by 1
-    d.pollId++;
-
-    // Update the pollId in the pollId.json file
-    fs.writeFileSync('server/data/pollId.json', JSON.stringify({ pollId: d.pollId }));
-
   });
 
   socket.on('addQuestion', function (d) {

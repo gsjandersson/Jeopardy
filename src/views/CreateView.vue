@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- Poll link input field -->
-    Poll ID: {{ pollId }}
+    Poll link:
+    <input type="text" v-model="pollId">
 
     <!-- Create poll button -->
     <button v-on:click="createPoll">
@@ -35,7 +36,7 @@
     </button>
 
     <!-- Display data -->
-    {{ data }}
+    {{ data }} <!-- Tror inte att det här är rätt-->
 
     <!-- Router link to check result -->
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
@@ -62,13 +63,6 @@ export default {
     }
   },
   created: function () {
-    // Fetch the pollId from the server
-    fetch('../../server/data/pollId.json')
-      .then(response => response.json())
-      .then(data => {
-        this.pollId = data.pollId;
-        console.log(this.pollId);
-      });
     // Lifecycle hook - component creation
     this.id = this.$route.params.id;
 
@@ -96,6 +90,7 @@ export default {
     },
     addQuestion: function () {
       socket.emit("addQuestion", { pollId: this.pollId, q: this.question, a: this.answers })
+      console.log(this);
     },
     addAnswer: function () {
       this.answers.push("");
