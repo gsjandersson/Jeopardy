@@ -37,8 +37,8 @@
   
   <style>
 
-main {background-color: blue;
-    color: yellow;}
+main {background-color: #073763ff;
+    color: #ffff00;}
 
 
   /* Add your CSS styles for the board, rows, and squares here */

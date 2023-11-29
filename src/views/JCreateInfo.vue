@@ -8,27 +8,29 @@
   </div>
 
   <header>
-    <img src="/img/jeopardy.png" style="width: 50vw">
-    <h2 style="margin:1em">{{ uiLabels["sales-pitch"] }}</h2>
-    <h3 style="margin:1em">{{ uiLabels.subHeading }}</h3>
+    <h1>HOW TO CREATE A QUIZ</h1>
   </header>
 
-  <div class="buttonContainer">
-    <div>
-      <button id="playButton"> 
-        <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/poll/' + id">{{ uiLabels.participatePoll }}</router-link> 
-      </button>
-    </div>
-    <div>
-      <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/' + id">{{ uiLabels.createPoll }}</router-link> </button>
-    </div>
-  </div>
   
+    <div>
+      <ol style="text-align: left;">
+        <li>Write 5 topics</li>
+        <li>Click on each $ box to create a new question</li>
+        <li>Type the question</li>
+        <li>Click on YES or NO to mark the right answer</li>
+        <li>Press Complete and return to Jeopardy Board to lock in the answer</li>
+        <li>The completed questions will be marked with a lighter colour</li>
+        <li>Continue to fill in the rest of the questions</li>
+        <li>Great job, you have created a quiz!</li>
+      </ol>
+    </div>
+
+    <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/create/' + id">{{ uiLabels.createPoll }}</router-link> </button>
     
+
 </main>
 </body>
 
-  
 
 </template>
 
@@ -40,7 +42,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'StartView',
+  name: 'JCreateInfo',
   components: {
     ResponsiveNav
   },
@@ -96,10 +98,6 @@ body {
   color: #ffff00;
 }
 
-main {
-  display: grid;
-  grid-template-columns: 2em auto;
-}
 
 #UKflagga {
   background-image: url(/img/UKflagga.png);
@@ -127,7 +125,7 @@ header {
   margin-bottom: 50px;
 }
 
-header img {
+h1 {
   margin-top: 100px;
 }
 
