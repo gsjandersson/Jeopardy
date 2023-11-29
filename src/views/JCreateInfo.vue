@@ -51,7 +51,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'JCreateInfoSwe',
+  name: 'JCreateInfo',
   components: {
     ResponsiveNav
   },

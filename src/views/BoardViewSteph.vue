@@ -2,6 +2,7 @@
 <body>
   <header>
     <h1>Create the board!</h1>
+    <h1>Create the board!</h1>
   </header>
   
   <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
@@ -32,8 +33,8 @@
 <script>
 export default {
   data() {
-
     return {
+      lang: localStorage.getItem("lang") || "en",
       questions: Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => ({
         question: '',
         answer: ''
