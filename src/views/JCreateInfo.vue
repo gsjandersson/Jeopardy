@@ -160,7 +160,7 @@ button {
   background-color: #073763ff;
   width: 10em;
   margin: 0; /* Set margin to 0 to remove any default margin */
-  padding: 0; /* Set padding to 0 to remove any default padding */
+  padding: 1em; /* Set padding to 0 to remove any default padding */
 }
 
 button:hover {
