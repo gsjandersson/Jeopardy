@@ -1,11 +1,11 @@
 <template>
-<body>
-  <header>
-    <h1>Create the board!</h1>
-  </header>
-  
-  <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
-  <button v-on:click="createPoll"> Create poll </button>
+  <body>
+    <header>
+      <h1>Create the board!</h1>
+    </header>
+
+    <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
+    <button v-on:click="createPoll"> Create poll </button>
 
     <main>
       <div class="jeopardy-board">
@@ -44,9 +44,10 @@ export default {
   methods: {
     handleClick(row, col) {
       const newQuestion = prompt('Enter the question:');
-      if (newQuestion !== null) {
-        const newAnswer = prompt('Enter the correct answer:');
-      }
+      const newAnswer = prompt('Enter the correct answer:');
+
+      console.log(newQuestion);
+      console.log(newAnswer);
 
       if (newQuestion !== null && newAnswer !== null) {
         this.questions[row][col].question = newQuestion;
