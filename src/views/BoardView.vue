@@ -61,7 +61,7 @@ main {
 margin: 300px;
 }
 
-.jeopardy-board{width: 150%;}
+
 
 
 template { color: #000; }
@@ -83,5 +83,7 @@ template { color: #000; }
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    width: 150%;
+   
   }
   </style>
