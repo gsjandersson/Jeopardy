@@ -30,7 +30,7 @@
     </button>
 
     <!-- Input field for question number and button to run the question -->
-    <input type="number" v-model="questionNumber" min="1">
+    <input type="number" v-model="questionNumber">
     <button v-on:click="runQuestion">
       Run question
     </button>

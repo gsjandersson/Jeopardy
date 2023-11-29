@@ -58,25 +58,23 @@ export default {
       }))),
     };
   },
-  methods: {
-    created: function () {
+  created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels
     })
     },
+  methods: {
     handleClick(row, col) {
       const newQuestion = prompt('Enter the question:');
-      if (newQuestion !== null) {
-        const newAnswer = prompt('Enter the correct answer:');
-      }
-
+      const newAnswer = prompt('Enter the correct answer:');
+  
       if (newQuestion !== null && newAnswer !== null) {
         this.questions[row][col].question = newQuestion;
         this.questions[row][col].answer = newAnswer;
       }
-      }, 
+    },
     exitCreatorMode() {
       this.$router.push('/jstartview');
     },
@@ -108,7 +106,6 @@ body {
   color: #ffff00;
   font-family: Arial, sans-serif;
   padding: 0;
-  height: 100vh;
 }
 
 main {
