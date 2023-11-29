@@ -1,33 +1,31 @@
 <template>
-<body>
-  <header>
-    <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-    <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-  </header>
+  <body>
+    <header>
+      <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
+      <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
+    </header>
 
-  <h1 v-if="this.lang=='en'">Create the board!</h1>
-  <h1 v-if="this.lang=='sv'">Skapa brädan!</h1>
-  
-  <div v-if="this.lang=='en'">
-    <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
-    <button v-on:click="createPoll"> Create Jeopardy Quiz</button>
-  </div>
+    <h1 v-if="this.lang == 'en'">Create the board!</h1>
+    <h1 v-if="this.lang == 'sv'">Skapa brädan!</h1>
 
-  <div v-if="this.lang=='sv'">
-    <button v-on:click="exitCreatorMode">Lämna Skaparläge</button>
-    <button v-on:click="createPoll"> Skapa Jeopardy Quiz</button>
-  </div>
+    <div v-if="this.lang == 'en'">
+      <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
+      <button v-on:click="createPoll"> Create Jeopardy Quiz</button>
+    </div>
+
+    <div v-if="this.lang == 'sv'">
+      <button v-on:click="exitCreatorMode">Lämna Skaparläge</button>
+      <button v-on:click="createPoll"> Skapa Jeopardy Quiz</button>
+    </div>
 
     <main>
       <div class="jeopardy-board">
         <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
             @click="handleClick(indexRow, indexCol)">
-            <div v-if="!col.question && this.lang=='en'" >
-              Click to Add Question
-            </div>
-            <div v-else-if="!col.question && this.lang=='sv'" >
-              Klicka för att Lägga till Fråga
+            <div v-if="!col.question" >
+              <div v-if="this.lang=='en'">Click to add question</div>
+              <div v-if="this.lang=='sv'">Klicka för att lägga till fråga</div>
             </div>
             <div>
               <div>Q: {{ col.question }}</div>
@@ -39,13 +37,16 @@
     </main>
 
     <footer>
-      <p v-if="this.lang=='en'">Have fun!! </p>
-      <p v-if="this.lang=='sv'">Ha det så kul!! </p>
+      <p v-if="this.lang == 'en'">Have fun!! </p>
+      <p v-if="this.lang == 'sv'">Ha det så kul!! </p>
     </footer>
   </body>
 </template>
 
 <script>
+import io from 'socket.io-client';
+const socket = io("localhost:3000");
+
 export default {
   data() {
     return {
@@ -75,7 +76,7 @@ export default {
         this.questions[row][col].question = newQuestion;
         this.questions[row][col].answer = newAnswer;
       }
-    },
+      }, 
     exitCreatorMode() {
       this.$router.push('/jstartview');
     },
@@ -106,12 +107,18 @@ body {
   margin: 0;
   color: #ffff00;
   font-family: Arial, sans-serif;
+  padding: 0;
+  height: 100vh;
 }
 
 main {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  padding-top: 20px;
+}
+
+h1 {
+  padding-top: 100px;
 }
 
 #UKflagga {
@@ -166,5 +173,4 @@ button {
   justify-content: center;
   cursor: pointer;
   margin: 5px;
-}
-</style>
+}</style>
