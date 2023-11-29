@@ -1,11 +1,11 @@
 <template>
-  <body>
-    <header>
-      <h1>Create the board!</h1>
-    </header>
-
-    <button @click="exitCreatorMode">Exit Creator Mode</button>
-    <button v-on:click="createPoll"> Create poll </button>
+<body>
+  <header>
+    <h1>Create the board!</h1>
+  </header>
+  
+  <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
+  <button v-on:click="createPoll"> Create poll </button>
 
     <main>
       <div class="jeopardy-board">
