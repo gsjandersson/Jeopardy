@@ -1,8 +1,9 @@
 <template>
   <header>
-    <h1>Create the board</h1>
-    <button class="exit-button" @click="exitCreatorMode">Exit Creator Mode</button>
+    <h1>Create the board!</h1>
   </header>
+  
+  <button class="exit-button" @click="exitCreatorMode">Exit Creator Mode</button>
 
   <main>
     <div class="jeopardy-board">
@@ -21,7 +22,7 @@
   </main>
 
   <footer>
-    Have fun
+    Have fun!!
   </footer>
 </template>
 
@@ -53,9 +54,6 @@ export default {
 </script>
 
 <style>
-  header {
-    background-color: #bdb3b3;
-  }
 
   body {
     background-color: #073763ff;
@@ -70,8 +68,13 @@ export default {
     margin-top: 20px;
   }
 
-  .exit-button{
-  background-color: yellow;
+  .exit-button {
+  color: yellow;
+  font-size: 1em;
+  background-color: #073763ff;
+  padding: 1em;
+  width: 10em;
+  text-decoration: underline;
   }
 
   .jeopardy-board {
