@@ -23,11 +23,9 @@
         <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
             @click="handleClick(indexRow, indexCol)">
-            <div v-if="!col.question && this.lang=='en'" >
-              Click to Add Question
-            </div>
-            <div v-else-if="!col.question && this.lang=='sv'" >
-              Klicka för att Lägga till Fråga
+            <div v-if="!col.question" >
+              <div v-if="this.lang=='en'">Click to add question</div>
+              <div v-if="this.lang=='sv'">Klicka för att lägga till fråga</div>
             </div>
             <div v-else>
               <div>Q: {{ col.question }}</div>
@@ -46,6 +44,9 @@
 </template>
 
 <script>
+import io from 'socket.io-client';
+const socket = io("localhost:3000");
+
 export default {
   data() {
     return {
@@ -57,25 +58,23 @@ export default {
       }))),
     };
   },
-  methods: {
-    created: function () {
+  created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels
     })
-    },
-    handleClick(row, col) {
+  },
+  methods: {
+      handleClick(row, col) {
       const newQuestion = prompt('Enter the question:');
-      if (newQuestion !== null) {
-        const newAnswer = prompt('Enter the correct answer:');
-      }
-
+      const newAnswer = prompt('Enter the correct answer:');
+  
       if (newQuestion !== null && newAnswer !== null) {
         this.questions[row][col].question = newQuestion;
         this.questions[row][col].answer = newAnswer;
       }
-    },
+      }, 
     exitCreatorMode() {
       this.$router.push('/jstartview');
     },
@@ -111,14 +110,18 @@ body {
 main {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  padding-top: 20px;
+}
+
+h1 {
+  padding-top: 100px;
 }
 
 #UKflagga {
   background-image: url(/img/UKflagga.png);
   background-size: 100px 50px;
   margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
+  position: absolute; /* Fixed position allows the image to stay in the same place even when scrolling */
   top: 0; /* Position at the top of the viewport */
   right: 15px; /* Position at the right of the viewport */
   width: 100px; /* Adjust the width as needed */
@@ -129,7 +132,7 @@ main {
   background-image: url(/img/sverigeflagga.png);
   background-size: 100px 50px;
   margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
+  position: absolute; /* Fixed position allows the image to stay in the same place even when scrolling */
   top: 0; /* Position at the top of the viewport */
   right: 125px; /* Position at the right of the viewport */
   width: 100px; /* Adjust the width as needed */
