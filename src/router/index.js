@@ -50,6 +50,11 @@ const router = createRouter({
       path: '/jCreateInfo',
       name: 'JCreateInfo',
       component: () => import('../views/JCreateInfo.vue')
+    },
+    { 
+      path: '/BoardViewSteph',
+      name: 'BoardViewSteph',
+      component: () => import('../views/BoardViewSteph.vue')
     }
   ]
 });
