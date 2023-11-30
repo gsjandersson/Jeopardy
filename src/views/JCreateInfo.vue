@@ -37,8 +37,13 @@
         </ol>
       </div>
 
-      <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em"
+      <p> Jeopardy ID: </p>
+      <input type="text" v-model="pollId">
+
+      <div>
+      <button id="createButton" v-on:click="createPoll"> <router-link style="color: #ffff00; font-size: 2em"
           v-bind:to="'/BoardViewSteph/' + id">{{ uiLabels.createPoll }}</router-link> </button>
+      </div>
     </main>
   </body>
 </template>
@@ -51,7 +56,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'JCreateInfoSwe',
+  name: 'JCreateInfo',
   components: {
     ResponsiveNav
   },
@@ -68,13 +73,26 @@ export default {
 
   // Lifecycle hook - component creation
   created: function () {
-    // Emitting an event when the page is loaded and listening for initialization data
+    // Lifecycle hook - component creation
+    this.id = this.$route.params.id;
+
+    // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
+
+    // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
     })
-  },
 
+    // Listen for data updates from the server
+    socket.on("dataUpdate", (data) =>
+      this.data = data
+    )
+
+    // Listen for the event when a poll is created
+    socket.on("pollCreated", (data) =>
+      this.data = data)
+  },
   // Methods for language switching and toggling the navigation menu
   methods: {
     switchLanguageEnglish: function () {
@@ -91,9 +109,8 @@ export default {
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang)
     },
-
-    toggleNav: function () {
-      this.hideNav = !this.hideNav;
+    createPoll: function () {
+      socket.emit("createPoll", { pollId: this.pollId, lang: this.lang })
     }
   }
 }

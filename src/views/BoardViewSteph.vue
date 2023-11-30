@@ -18,6 +18,8 @@
       <button v-on:click="createPoll"> Skapa Jeopardy Quiz</button>
     </div>
 
+
+
     <main>
       <div class="jeopardy-board">
         <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
@@ -27,7 +29,7 @@
               <div v-if="this.lang=='en'">Click to add question</div>
               <div v-if="this.lang=='sv'">Klicka för att lägga till fråga</div>
             </div>
-            <div>
+            <div v-else>
               <div>Q: {{ col.question }}</div>
               <div>A: {{ col.answer }}</div>
             </div>
@@ -56,6 +58,11 @@ export default {
         question: '',
         answer: ''
       }))),
+      pollId: "",
+      // answers: ["", ""],
+      questionNumber: 1,
+      data: {},
+      uiLabels: {}
     };
   },
   created: function () {
@@ -67,13 +74,30 @@ export default {
     },
   methods: {
     handleClick(row, col) {
-      const newQuestion = prompt('Enter the question:');
-      const newAnswer = prompt('Enter the correct answer:');
-  
-      if (newQuestion !== null && newAnswer !== null) {
+      let newQuestion;
+      let newAnswer;
+
+      if (this.lang == 'en') {
+        newQuestion = prompt('Enter the question:');
+        newAnswer = prompt('Enter the correct answer:');
+      }
+      if (this.lang == 'sv') {
+        newQuestion = prompt('Skriv frågan:');
+        newAnswer = prompt('Skriv de korrekta svaret:');
+      }
+      if (newQuestion !== "" && newAnswer !== "") {
         this.questions[row][col].question = newQuestion;
         this.questions[row][col].answer = newAnswer;
       }
+    },
+    getCategoryName() {
+      if (this.lang == 'en') {
+        this.categoryName = prompt('Enter the category name:');
+      }
+      if (this.lang == 'sv') {
+        this.categoryName = prompt('Skriv kategorinamnet:');
+      }
+
     },
     exitCreatorMode() {
       this.$router.push('/jstartview');
@@ -105,10 +129,45 @@ main {
   display: flex;
   justify-content: center;
   padding-top: 20px;
+  margin: 0;
 }
 
 h1 {
+  margin: 0;
   padding-top: 100px;
+}
+
+#UKflagga {
+  background-image: url(/img/UKflagga.png);
+  background-size: 100px 50px;
+  margin: 25px 10px 0 0;
+  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
+  top: 0; /* Position at the top of the viewport */
+  right: 15px; /* Position at the right of the viewport */
+  width: 100px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
+}
+
+#sverigeflagga {
+  background-image: url(/img/sverigeflagga.png);
+  background-size: 100px 50px;
+  margin: 25px 10px 0 0;
+  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
+  top: 0; /* Position at the top of the viewport */
+  right: 125px; /* Position at the right of the viewport */
+  width: 100px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
+}
+
+button {
+  background-color: #073763ff;
+  padding: 1em;
+  width: 10em;
+  height: 5em;
+  text-decoration: underline;
+  color: #ffff00;
+  font-size: 1em;
+  margin: 1em;
 }
 
 .jeopardy-board {
@@ -130,4 +189,14 @@ h1 {
   justify-content: center;
   cursor: pointer;
   margin: 5px;
-}</style>
+}
+
+footer {
+  padding-bottom: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+</style>
