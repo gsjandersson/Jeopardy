@@ -90,50 +90,9 @@ export default {
 <style scoped>
 /* Scoped styles for the component */
 
-body {
-  background-color: #073763ff;
-  color: #ffff00;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100vh;
-}
-
 main {
   display: grid;
   grid-template-columns: 2em auto;
-}
-
-#UKflagga {
-  background-image: url(/img/UKflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed;
-  /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0;
-  /* Position at the top of the viewport */
-  right: 15px;
-  /* Position at the right of the viewport */
-  width: 100px;
-  /* Adjust the width as needed */
-  height: 50px;
-  /* Maintain the aspect ratio of the image */
-}
-
-#sverigeflagga {
-  background-image: url(/img/sverigeflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed;
-  /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0;
-  /* Position at the top of the viewport */
-  right: 125px;
-  /* Position at the right of the viewport */
-  width: 100px;
-  /* Adjust the width as needed */
-  height: 50px;
-  /* Maintain the aspect ratio of the image */
 }
 
 header {
@@ -149,13 +108,6 @@ header img {
   grid-template-columns: 50vw 50vw;
 }
 
-button {
-  background-color: #073763ff;
-  margin-bottom: 200px;
-  padding: 1em;
-  width: 10em;
-}
-
 #playButton {
   margin-left: 10px;
 }
@@ -164,6 +116,4 @@ button {
   margin-right: 10px;
 }
 
-button:hover {
-  cursor: pointer;
-}</style>
+</style>
