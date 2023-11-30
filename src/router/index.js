@@ -52,7 +52,7 @@ const router = createRouter({
       component: () => import('../views/JCreateInfo.vue')
     },
     { 
-      path: '/BoardViewSteph',
+      path: '/BoardViewSteph/:pollId',
       name: 'BoardViewSteph',
       component: () => import('../views/BoardViewSteph.vue')
     }
