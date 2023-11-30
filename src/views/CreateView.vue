@@ -30,13 +30,13 @@
     </button>
 
     <!-- Input field for question number and button to run the question -->
-    <input type="number" v-model="questionNumber" min="1">
+    <input type="number" v-model="questionNumber">
     <button v-on:click="runQuestion">
       Run question
     </button>
 
     <!-- Display data -->
-    {{ data }}
+    {{ data }} <!-- Tror inte att det här är rätt-->
 
     <!-- Router link to check result -->
     <router-link v-bind:to="'/result/' + pollId">Check result</router-link>
@@ -90,6 +90,7 @@ export default {
     },
     addQuestion: function () {
       socket.emit("addQuestion", { pollId: this.pollId, q: this.question, a: this.answers })
+      console.log(this);
     },
     addAnswer: function () {
       this.answers.push("");
@@ -118,8 +119,4 @@ button {
 button:hover {
   cursor: pointer;
 }
-
-
-
-
 </style>

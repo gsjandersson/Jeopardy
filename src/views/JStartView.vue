@@ -1,34 +1,34 @@
 <template>
-<main>
+  <body>
+    <main>
 
-  <div> 
-    <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-    <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-  </div>
+      <div style="margin: 0; padding: 0;">
+        <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
+        <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
+      </div>
 
-  <header>
-    <img src="/img/jeopardy.png" style="width: 50vw">
-    <h2 style="margin:1em">{{ uiLabels["sales-pitch"] }}</h2>
-    <h3 style="margin:1em">{{ uiLabels.subHeading }}</h3>
-  </header>
+      <header>
+        <img src="/img/jeopardy.png" style="width: 50vw">
+        <h2 style="margin:1em">{{ uiLabels["sales-pitch"] }}</h2>
+        <h3 style="margin:1em">{{ uiLabels.subHeading }}</h3>
+      </header>
 
-  <body class="buttonContainer">
-    <div>
-      <button id="playButton"> 
-        <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/poll/' + id">{{ uiLabels.participatePoll }}</router-link> 
-      </button>
-    </div>
-    <div>
-      <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/create/' + id">{{ uiLabels.createPoll }}</router-link> </button>
-    </div>
+      <div class="buttonContainer">
+        <div>
+          <button id="playButton">
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/poll/' + id">{{ uiLabels.participatePoll
+            }}</router-link>
+          </button>
+        </div>
+        <div>
+          <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em"
+              v-bind:to="'/JCreateInfo/' + id">{{ uiLabels.createPoll }}</router-link> </button>
+        </div>
+      </div>
+
+
+    </main>
   </body>
-    
-    
-
-</main>
-
-  
-
 </template>
 
 <script>
@@ -91,35 +91,8 @@ export default {
 /* Scoped styles for the component */
 
 main {
-  background-color: #073763ff;
-  color: #ffff00;
-}
-
-body {
   display: grid;
   grid-template-columns: 2em auto;
-}
-
-#UKflagga {
-  background-image: url(/img/UKflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0; /* Position at the top of the viewport */
-  right: 15px; /* Position at the right of the viewport */
-  width: 100px; /* Adjust the width as needed */
-  height: 50px; /* Maintain the aspect ratio of the image */
-}
-
-#sverigeflagga {
-  background-image: url(/img/sverigeflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0; /* Position at the top of the viewport */
-  right: 125px; /* Position at the right of the viewport */
-  width: 100px; /* Adjust the width as needed */
-  height: 50px; /* Maintain the aspect ratio of the image */
 }
 
 header {
@@ -130,28 +103,17 @@ header img {
   margin-top: 100px;
 }
 
-.buttonContainer{
+.buttonContainer {
   display: grid;
   grid-template-columns: 50vw 50vw;
 }
 
-button {
-  background-color: #073763ff;
-  margin-bottom: 200px;
-  padding: 1em;
-  width: 10em;
-}
-
-#playButton{
+#playButton {
   margin-left: 10px;
 }
 
-#createButton{
+#createButton {
   margin-right: 10px;
-}
-
-button:hover{
-  cursor: pointer;
 }
 
 </style>
