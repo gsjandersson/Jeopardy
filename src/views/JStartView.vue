@@ -108,7 +108,7 @@ main {
   background-image: url(/img/UKflagga.png);
   background-size: 100px 50px;
   margin: 25px 10px 0 0;
-  position: fixed;
+  position: absolute;
   /* Fixed position allows the image to stay in the same place even when scrolling */
   top: 0;
   /* Position at the top of the viewport */
@@ -124,7 +124,7 @@ main {
   background-image: url(/img/sverigeflagga.png);
   background-size: 100px 50px;
   margin: 25px 10px 0 0;
-  position: fixed;
+  position: absolute;
   /* Fixed position allows the image to stay in the same place even when scrolling */
   top: 0;
   /* Position at the top of the viewport */
