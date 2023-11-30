@@ -102,14 +102,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background-color: #073763ff;
-  margin: 0;
-  color: #ffff00;
-  font-family: Arial, sans-serif;
-  padding: 0;
-  height: 100vh;
-}
 
 main {
   display: flex;
@@ -119,39 +111,6 @@ main {
 
 h1 {
   padding-top: 100px;
-}
-
-#UKflagga {
-  background-image: url(/img/UKflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0; /* Position at the top of the viewport */
-  right: 15px; /* Position at the right of the viewport */
-  width: 100px; /* Adjust the width as needed */
-  height: 50px; /* Maintain the aspect ratio of the image */
-}
-
-#sverigeflagga {
-  background-image: url(/img/sverigeflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0; /* Position at the top of the viewport */
-  right: 125px; /* Position at the right of the viewport */
-  width: 100px; /* Adjust the width as needed */
-  height: 50px; /* Maintain the aspect ratio of the image */
-}
-
-button {
-  background-color: #073763ff;
-  padding: 1em;
-  width: 10em;
-  height: 5em;
-  text-decoration: underline;
-  color: #ffff00;
-  font-size: 1em;
-  margin: 1em;
 }
 
 .jeopardy-board {
