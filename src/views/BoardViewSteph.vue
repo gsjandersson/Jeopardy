@@ -67,6 +67,7 @@ export default {
   },
   created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
+    this.pollId = this.$route.params.pollId
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels

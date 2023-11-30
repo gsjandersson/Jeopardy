@@ -19,6 +19,9 @@
   <ResponsiveNav v-bind:hideNav="hideNav">
     <!-- Button to switch language -->
     <button v-on:click="switchLanguage">{{ uiLabels.changeLanguage }}</button>
+    
+    <!-- Router link to QuizIDView -->
+    <router-link to="/quiz-id-view">{{ uiLabels.quizIDView }}</router-link>
 
     <!-- Router link to create a new poll -->
     <router-link to="/create/">{{ uiLabels.createPoll }}</router-link>
@@ -26,6 +29,7 @@
     <!-- Links for 'About' and 'FAQ' -->
     <a href="">{{ uiLabels.about }}</a>
     <a href="">FAQ</a>
+    
     <router-link to="/test/">Test</router-link>
     <router-link to="/board/">Board</router-link>
     <router-link to="/JStartView/">J Start View</router-link>

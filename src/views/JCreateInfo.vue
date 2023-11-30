@@ -12,7 +12,7 @@
         <h1 v-if="this.lang == 'sv'">HUR SKAPAR DU ETT QUIZ</h1>
       </header>
 
-
+      <!--gör array i labels som man loopar över, för mycket kladd slay-->
       <div>
         <ol v-if="this.lang == 'en'">
           <li>Write 5 topics</li>
@@ -41,8 +41,9 @@
       <input type="text" v-model="pollId">
 
       <div>
-      <button id="createButton" v-on:click="createPoll"> <router-link style="color: #ffff00; font-size: 2em"
-          v-bind:to="'/BoardViewSteph/' + id">{{ uiLabels.createPoll }}</router-link> </button>
+      <button id="createButton" v-on:click="createPoll">
+        {{ uiLabels.createPoll }} 
+      </button>
       </div>
     </main>
   </body>
@@ -74,7 +75,7 @@ export default {
   // Lifecycle hook - component creation
   created: function () {
     // Lifecycle hook - component creation
-    this.id = this.$route.params.id;
+    // this.id = this.$route.params.id;
 
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
@@ -111,6 +112,7 @@ export default {
     },
     createPoll: function () {
       socket.emit("createPoll", { pollId: this.pollId, lang: this.lang })
+      this.$router.push('/BoardViewSteph/' + this.pollId);
     }
   }
 }
@@ -120,20 +122,12 @@ export default {
 /* Scoped styles for the component */
 
 header {
-  background-color: #073763ff;
-  margin: 0; /* Set margin to 0 to remove any default margin */
-  padding-top: 100px; /* Set padding to 0 to remove any default padding */
-}
-
-h1 {
-  background-color: #073763ff;
-  margin: 0; /* Set margin to 0 to remove any default margin */
-  padding: 0; /* Set padding to 0 to remove any default padding */
+  margin-top: 100px;
 }
 
 ol {
+
   text-align: left;
   display: inline-block;
-  margin: 0; /* Set margin to 0 to remove any default margin */
-  padding: 50px; /* Set padding to 0 to remove any default padding */
-}</style>
+}
+</style>
