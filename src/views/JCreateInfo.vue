@@ -119,48 +119,6 @@ export default {
 <style scoped>
 /* Scoped styles for the component */
 
-body {
-  background-color: #073763ff;
-  color: #ffff00;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100vh;
-}
-
-
-#UKflagga {
-  background-image: url(/img/UKflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: absolute;
-  /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0;
-  /* Position at the top of the viewport */
-  right: 15px;
-  /* Position at the right of the viewport */
-  width: 100px;
-  /* Adjust the width as needed */
-  height: 50px;
-  /* Maintain the aspect ratio of the image */
-}
-
-#sverigeflagga {
-  background-image: url(/img/sverigeflagga.png);
-  background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: absolute;
-  /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0;
-  /* Position at the top of the viewport */
-  right: 125px;
-  /* Position at the right of the viewport */
-  width: 100px;
-  /* Adjust the width as needed */
-  height: 50px;
-  /* Maintain the aspect ratio of the image */
-}
-
 header {
   background-color: #073763ff;
   margin: 0; /* Set margin to 0 to remove any default margin */
@@ -177,8 +135,7 @@ button {
   background-color: #073763ff;
   width: 10em;
   margin: 0; /* Set margin to 0 to remove any default margin */
-  padding: 1em; /* Set padding to 0 to remove any default padding */
-  margin-top: 1em;
+  padding: 0; /* Set padding to 0 to remove any default padding */
 }
 
 button:hover {
