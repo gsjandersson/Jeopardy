@@ -6,5 +6,21 @@
 	"participatePoll": "PLAY",
 	"question": "Question",
 	"changeLanguage": "",
-	"about": "About"
+	"about": "About",
+	"emptyIdMessage": "Error: Jeopardy ID must not be empty",
+	"createInfoTitle": "HOW TO CREATE A QUIZ",
+	"createInfo": [
+	  "Write 5 topics",
+      "Click on each $ box to create a new question",
+      "Type the question",
+      "Click on YES or NO to mark the right answer",
+      "Press Complete and return to Jeopardy Board to lock in the answer",
+      "The completed questions will be marked with a lighter colour",
+      "Continue to fill in the rest of the questions",
+      "Great job, you have created your own Jeopardy!" 
+	],
+	"boardViewQuestionBox": "Click to add question",
+	"boardViewTitle": "Create the board!",
+	"exit": "Go to the homescreen",
+	"joinViewTitle": "JOIN A JEOPARDY"
 }
