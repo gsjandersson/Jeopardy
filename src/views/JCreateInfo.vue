@@ -8,32 +8,15 @@
       </div>
 
       <header>
-        <h1 v-if="this.lang == 'en'">HOW TO CREATE A QUIZ</h1>
-        <h1 v-if="this.lang == 'sv'">HUR SKAPAR DU ETT QUIZ</h1>
+        <h1> {{ uiLabels.createInfoTitle }} </h1>
       </header>
 
       <!--gör array i labels som man loopar över, för mycket kladd slay-->
       <div>
-        <ol v-if="this.lang == 'en'">
-          <li>Write 5 topics</li>
-          <li>Click on each $ box to create a new question</li>
-          <li>Type the question</li>
-          <li>Click on YES or NO to mark the right answer</li>
-          <li>Press Complete and return to Jeopardy Board to lock in the answer</li>
-          <li>The completed questions will be marked with a lighter colour</li>
-          <li>Continue to fill in the rest of the questions</li>
-          <li>Great job, you have created your own Jeopardy!</li>
-        </ol>
-
-        <ol v-if="this.lang == 'sv'">
-          <li>Skriv 5 ämnen</li>
-          <li>Klicka på de olika $ i tabellen för att skapa nya frågor</li>
-          <li>Skiv ut frågan</li>
-          <li>Klicka på JA eller NEJ för att märkera rätt svar</li>
-          <li>Tryck klar och returnera till Jeopardy brädan för att låsa in svaret</li>
-          <li>De klarskrivna frågorna märkeras med en ljusare färg</li>
-          <li>Fortsätt att fylla i resten av frågorna</li>
-          <li>Bra jobbat, du har skapat ditt eget Jeopardy!</li>
+        <ol>
+          <li v-for="(instruction, index) in uiLabels.createInfo" :key="index">
+            {{ instruction }}
+          </li>
         </ol>
       </div>
 
@@ -41,9 +24,12 @@
       <input type="text" v-model="pollId">
 
       <div>
-      <button id="createButton" v-on:click="createPoll">
-        {{ uiLabels.createPoll }} 
-      </button>
+        <button v-on:click="createPoll">
+          {{ uiLabels.createPoll }} 
+        </button>
+      <p v-if="errorIdMessage == true" style="color: red">
+        {{ uiLabels.emptyIdMessage }}
+      </p>
       </div>
     </main>
   </body>
@@ -66,9 +52,9 @@ export default {
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      id: "", // Input for poll ID
+      pollId: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting
-      hideNav: true // Flag for hiding the navigation menu
+      errorIdMessage: false
     }
   },
 
@@ -111,8 +97,15 @@ export default {
       socket.emit("switchLanguage", this.lang)
     },
     createPoll: function () {
-      socket.emit("createPoll", { pollId: this.pollId, lang: this.lang })
-      this.$router.push('/BoardViewSteph/' + this.pollId);
+      if (this.pollId !== "") {
+        this.errorIdMessage = false;
+        socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
+        this.$router.push('/BoardViewSteph/' + this.pollId);
+      }
+      else {
+        this.errorIdMessage = true;
+      }
+      
     }
   }
 }
@@ -121,12 +114,7 @@ export default {
 <style scoped>
 /* Scoped styles for the component */
 
-header {
-  margin-top: 100px;
-}
-
 ol {
-
   text-align: left;
   display: inline-block;
 }
