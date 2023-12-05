@@ -1,11 +1,9 @@
 <template>
-
   <!-- Det som står längst upp på sidan -->
   <header>
     <!-- Navigeringen länst upp till vänster, kallas hamburger -->
-    <div v-bind:class="['hamburger', {'close': !hideNav}]" 
-         v-on:click="toggleNav">
-         <!-- öppnar och stänger navigeringen-->
+    <div v-bind:class="['hamburger', { 'close': !hideNav }]" v-on:click="toggleNav">
+      <!-- öppnar och stänger navigeringen-->
     </div>
     <div class="logo">
       <img src="/img/jeopardy.png">
@@ -19,7 +17,7 @@
   <ResponsiveNav v-bind:hideNav="hideNav">
     <!-- Button to switch language -->
     <button v-on:click="switchLanguage">{{ uiLabels.changeLanguage }}</button>
-    
+
     <!-- Router link to QuizIDView -->
     <router-link to="/quiz-id-view">{{ uiLabels.quizIDView }}</router-link>
 
@@ -29,7 +27,7 @@
     <!-- Links for 'About' and 'FAQ' -->
     <a href="">{{ uiLabels.about }}</a>
     <a href="">FAQ</a>
-    
+
     <router-link to="/test/">Test</router-link>
     <router-link to="/board/">Board</router-link>
     <router-link to="/JStartView/">J Start View</router-link>
@@ -163,4 +161,5 @@ header {
     left: -12em;
     /* Positioning for hiding the navigation menu */
   }
-}</style>
+}
+</style>
