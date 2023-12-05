@@ -8,6 +8,7 @@
 	"changeLanguage": "",
 	"about": "Om oss",
 	"errorCreateIdMessage": "OBS: Jeopardy ID kan ej vara tom",
+	"errorPlayIdMessage" : "OBS: Jeopardy ID kan ej vara tom",
 	"errorCreateQuestionMessage": "OBS: Det måste vara minst en fråga i en kategori",
 	"errorCreateCategoryMessage": "OBS: Det måste vara minst en kategori",
 	"createInfoTitle": "HUR SKAPAR DU ETT QUIZ",
