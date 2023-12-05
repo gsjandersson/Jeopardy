@@ -50,7 +50,7 @@ export default {
       this.uiLabels = labels
     })
     // Set pollId from route parameters and join the poll
-    this.pollId = this.$route.params.id
+    this.pollId = this.$route.params.pollId
     socket.emit('joinPoll', this.pollId)
 
     // Listen for new questions and data updates from the server

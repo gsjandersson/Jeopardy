@@ -12,7 +12,7 @@
   </header>
 
   <p> {{ uiLabels.enterNameDescription }} </p>
-  <input type="text" />
+  <input type="text" v-model="nameId"/>
 
   <div>
     <button id="playButton" v-on:click="joinPoll">
@@ -39,9 +39,10 @@ export default {
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      pollId: "", // Input for poll ID
+      nameId: "", // Input for name ID
       lang: localStorage.getItem("lang") || "en", // Language setting,
-      errorIdMessage: false
+      errorIdMessage: false,
+      pollId: ""
     }
   },
 
@@ -52,6 +53,7 @@ export default {
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     })
+    this.pollId = this.$route.params.pollId
   },
 
   // Methods to interact with the server
@@ -71,7 +73,7 @@ export default {
       socket.emit("switchLanguage", this.lang);
     },
     joinPoll() {
-      if (this.pollId !== "") {
+      if (this.nameId !== "") {
         this.errorIdMessage = false;
         this.$router.push('/jPollView/' + this.pollId);
       }
