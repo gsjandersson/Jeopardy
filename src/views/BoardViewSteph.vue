@@ -100,6 +100,7 @@ export default {
         this.questions[row][col].answer = newAnswer;
         socket.emit("addQuestion", { pollId: this.pollId, 
           q: this.questions[row][col].question, a: this.questions[row][col].answer })
+          console.log(this)
       }
     },
     handleCategoryClick(index) {
