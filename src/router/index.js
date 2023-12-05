@@ -42,7 +42,7 @@ const router = createRouter({
       component: () => import('../views/JCreateInfo.vue')
     },
     { 
-      path: '/EnterNameView',
+      path: '/EnterNameView/:pollId',
       name: 'EnterNameView',
       component: () => import('../views/EnterNameView.vue')
     },

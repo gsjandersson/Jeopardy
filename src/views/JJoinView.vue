@@ -15,7 +15,7 @@
   <input type="text" v-model="pollId">
 
   <div>
-    <button id="playButton" v-on:click="joinPoll">
+    <button id="playButton" v-on:click="goToName">
       {{ uiLabels.participatePoll }}
     </button>
     <p v-if="errorIdMessage == true" style="color: red">
@@ -69,10 +69,10 @@ export default {
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang);
     },
-    joinPoll() {
+    goToName() {
       if (this.pollId !== "") {
         this.errorIdMessage = false;
-        this.$router.push('/jPollView/' + this.pollId);
+        this.$router.push('/EnterNameView/' + this.pollId);
       }
       else {
         this.errorIdMessage = true;
