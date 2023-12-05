@@ -1,6 +1,5 @@
 <template>
   <body>
-    <main>
 
       <div>
         <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
@@ -12,6 +11,7 @@
         <h1> {{ uiLabels.createInfoTitle }} </h1>
       </header>
 
+      <main>
       <!--gör array i labels som man loopar över, för mycket kladd slay-->
       <div>
         <ol>
@@ -124,7 +124,8 @@ export default {
         this.errorIdMessage = false;
         this.errorCategoryNo = false;
         this.errorQuestionNo = false;
-        socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
+        socket.emit("createPoll", { pollId: this.pollId, lang: this.lang, 
+          questionNo: this.questionNo, categoryNo: this.categoryNo});
         this.$router.push('/BoardViewSteph/' + this.pollId);
       }
       if (this.pollId === "") {
@@ -161,5 +162,9 @@ export default {
 ol {
   text-align: left;
   display: inline-block;
+}
+
+main {
+  overflow: scroll;
 }
 </style>

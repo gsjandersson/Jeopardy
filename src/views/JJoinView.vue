@@ -20,7 +20,7 @@
       {{ uiLabels.participatePoll }} 
     </button>
     <p v-if="errorIdMessage == true" style="color: red">
-        {{ uiLabels.emptyIdMessage }}
+        {{ uiLabels.errorPlayIdMessage }}
     </p>
   </div>
 

@@ -8,6 +8,7 @@
 	"changeLanguage": "",
 	"about": "About",
 	"errorCreateIdMessage": "Error: Jeopardy ID must not be empty",
+	"errorPlayIdMessage": "Error: Jeopardy ID must not be empty",
 	"errorCreateQuestionMessage": "Error: There has to be at least one question in each category",
 	"errorCreateCategoryMessage": "Error: There has to be at least one category",
 	"createInfoTitle": "HOW TO CREATE A QUIZ",
@@ -22,7 +23,10 @@
       "Great job, you have created your own Jeopardy!" 
 	],
 	"boardViewQuestionBox": "Click to add question",
+	"boardViewCategoryBox": "Click to add category name",
 	"boardViewTitle": "Create the board!",
 	"exit": "Go to the homescreen",
-	"joinViewTitle": "JOIN A JEOPARDY"
+	"joinViewTitle": "JOIN A JEOPARDY",
+	"answerWhatIsAre": "WHAT IS/ARE...",
+	"answer": "Answer"
 }

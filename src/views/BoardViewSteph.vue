@@ -9,23 +9,15 @@
     <h1>{{ uiLabels.boardViewTitle }}</h1>
     <p class="pollDisplay"> Poll Id: {{ pollId }}</p>
 
-    <div>
-      Row number:
-      <input type="number" v-model="questionRow">
-      Column number:
-      <input type="number" v-model="questionColumn">
-    </div>
-    <div>
-      <button v-on:click="runQuestion"> Run question </button>
-    </div>
 
     <main>
       <div class="jeopardy-board">
       <!-- Display column titles -->
       <div class="jeopardy-row">
-        <div v-for="(category, index) in categories" :key="index" class="jeopardy-square" @click="handleCategoryClick(index)">
+        <div v-for="(category, index) in categories" :key="index" :style="{ width: `calc(90vw / ${categories.length})` }" 
+        class="jeopardy-square" @click="handleCategoryClick(index)">
           <div v-if="!category">
-            <p>Click to add category name</p>
+            <p> {{ uiLabels.boardViewCategoryBox }} </p>
           </div>
           <div v-else>
             <div>{{ category }}</div>
@@ -39,7 +31,8 @@
 
       <!-- Display Jeopardy board content -->
       <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
-        <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square" @click="handleClick(indexRow, indexCol)">
+        <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
+          :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleClick(indexRow, indexCol)">
           <div v-if="!col.question">
             <p>{{ uiLabels.boardViewQuestionBox }}</p>
           </div>
@@ -60,18 +53,16 @@ import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
-  data() {
+  data: function () {
     return {
+      // Initial data properties
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
-      questions: Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => ({
-        question: '',
-        answer: ''
-      }))),
       pollId: "",
-      categories: Array.from({ length: 5 }, () => ""),
       questionNumber: {questionRow: 0, questionColumn: 0},  
-      data: {}
+      data: {},
+      questions: [],
+      categories: []
     };
   },
   created: function () {
@@ -80,10 +71,30 @@ export default {
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels
-    })
+    });
+    socket.emit("retrieveQuestions", (this.pollId));
+
+    socket.emit("retrieveCategories", (this.pollId))
+  
+    socket.on("dataUpdate", (data) =>
+      this.data = data
+    );
+
+    socket.on("pollCreated", (data) =>
+      this.data = data
+    );
+
+    socket.on("questionsRetrieved", (questions) => 
+      this.questions = questions
+    );
+
+    socket.on("categoriesRetrieved", (categories) => 
+      this.categories = categories
+    );
+
     },
   methods: {
-    handleClick(row, col) {
+    handleClick(rowNo, colNo) {
       let newQuestion;
       let newAnswer;
 
@@ -96,13 +107,16 @@ export default {
         newAnswer = prompt('Skriv de korrekta svaret:');
       }
       if (newQuestion !== "" && newAnswer !== "") {
-        this.questions[row][col].question = newQuestion;
-        this.questions[row][col].answer = newAnswer;
-        socket.emit("addQuestion", { pollId: this.pollId, 
-          q: this.questions[row][col].question, a: this.questions[row][col].answer })
+        socket.emit("editQuestion", { pollId: this.pollId, row: rowNo, col: colNo,
+          q: newQuestion, a: newAnswer })
+        
+        socket.on("questionsRetrieved", (questions) => 
+          this.questions = questions
+        )
+        
       }
     },
-    handleCategoryClick(index) {
+    handleCategoryClick(colNo) {
       let categoryName;
 
       if (this.lang == 'en') {
@@ -112,7 +126,11 @@ export default {
         categoryName = prompt('Skriv kategorinamnet:');
       }
       if (categoryName !== "") {
-        this.categories[index] = categoryName
+        socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: categoryName})
+
+        socket.on("categoriesRecieved", (categories) =>
+          this.categories = categories
+        )
       }
     },
     exitCreatorMode() {
@@ -160,7 +178,6 @@ main {
 
 .jeopardy-square {
   border: 1px solid #000;
-  width: 250px;
   height: 100px;
   display: flex;
   align-items: center;
@@ -173,15 +190,11 @@ footer {
   padding-bottom: 10px;
 }
 
-input {
-  margin: 2px;
-}
-
 hr {
     color: black; /* Line color */
     background-color: black; /* Line color for older browsers */
     height: 5px; /* Line thickness */
-    width: 1300px;
+    width: 100vw;
     border: none; /* Remove the default border */
   }
 

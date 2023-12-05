@@ -32,12 +32,15 @@ Data.prototype.getUILabels = function (lang = "en") {
 }
 
 // Method to create a new poll
-Data.prototype.createPoll = function (pollId, lang = "en") {
+Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categoryNo = 5) {
   if (typeof this.polls[pollId] === "undefined") {
     let poll = {};
     poll.lang = lang;
-    poll.questions = [];
-    poll.answers = [];
+    poll.questions = Array.from({ length: questionNo }, () => Array.from({ length: categoryNo }, () => ({
+      question: '',
+      answer: ''
+    }))),
+    poll.categories = Array.from({ length: categoryNo }, () => "");
     poll.currentQuestion = 0;
     this.polls[pollId] = poll;
     console.log("poll created", pollId, poll);
@@ -55,10 +58,18 @@ Data.prototype.addQuestion = function (pollId, q) {
 }
 
 // Method to edit a question in an existing poll
-Data.prototype.editQuestion = function (pollId, index, newQuestion) {
+Data.prototype.editQuestion = function (pollId, row, col, newQuestion) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
-    poll.questions[index] = newQuestion;
+    poll.questions[row][col].question = newQuestion.q;
+    poll.questions[row][col].answer = newQuestion.a;
+  }
+}
+
+Data.prototype.editCategory = function (pollId, col, newCategory) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    poll.categories[col] = newCategory;
   }
 }
 
@@ -106,6 +117,22 @@ Data.prototype.getAnswers = function (pollId) {
     }
   }
   return {};
+}
+
+Data.prototype.retrieveQuestions = function (pollId) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    const questions = poll.questions;
+    return questions;
+ }
+}
+
+Data.prototype.retrieveCategories = function (pollId) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    const categories = poll.categories;
+    return categories;
+ }
 }
 
 // Export the Data class for use in other modules

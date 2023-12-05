@@ -12,7 +12,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on('createPoll', function (d) {
-    socket.emit('pollCreated', data.createPoll(d.pollId, d.lang));
+    socket.emit('pollCreated', data.createPoll(d.pollId, d.lang, d.questionNo, d.categoryNo));
   });
 
   socket.on('addQuestion', function (d) {
@@ -22,8 +22,13 @@ function sockets(io, socket, data) {
   });
 
   socket.on('editQuestion', function (d) {
-    data.editQuestion(d.pollId, d.index, { q: d.q, a: d.a });
-    socket.emit('questionEdited', data.getAllQuestions(d.pollId));
+    data.editQuestion(d.pollId, d.row, d.col, { q: d.q, a: d.a });
+    socket.emit('questionRetrieved', data.retrieveQuestions(d.pollId));
+  });
+
+  socket.on('editCategory', function (d) {
+    data.editCategory(d.pollId, d.col, d.cat);
+    socket.emit('categoriesRetrieved', data.retrieveCategories(d.pollId));
   });
 
   socket.on('joinPoll', function (pollId) {
@@ -45,6 +50,14 @@ function sockets(io, socket, data) {
   socket.on('resetAll', () => {
     data = new Data();
     data.initializeData();
+  });
+
+  socket.on('retrieveQuestions', function (pollId){
+    socket.emit('questionsRetrieved', data.retrieveQuestions(pollId));
+  });
+
+  socket.on('retrieveCategories', function (pollId){
+    socket.emit('categoriesRetrieved', data.retrieveCategories(pollId))
   })
 
 }
