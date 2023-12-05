@@ -21,8 +21,8 @@
           </button>
         </div>
         <div>
-          <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em"
-              v-bind:to="'/JCreateInfo/'">{{ uiLabels.createPoll }}</router-link> </button>
+          <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
+            uiLabels.createPoll }}</router-link> </button>
         </div>
       </div>
 
@@ -110,5 +110,4 @@ header img {
 #createButton {
   margin-right: 10px;
 }
-
 </style>

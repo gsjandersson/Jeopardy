@@ -8,7 +8,8 @@
 	"changeLanguage": "",
 	"about": "Om oss",
 	"errorCreateIdMessage": "OBS: Jeopardy ID kan ej vara tom",
-	"errorPlayIdMessage": "OBS: Jeopardy ID kan ej vara tom",
+	"errorPlayIdMessage" : "OBS: Jeopardy ID kan ej vara tom",
+	"errorNameIdMessage": "OBS: Namn kan inte vara tomt",
 	"errorCreateQuestionMessage": "OBS: Det måste vara minst en fråga i en kategori",
 	"errorCreateCategoryMessage": "OBS: Det måste vara minst en kategori",
 	"createInfoTitle": "HUR SKAPAR DU ETT QUIZ",
@@ -28,5 +29,8 @@
 	"exit": "Gå till hemskärmen",
 	"joinViewTitle": "GÅ MED I EN JEOPARDY",
 	"answerWhatIsAre": "VAD ÄR...",
-	"answer": "Svar"
+	"answer": "Svar",
+	"playGame": "Nu spelar vi Jeopardy!",
+	"enterNameTitle": "Vem är du?",
+	"enterNameDescription": "Skriv ditt namn"
 }

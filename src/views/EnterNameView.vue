@@ -8,22 +8,23 @@
   </button>
 
   <header>
-    <h1> {{ uiLabels.joinViewTitle }} </h1>
+    <h1> {{ uiLabels.enterNameTitle }} </h1>
   </header>
 
-  <p> Jeopardy ID: </p>
-  <input type="text" v-model="pollId">
+  <p> {{ uiLabels.enterNameDescription }} </p>
+  <input type="text" v-model="nameId"/>
 
   <div>
-    <button id="playButton" v-on:click="goToName">
+    <button id="playButton" v-on:click="joinPoll">
       {{ uiLabels.participatePoll }}
     </button>
     <p v-if="errorIdMessage == true" style="color: red">
-        {{ uiLabels.errorPlayIdMessage }}
+      {{ uiLabels.errorNameIdMessage }}
     </p>
   </div>
 </template>
-
+  
+  
 <script>
 // Import required modules
 import QuestionComponent from '@/components/QuestionComponent.vue';
@@ -32,15 +33,16 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'JJoinView',
+  name: 'EnterNameView',
 
   // Initial data properties
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      pollId: "", // Input for poll ID
+      nameId: "", // Input for name ID
       lang: localStorage.getItem("lang") || "en", // Language setting,
-      errorIdMessage: false
+      errorIdMessage: false,
+      pollId: ""
     }
   },
 
@@ -51,6 +53,7 @@ export default {
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     })
+    this.pollId = this.$route.params.pollId
   },
 
   // Methods to interact with the server
@@ -69,10 +72,10 @@ export default {
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang);
     },
-    goToName() {
-      if (this.pollId !== "") {
+    joinPoll() {
+      if (this.nameId !== "") {
         this.errorIdMessage = false;
-        this.$router.push('/EnterNameView/' + this.pollId);
+        this.$router.push('/jPollView/' + this.pollId);
       }
       else {
         this.errorIdMessage = true;
