@@ -1,3 +1,12 @@
+:root {
+  --foreground-color: red;
+  --background-color: green;
+}
+
+header {
+  margin-top: 100px;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #073763ff;
@@ -11,10 +20,9 @@ body {
 #UKflagga {
   background-image: url(/img/UKflagga.png);
   background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0; /* Position at the top of the viewport */
+  position: absolute;
   right: 15px; /* Position at the right of the viewport */
+  top: 15px;
   width: 100px; /* Adjust the width as needed */
   height: 50px; /* Maintain the aspect ratio of the image */
 }
@@ -22,9 +30,8 @@ body {
 #sverigeflagga {
   background-image: url(/img/sverigeflagga.png);
   background-size: 100px 50px;
-  margin: 25px 10px 0 0;
-  position: fixed; /* Fixed position allows the image to stay in the same place even when scrolling */
-  top: 0; /* Position at the top of the viewport */
+  position: absolute;
+  top: 15px; /* Position at the top of the viewport */
   right: 125px; /* Position at the right of the viewport */
   width: 100px; /* Adjust the width as needed */
   height: 50px; /* Maintain the aspect ratio of the image */
@@ -32,10 +39,10 @@ body {
 
 button {
   background-color: #073763ff;
-  padding: 1em;
   width: 10em;
-  height: 5em;
-  text-decoration: underline;
+  height: 4em;
+  padding: 0;
+  /* text-decoration: underline; */
   color: #ffff00;
   font-size: 1em;
   margin: 1em;
@@ -43,4 +50,12 @@ button {
 
 button:hover {
   cursor: pointer;
+}
+
+#homescreenButtonTopLeft {
+  position: absolute;
+  top: 15px; /* Position at the top of the viewport */
+  left: 15px; /* Position at the right of the viewport */
+  width: 110px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
 }

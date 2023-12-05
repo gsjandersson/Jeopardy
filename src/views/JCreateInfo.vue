@@ -3,42 +3,53 @@
     <main>
 
       <div>
+        <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
         <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
         <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
       </div>
 
       <header>
-        <h1 v-if="this.lang == 'en'">HOW TO CREATE A QUIZ</h1>
-        <h1 v-if="this.lang == 'sv'">HUR SKAPAR DU ETT QUIZ</h1>
+        <h1> {{ uiLabels.createInfoTitle }} </h1>
       </header>
 
-
+      <!--gör array i labels som man loopar över, för mycket kladd slay-->
       <div>
-        <ol v-if="this.lang == 'en'">
-          <li>Write 5 topics</li>
-          <li>Click on each $ box to create a new question</li>
-          <li>Type the question</li>
-          <li>Click on YES or NO to mark the right answer</li>
-          <li>Press Complete and return to Jeopardy Board to lock in the answer</li>
-          <li>The completed questions will be marked with a lighter colour</li>
-          <li>Continue to fill in the rest of the questions</li>
-          <li>Great job, you have created your own Jeopardy!</li>
-        </ol>
-
-        <ol v-if="this.lang == 'sv'">
-          <li>Skriv 5 ämnen</li>
-          <li>Klicka på de olika $ i tabellen för att skapa nya frågor</li>
-          <li>Skiv ut frågan</li>
-          <li>Klicka på JA eller NEJ för att märkera rätt svar</li>
-          <li>Tryck klar och returnera till Jeopardy brädan för att låsa in svaret</li>
-          <li>De klarskrivna frågorna märkeras med en ljusare färg</li>
-          <li>Fortsätt att fylla i resten av frågorna</li>
-          <li>Bra jobbat, du har skapat ditt eget Jeopardy!</li>
+        <ol>
+          <li v-for="(instruction, index) in uiLabels.createInfo" :key="index">
+            {{ instruction }}
+          </li>
         </ol>
       </div>
 
-      <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em"
-          v-bind:to="'/BoardViewSteph/' + id">{{ uiLabels.createPoll }}</router-link> </button>
+      <div>
+        <p> Jeopardy ID: </p>
+        <input type="text" v-model="pollId">
+      </div>
+
+      <div>
+        <p> Number of categories: </p>
+        <input type="number" v-model="categoryNo" min="1" step="1">
+      </div>
+      
+      <div>
+        <p> Number of questions per category: </p>
+        <input type="number" v-model="questionNo" min="1" step="1">
+      </div>
+
+      <div>
+        <button v-on:click="createPoll">
+          {{ uiLabels.createPoll }} 
+        </button>
+      <p v-if="errorIdMessage == true" style="color: red">
+        {{ uiLabels.errorCreateIdMessage }}
+      </p>
+      <p v-if="errorCategoryNo == true" style="color: red">
+        {{ uiLabels.errorCreateCategoryMessage }}
+      </p>
+      <p v-if="errorQuestionNo == true" style="color: red">
+        {{ uiLabels.errorCreateQuestionMessage }}
+      </p>
+      </div>
     </main>
   </body>
 </template>
@@ -51,7 +62,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'JCreateInfoSwe',
+  name: 'JCreateInfo',
   components: {
     ResponsiveNav
   },
@@ -60,21 +71,38 @@ export default {
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      id: "", // Input for poll ID
+      pollId: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting
-      hideNav: true // Flag for hiding the navigation menu
+      errorIdMessage: false,
+      errorCategoryNo: false,
+      errorQuestionNo: false,
+      categoryNo: 5,
+      questionNo: 5
     }
   },
 
   // Lifecycle hook - component creation
   created: function () {
-    // Emitting an event when the page is loaded and listening for initialization data
+    // Lifecycle hook - component creation
+    // this.id = this.$route.params.id;
+
+    // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
+
+    // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
     })
-  },
 
+    // Listen for data updates from the server
+    socket.on("dataUpdate", (data) =>
+      this.data = data
+    )
+
+    // Listen for the event when a poll is created
+    socket.on("pollCreated", (data) =>
+      this.data = data)
+  },
   // Methods for language switching and toggling the navigation menu
   methods: {
     switchLanguageEnglish: function () {
@@ -91,9 +119,37 @@ export default {
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang)
     },
+    createPoll: function () {
+      if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
+        this.errorIdMessage = false;
+        this.errorCategoryNo = false;
+        this.errorQuestionNo = false;
+        socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
+        this.$router.push('/BoardViewSteph/' + this.pollId);
+      }
+      if (this.pollId === "") {
+        this.errorIdMessage = true;
+      }
+      else {
+        this.errorIdMessage = false;
+      }
 
-    toggleNav: function () {
-      this.hideNav = !this.hideNav;
+      if (this.categoryNo < 1 || this.categoryNo === "") {
+        this.errorCategoryNo = true;
+      }
+      else {
+        this.errorCategoryNo = false;
+      }
+
+      if (this.questionNo < 1 || this.questionNo === "") {
+        this.errorQuestionNo = true;
+      }
+      else {
+        this.errorQuestionNo = false;
+      }
+    },
+    exitCreatorMode() {
+      this.$router.push('/jStartView');
     }
   }
 }
@@ -102,21 +158,8 @@ export default {
 <style scoped>
 /* Scoped styles for the component */
 
-header {
-  background-color: #073763ff;
-  margin: 0; /* Set margin to 0 to remove any default margin */
-  padding-top: 100px; /* Set padding to 0 to remove any default padding */
-}
-
-h1 {
-  background-color: #073763ff;
-  margin: 0; /* Set margin to 0 to remove any default margin */
-  padding: 0; /* Set padding to 0 to remove any default padding */
-}
-
 ol {
   text-align: left;
   display: inline-block;
-  margin: 0; /* Set margin to 0 to remove any default margin */
-  padding: 50px; /* Set padding to 0 to remove any default padding */
-}</style>
+}
+</style>

@@ -6,5 +6,23 @@
 	"participatePoll": "SPELA",
 	"question": "Fråga",
 	"changeLanguage": "",
-	"about": "Om oss"
+	"about": "Om oss",
+	"errorCreateIdMessage": "OBS: Jeopardy ID kan ej vara tom",
+	"errorCreateQuestionMessage": "OBS: Det måste vara minst en fråga i en kategori",
+	"errorCreateCategoryMessage": "OBS: Det måste vara minst en kategori",
+	"createInfoTitle": "HUR SKAPAR DU ETT QUIZ",
+	"createInfo": [
+		"Skriv 5 ämnen",
+		"Klicka på de olika $ i tabellen för att skapa nya frågor",
+		"Skiv ut frågan",
+		"Klicka på JA eller NEJ för att märkera rätt svar",
+		"Tryck klar och returnera till Jeopardy brädan för att låsa in svaret",
+		"De klarskrivna frågorna märkeras med en ljusare färg",
+		"Fortsätt att fylla i resten av frågorna",
+		"Bra jobbat, du har skapat ditt eget Jeopardy!"
+	],
+	"boardViewQuestionBox": "Klicka för att lägga till frågan",
+	"boardViewTitle": "Skapa brädan!",
+	"exit": "Gå till hemskärmen",
+	"joinViewTitle": "GÅ MED I EN JEOPARDY"
 }

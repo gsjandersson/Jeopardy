@@ -2,7 +2,7 @@
   <body>
     <main>
 
-      <div style="margin: 0; padding: 0;">
+      <div>
         <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
         <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
       </div>
@@ -16,13 +16,13 @@
       <div class="buttonContainer">
         <div>
           <button id="playButton">
-            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/poll/' + id">{{ uiLabels.participatePoll
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/jJoinView'">{{ uiLabels.participatePoll
             }}</router-link>
           </button>
         </div>
         <div>
           <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em"
-              v-bind:to="'/JCreateInfo/' + id">{{ uiLabels.createPoll }}</router-link> </button>
+              v-bind:to="'/JCreateInfo/'">{{ uiLabels.createPoll }}</router-link> </button>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'StartView',
+  name: 'JStartView',
   components: {
     ResponsiveNav
   },
@@ -48,7 +48,6 @@ export default {
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      id: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting
       hideNav: true // Flag for hiding the navigation menu
     }
@@ -78,10 +77,6 @@ export default {
       }
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang)
-    },
-
-    toggleNav: function () {
-      this.hideNav = !this.hideNav;
     }
   }
 }

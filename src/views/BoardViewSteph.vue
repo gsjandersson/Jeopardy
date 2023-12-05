@@ -1,45 +1,57 @@
 <template>
   <body>
     <header>
+      <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
       <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
       <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
     </header>
 
-    <h1 v-if="this.lang == 'en'">Create the board!</h1>
-    <h1 v-if="this.lang == 'sv'">Skapa brädan!</h1>
+    <h1>{{ uiLabels.boardViewTitle }}</h1>
+    <p class="pollDisplay"> Poll Id: {{ pollId }}</p>
 
-    <div v-if="this.lang == 'en'">
-      <button v-on:click="exitCreatorMode">Exit Creator Mode</button>
-      <button v-on:click="createPoll"> Create Jeopardy Quiz</button>
+    <div>
+      Row number:
+      <input type="number" v-model="questionRow">
+      Column number:
+      <input type="number" v-model="questionColumn">
     </div>
-
-    <div v-if="this.lang == 'sv'">
-      <button v-on:click="exitCreatorMode">Lämna Skaparläge</button>
-      <button v-on:click="createPoll"> Skapa Jeopardy Quiz</button>
+    <div>
+      <button v-on:click="runQuestion"> Run question </button>
     </div>
 
     <main>
       <div class="jeopardy-board">
-        <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
-          <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
-            @click="handleClick(indexRow, indexCol)">
-            <div v-if="!col.question" >
-              <div v-if="this.lang=='en'">Click to add question</div>
-              <div v-if="this.lang=='sv'">Klicka för att lägga till fråga</div>
-            </div>
-            <div>
-              <div>Q: {{ col.question }}</div>
-              <div>A: {{ col.answer }}</div>
-            </div>
+      <!-- Display column titles -->
+      <div class="jeopardy-row">
+        <div v-for="(category, index) in categories" :key="index" class="jeopardy-square" @click="handleCategoryClick(index)">
+          <div v-if="!category">
+            <p>Click to add category name</p>
+          </div>
+          <div v-else>
+            <div>{{ category }}</div>
           </div>
         </div>
       </div>
+
+      <div>
+      <hr>
+      </div>
+
+      <!-- Display Jeopardy board content -->
+      <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
+        <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square" @click="handleClick(indexRow, indexCol)">
+          <div v-if="!col.question">
+            <p>{{ uiLabels.boardViewQuestionBox }}</p>
+          </div>
+          <div v-else>
+            <div>Q: {{ col.question }}</div>
+            <div>A: {{ col.answer }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
     </main>
 
-    <footer>
-      <p v-if="this.lang == 'en'">Have fun!! </p>
-      <p v-if="this.lang == 'sv'">Ha det så kul!! </p>
-    </footer>
   </body>
 </template>
 
@@ -56,32 +68,58 @@ export default {
         question: '',
         answer: ''
       }))),
+      pollId: "",
+      categories: Array.from({ length: 5 }, () => ""),
+      questionNumber: {questionRow: 0, questionColumn: 0},  
+      data: {}
     };
   },
-  methods: {
-    created: function () {
+  created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
+    this.pollId = this.$route.params.pollId
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels
     })
     },
+  methods: {
     handleClick(row, col) {
-      const newQuestion = prompt('Enter the question:');
-      if (newQuestion !== null) {
-        const newAnswer = prompt('Enter the correct answer:');
-      }
+      let newQuestion;
+      let newAnswer;
 
-      if (newQuestion !== null && newAnswer !== null) {
+      if (this.lang == 'en') {
+        newQuestion = prompt('Enter the question:');
+        newAnswer = prompt('Enter the correct answer:');
+      }
+      if (this.lang == 'sv') {
+        newQuestion = prompt('Skriv frågan:');
+        newAnswer = prompt('Skriv de korrekta svaret:');
+      }
+      if (newQuestion !== "" && newAnswer !== "") {
         this.questions[row][col].question = newQuestion;
         this.questions[row][col].answer = newAnswer;
+        socket.emit("addQuestion", { pollId: this.pollId, 
+          q: this.questions[row][col].question, a: this.questions[row][col].answer })
       }
-      }, 
-    exitCreatorMode() {
-      this.$router.push('/jstartview');
     },
-    createPoll: function () {
-      socket.emit("createPoll", { pollId: this.pollId, lang: this.lang })
+    handleCategoryClick(index) {
+      let categoryName;
+
+      if (this.lang == 'en') {
+        categoryName = prompt('Enter the category name:');
+      }
+      if (this.lang == 'sv') {
+        categoryName = prompt('Skriv kategorinamnet:');
+      }
+      if (categoryName !== "") {
+        this.categories[index] = categoryName
+      }
+    },
+    exitCreatorMode() {
+      this.$router.push('/jStartView');
+    },
+    runQuestion: function () {
+      socket.emit("runQuestion", { pollId: this.pollId, questionNumber: this.questionNumber })
     },
     switchLanguageEnglish: function () {
       if (this.lang === "sv") {
@@ -107,10 +145,7 @@ main {
   display: flex;
   justify-content: center;
   padding-top: 20px;
-}
-
-h1 {
-  padding-top: 100px;
+  margin: 0;
 }
 
 .jeopardy-board {
@@ -132,4 +167,22 @@ h1 {
   justify-content: center;
   cursor: pointer;
   margin: 5px;
-}</style>
+}
+
+footer {
+  padding-bottom: 10px;
+}
+
+input {
+  margin: 2px;
+}
+
+hr {
+    color: black; /* Line color */
+    background-color: black; /* Line color for older browsers */
+    height: 5px; /* Line thickness */
+    width: 1300px;
+    border: none; /* Remove the default border */
+  }
+
+</style>

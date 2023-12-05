@@ -46,15 +46,31 @@ const router = createRouter({
       name: 'BoardView',
       component: () => import('../views/BoardView.vue')
     },
+    {
+      path: '/quiz-id-view',
+      name: 'QuizIDView',
+      component: () => import('../views/QuizIDView.vue')
+
+    },
     { 
       path: '/jCreateInfo',
       name: 'JCreateInfo',
       component: () => import('../views/JCreateInfo.vue')
     },
     { 
-      path: '/BoardViewSteph',
+      path: '/BoardViewSteph/:pollId',
       name: 'BoardViewSteph',
       component: () => import('../views/BoardViewSteph.vue')
+    },
+    { 
+      path: '/jJoinView',
+      name: 'JJoinView',
+      component: () => import('../views/JJoinView.vue')
+    },
+    { 
+      path: '/jPollView/:pollId',
+      name: 'JPollView',
+      component: () => import('../views/JPollView.vue')
     }
   ]
 });
