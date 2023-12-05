@@ -63,6 +63,11 @@ const router = createRouter({
       component: () => import('../views/BoardViewSteph.vue')
     },
     { 
+      path: '/PlayPrototype',
+      name: 'PlayPrototype/',
+      component: () => import('../views/PlayPrototype.vue')
+    },
+    { 
       path: '/jJoinView',
       name: 'JJoinView',
       component: () => import('../views/JJoinView.vue')

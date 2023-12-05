@@ -24,5 +24,6 @@
 	"boardViewQuestionBox": "Click to add question",
 	"boardViewTitle": "Create the board!",
 	"exit": "Go to the homescreen",
-	"joinViewTitle": "JOIN A JEOPARDY"
+	"joinViewTitle": "JOIN A JEOPARDY",
+	"playGame": "Let's play Jeopardy!"
 }
