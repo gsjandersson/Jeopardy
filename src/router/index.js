@@ -45,8 +45,6 @@ const router = createRouter({
       path: '/board',
       name: 'BoardView',
       component: () => import('../views/BoardView.vue')
-
-      
     },
     {
       path: '/quiz-id-view',
@@ -68,6 +66,11 @@ const router = createRouter({
       path: '/jJoinView',
       name: 'JJoinView',
       component: () => import('../views/JJoinView.vue')
+    },
+    { 
+      path: '/jPollView/:pollId',
+      name: 'JPollView',
+      component: () => import('../views/JPollView.vue')
     }
   ]
 });

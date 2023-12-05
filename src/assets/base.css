@@ -39,9 +39,9 @@ body {
 
 button {
   background-color: #073763ff;
-  padding: 1em;
   width: 10em;
-  height: 5em;
+  height: 4em;
+  padding: 0;
   /* text-decoration: underline; */
   color: #ffff00;
   font-size: 1em;
@@ -50,4 +50,12 @@ button {
 
 button:hover {
   cursor: pointer;
+}
+
+#homescreenButtonTopLeft {
+  position: absolute;
+  top: 15px; /* Position at the top of the viewport */
+  left: 15px; /* Position at the right of the viewport */
+  width: 110px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
 }

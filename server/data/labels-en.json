@@ -7,7 +7,9 @@
 	"question": "Question",
 	"changeLanguage": "",
 	"about": "About",
-	"emptyIdMessage": "Error: Jeopardy ID must not be empty",
+	"errorCreateIdMessage": "Error: Jeopardy ID must not be empty",
+	"errorCreateQuestionMessage": "Error: There has to be at least one question in each category",
+	"errorCreateCategoryMessage": "Error: There has to be at least one category",
 	"createInfoTitle": "HOW TO CREATE A QUIZ",
 	"createInfo": [
 	  "Write 5 topics",

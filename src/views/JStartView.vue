@@ -2,7 +2,7 @@
   <body>
     <main>
 
-      <div style="margin: 0; padding: 0;">
+      <div>
         <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
         <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
       </div>
@@ -39,7 +39,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'StartView',
+  name: 'JStartView',
   components: {
     ResponsiveNav
   },

@@ -1,5 +1,6 @@
 <template>
-  
+
+  <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
   <button id="UKflagga" v-on:click="switchLanguageEnglish">
     {{ uiLabels.changeLanguage }}
   </button>
@@ -51,7 +52,7 @@ export default {
     // Emitting an event when the page is loaded and listening for initialization data
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
-      this.uiLabels = labels
+      this.uiLabels = labels;
     })
   },
 
@@ -59,27 +60,30 @@ export default {
   methods: {
     switchLanguageEnglish: function () {
       if (this.lang === "sv") {
-        this.lang = "en"
+        this.lang = "en";
       }
       localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
+      socket.emit("switchLanguage", this.lang);
     },
     switchLanguageSwedish: function () {
       if (this.lang === "en") {
-        this.lang = "sv"
+        this.lang = "sv";
       }
       localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
+      socket.emit("switchLanguage", this.lang);
     },
     joinPoll () {
       if (this.pollId !== "") {
         this.errorIdMessage = false;
-        this.$router.push('/poll/' + this.pollId);
+        this.$router.push('/jPollView/' + this.pollId);
       }
-      else {}
-      this.errorIdMessage = true;
-    } 
-
+      else {
+        this.errorIdMessage = true;
+      }
+    },
+    exitCreatorMode() {
+      this.$router.push('/jStartView');
+    }
   }
 }
 </script>

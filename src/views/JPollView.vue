@@ -1,4 +1,9 @@
 <template>
+
+  <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">
+    {{ uiLabels.exit }}
+  </button>
+
   <div>
     <!-- Display the current pollId -->
     {{ pollId }}
@@ -20,7 +25,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'Poll VIEWWWWWW',
+  name: 'JPollView',
   components: {
     QuestionComponent
   },
@@ -28,17 +33,23 @@ export default {
   // Initial data properties
   data: function () {
     return {
+      uiLabels: {},
       question: {
         q: "",
         a: []
       },
       pollId: "inactive poll",
-      submittedAnswers: {}
+      submittedAnswers: {},
+      lang: localStorage.getItem("lang") || "en"
     }
   },
 
   // Lifecycle hook - component creation
   created: function () {
+    socket.emit("pageLoaded", this.lang);
+    socket.on("init", (labels) => {
+      this.uiLabels = labels
+    })
     // Set pollId from route parameters and join the poll
     this.pollId = this.$route.params.id
     socket.emit('joinPoll', this.pollId)
@@ -56,7 +67,10 @@ export default {
   methods: {
     submitAnswer: function (answer) {
       socket.emit("submitAnswer", { pollId: this.pollId, answer: answer })
-    }
+    },
+    exitCreatorMode() {
+      this.$router.push('/jStartView');
+    },
   }
 }
 </script>

@@ -20,7 +20,7 @@ const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
-  name: 'Poll VIEWWWWWW',
+  name: 'PollView',
   components: {
     QuestionComponent
   },

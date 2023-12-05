@@ -3,6 +3,7 @@
     <main>
 
       <div>
+        <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
         <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
         <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
       </div>
@@ -20,15 +21,33 @@
         </ol>
       </div>
 
-      <p> Jeopardy ID: </p>
-      <input type="text" v-model="pollId">
+      <div>
+        <p> Jeopardy ID: </p>
+        <input type="text" v-model="pollId">
+      </div>
+
+      <div>
+        <p> Number of categories: </p>
+        <input type="number" v-model="categoryNo" min="1" step="1">
+      </div>
+      
+      <div>
+        <p> Number of questions per category: </p>
+        <input type="number" v-model="questionNo" min="1" step="1">
+      </div>
 
       <div>
         <button v-on:click="createPoll">
           {{ uiLabels.createPoll }} 
         </button>
       <p v-if="errorIdMessage == true" style="color: red">
-        {{ uiLabels.emptyIdMessage }}
+        {{ uiLabels.errorCreateIdMessage }}
+      </p>
+      <p v-if="errorCategoryNo == true" style="color: red">
+        {{ uiLabels.errorCreateCategoryMessage }}
+      </p>
+      <p v-if="errorQuestionNo == true" style="color: red">
+        {{ uiLabels.errorCreateQuestionMessage }}
       </p>
       </div>
     </main>
@@ -54,7 +73,11 @@ export default {
       uiLabels: {}, // Object for storing UI labels
       pollId: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting
-      errorIdMessage: false
+      errorIdMessage: false,
+      errorCategoryNo: false,
+      errorQuestionNo: false,
+      categoryNo: 5,
+      questionNo: 5
     }
   },
 
@@ -97,15 +120,36 @@ export default {
       socket.emit("switchLanguage", this.lang)
     },
     createPoll: function () {
-      if (this.pollId !== "") {
+      if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
         this.errorIdMessage = false;
+        this.errorCategoryNo = false;
+        this.errorQuestionNo = false;
         socket.emit("createPoll", { pollId: this.pollId, lang: this.lang });
         this.$router.push('/BoardViewSteph/' + this.pollId);
       }
-      else {
+      if (this.pollId === "") {
         this.errorIdMessage = true;
       }
-      
+      else {
+        this.errorIdMessage = false;
+      }
+
+      if (this.categoryNo < 1 || this.categoryNo === "") {
+        this.errorCategoryNo = true;
+      }
+      else {
+        this.errorCategoryNo = false;
+      }
+
+      if (this.questionNo < 1 || this.questionNo === "") {
+        this.errorQuestionNo = true;
+      }
+      else {
+        this.errorQuestionNo = false;
+      }
+    },
+    exitCreatorMode() {
+      this.$router.push('/jStartView');
     }
   }
 }

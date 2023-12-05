@@ -47,7 +47,7 @@ export default {
       }
     },
     exitCreatorMode() {
-      this.$router.push('/jstartview'); 
+      this.$router.push('/jStartView'); 
     },
   },
 };
