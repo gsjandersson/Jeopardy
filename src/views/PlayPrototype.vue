@@ -33,7 +33,7 @@
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
             @click="handleClick(indexRow, indexCol)">
             <div v-if="!col.question">
-              <p>{{ (indexRow + 1) * 100 }}$</p>
+              <p>${{ (indexRow + 1) * 100 }}</p>
             </div>
           </div>
         </div>

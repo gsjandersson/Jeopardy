@@ -32,30 +32,19 @@ const router = createRouter({
       component: () => import('../views/ResultView.vue') // Route for viewing poll results, dynamically loading the ResultView component
     },
     {
-      path: '/test',
-      name: 'TestView',
-      component: () => import('../views/TestView.vue')
-    },
-    {
       path: '/jStartView',
       name: 'JStartView',
       component: () => import('../views/JStartView.vue')
     },
     { 
-      path: '/board',
-      name: 'BoardView',
-      component: () => import('../views/BoardView.vue')
-    },
-    {
-      path: '/quiz-id-view',
-      name: 'QuizIDView',
-      component: () => import('../views/QuizIDView.vue')
-
-    },
-    { 
       path: '/jCreateInfo',
       name: 'JCreateInfo',
       component: () => import('../views/JCreateInfo.vue')
+    },
+    { 
+      path: '/EnterNameView',
+      name: 'EnterNameView',
+      component: () => import('../views/EnterNameView.vue')
     },
     { 
       path: '/BoardViewSteph/:pollId',
@@ -65,12 +54,12 @@ const router = createRouter({
     { 
       path: '/PlayPrototype',
       name: 'PlayPrototype/',
-      component: () => import('../views/PlayPrototype.vue')
+      component: () => import('../views/PlayPrototype.vue') 
     },
     { 
       path: '/jJoinView',
       name: 'JJoinView',
-      component: () => import('../views/JJoinView.vue')
+      component: () => import('../views/JJoinView.vue') /* lägg till ID*/
     },
     { 
       path: '/jPollView/:pollId',

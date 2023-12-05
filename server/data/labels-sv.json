@@ -25,5 +25,7 @@
 	"boardViewTitle": "Skapa brädan!",
 	"exit": "Gå till hemskärmen",
 	"joinViewTitle": "GÅ MED I EN JEOPARDY",
-	"playGame": "Nu spelar vi Jeopardy!"
+	"playGame": "Nu spelar vi Jeopardy!",
+	"enterNameTitle": "Vem är du?",
+	"enterNameDescription": "Skriv ditt namn"
 }

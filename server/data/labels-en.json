@@ -25,5 +25,6 @@
 	"boardViewTitle": "Create the board!",
 	"exit": "Go to the homescreen",
 	"joinViewTitle": "JOIN A JEOPARDY",
-	"playGame": "Let's play Jeopardy!"
+	"enterNameTitle": "Who are you?",
+	"enterNameDescription": "Enter your name"
 }
