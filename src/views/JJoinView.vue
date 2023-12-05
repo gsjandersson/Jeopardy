@@ -1,5 +1,4 @@
 <template>
-
   <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
   <button id="UKflagga" v-on:click="switchLanguageEnglish">
     {{ uiLabels.changeLanguage }}
@@ -17,15 +16,13 @@
 
   <div>
     <button id="playButton" v-on:click="joinPoll">
-      {{ uiLabels.participatePoll }} 
+      {{ uiLabels.participatePoll }}
     </button>
     <p v-if="errorIdMessage == true" style="color: red">
-        {{ uiLabels.emptyIdMessage }}
+      {{ uiLabels.emptyIdMessage }}
     </p>
   </div>
-
 </template>
-
 
 <script>
 // Import required modules
@@ -72,7 +69,7 @@ export default {
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang);
     },
-    joinPoll () {
+    joinPoll() {
       if (this.pollId !== "") {
         this.errorIdMessage = false;
         this.$router.push('/jPollView/' + this.pollId);

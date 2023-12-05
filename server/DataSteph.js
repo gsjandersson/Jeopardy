@@ -9,7 +9,7 @@ import { readFileSync } from "fs";
 
 // Data class constructor
 function Data() {
-  
+
   // Object to store poll data
   this.polls = {};
 }

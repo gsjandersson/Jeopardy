@@ -1,5 +1,4 @@
 <template>
-
   <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">
     {{ uiLabels.exit }}
   </button>
