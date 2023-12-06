@@ -6,7 +6,11 @@
     Poll id: {{ pollId }}
     </header>
 
-    <h1> {{ uiLabels.answerWhatIsAre }} </h1>
+    <h1> {{ currentQuestion }}</h1>
+
+    <h2> {{ uiLabels.answerWhatIsAre }} </h2>
+    <h2> {{ participants }}</h2>
+
 
     <div>
       <input type="text" v-model="participantAnswer" v-bind:placeholder="uiLabels.answer">
@@ -67,7 +71,10 @@ export default {
       participantAnswer: "",
       lang: localStorage.getItem("lang") || "en",
       categories: [],
-      questions: []
+      questions: [],
+      currentQuestion: "",
+      partName: "partName",
+      participants: []
     }
   },
 
@@ -81,6 +88,8 @@ export default {
     this.pollId = this.$route.params.pollId
     // socket.emit('joinPoll', this.pollId)
 
+    socket.emit('joinPoll', {pollId: this.pollId, participantName: "partNamemustchange"})
+
     socket.emit("retrieveQuestions", (this.pollId));
 
     socket.emit("retrieveCategories", (this.pollId));
@@ -92,12 +101,21 @@ export default {
     socket.on("categoriesRetrieved", (categories) => 
       this.categories = categories
     );
+
+    socket.on('questionChosen', (currentQuestion) =>
+      this.currentQuestion = currentQuestion
+    );
+    
+    socket.on('participantUpdate', (participants) => {
+      this.participants = participants;
+    }
+    );
   },
 
   // Methods to interact with the server
   methods: {
     handleClick(rowNo, colNo) {
-      // run question
+      socket.emit("chosenQuestion", {pollId: this.pollId, questionRow: rowNo, questionCol: colNo})
     },
     exit() {
       this.$router.push('/jStartView');

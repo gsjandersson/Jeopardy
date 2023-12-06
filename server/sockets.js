@@ -31,14 +31,16 @@ function sockets(io, socket, data) {
     socket.emit('categoriesRetrieved', data.retrieveCategories(d.pollId));
   });
 
-  socket.on('joinPoll', function (pollId) {
-    socket.join(pollId);
-    socket.emit('newQuestion', data.getQuestion(pollId))
-    socket.emit('dataUpdate', data.getAnswers(pollId));
+  socket.on('joinPoll', function (d) {
+    socket.join(d.pollId);
+    data.newParticipant(d.pollId, d.participantName);
+    io.to('participantUpdate', data.getParticipants(d.pollId))
+    // socket.emit('newQuestion', data.getQuestion(pollId))
+    // socket.emit('dataUpdate', data.getAnswers(pollId));
   });
 
   socket.on('runQuestion', function (d) {
-    io.to(d.pollId).emit('newQuestion', data.getQuestion(d.pollId, d.questionNumber));
+    io.to(d.pollId).emit('newQuestion', data.getQuestion(d.pollId, d.questionRow, d.questionCol));
     io.to(d.pollId).emit('dataUpdate', data.getAnswers(d.pollId));
   });
 
@@ -58,8 +60,11 @@ function sockets(io, socket, data) {
 
   socket.on('retrieveCategories', function (pollId){
     socket.emit('categoriesRetrieved', data.retrieveCategories(pollId))
-  })
+  });
 
+  socket.on('chosenQuestion', function (d) {
+    io.to(d.pollId).emit('questionChosen', data.getQuestion(d.pollId, d.questionRow, d.questionCol))
+  });
 }
 
 export { sockets };

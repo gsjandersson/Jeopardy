@@ -32,7 +32,7 @@
       <!-- Display Jeopardy board content -->
       <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
         <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
-          :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleClick(indexRow, indexCol)">
+          :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleQuestionClick(indexRow, indexCol)">
           <div v-if="!col.question">
             <p>{{ uiLabels.boardViewQuestionBox }}</p>
           </div>
@@ -60,7 +60,6 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
       questionNumber: {questionRow: 0, questionColumn: 0},  
-      data: {},
       questions: [],
       categories: []
     };
@@ -74,11 +73,7 @@ export default {
     });
     socket.emit("retrieveQuestions", (this.pollId));
 
-    socket.emit("retrieveCategories", (this.pollId))
-  
-    socket.on("dataUpdate", (data) =>
-      this.data = data
-    );
+    socket.emit("retrieveCategories", (this.pollId));
 
     socket.on("pollCreated", (data) =>
       this.data = data
@@ -91,10 +86,10 @@ export default {
     socket.on("categoriesRetrieved", (categories) => 
       this.categories = categories
     );
-
     },
+
   methods: {
-    handleClick(rowNo, colNo) {
+    handleQuestionClick(rowNo, colNo) {
       let newQuestion;
       let newAnswer;
 
@@ -109,11 +104,6 @@ export default {
       if (newQuestion !== "" && newAnswer !== "") {
         socket.emit("editQuestion", { pollId: this.pollId, row: rowNo, col: colNo,
           q: newQuestion, a: newAnswer })
-        
-        socket.on("questionsRetrieved", (questions) => 
-          this.questions = questions
-        )
-        
       }
     },
     handleCategoryClick(colNo) {
@@ -127,10 +117,6 @@ export default {
       }
       if (categoryName !== "") {
         socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: categoryName})
-
-        socket.on("categoriesRecieved", (categories) =>
-          this.categories = categories
-        )
       }
     },
     exitCreatorMode() {
