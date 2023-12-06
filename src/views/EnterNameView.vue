@@ -18,8 +18,8 @@
     <button id="playButton" v-on:click="joinPoll">
       {{ uiLabels.participatePoll }}
     </button>
-    <p v-if="errorNameIdMessage == true" style="color: red">
-      {{ uiLabels.emptyIdMessage }}
+    <p v-if="errorNameIDMessage == true" style="color: red">
+      {{ uiLabels.errorNameIDMessage }}
     </p>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
       uiLabels: {}, // Object for storing UI labels
       participantName: "", // Input for name ID
       lang: localStorage.getItem("lang") || "en", // Language setting,
-      errorNameIdMessage: false,
+      errorNameIDMessage: false,
       pollId: ""
     }
   },
@@ -74,11 +74,11 @@ export default {
     },
     joinPoll() {
       if (this.participantName !== "") {
-        this.errorNameIdMessage = false;
+        this.errorNameIDMessage = false;
         this.$router.push('/jPollView/' + this.pollId);
       }
       else {
-        this.errorNameIdMessage = true;
+        this.errorNameIDMessage = true;
       }
     },
     exitCreatorMode() {
