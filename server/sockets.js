@@ -49,6 +49,8 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('dataUpdate', data.getAnswers(d.pollId));
   });
 
+  //svar till alla anslutna klienter, lägga till fler...//
+
   socket.on('resetAll', () => {
     data = new Data();
     data.initializeData();
