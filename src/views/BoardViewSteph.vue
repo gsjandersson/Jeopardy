@@ -30,7 +30,7 @@
           <hr>
         </div>
 
-        <!-- Display Jeopardy board content -->
+        <!-- Display Jeopardy board content, gör istället en komponent mha questionskompent, vi ska göra en egen component med all styling etc, klickhantering och layout i kompknent -->
         <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
             :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleQuestionClick(indexRow, indexCol)">
