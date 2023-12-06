@@ -65,6 +65,11 @@ const router = createRouter({
       path: '/jPollView/:pollId',
       name: 'JPollView',
       component: () => import('../views/JPollView.vue')
+    },
+    { 
+      path: '/QuestionView/:pollId',
+      name: 'QuestionView',
+      component: () => import('../views/QuestionView.vue')
     }
   ]
 });

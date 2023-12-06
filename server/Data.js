@@ -11,6 +11,7 @@ import { readFileSync } from "fs";
 function Data() {
   // Object to store poll data
   this.polls = {};
+  this.participants = {};
 }
 
 /***********************************************
@@ -43,6 +44,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     poll.categories = Array.from({ length: categoryNo }, () => "");
     poll.currentQuestion = 0;
     this.polls[pollId] = poll;
+    this.participants[pollId] = [];
     console.log("poll created", pollId, poll);
   }
   return this.polls[pollId];
@@ -74,14 +76,14 @@ Data.prototype.editCategory = function (pollId, col, newCategory) {
 }
 
 // Method to get the current question in a poll
-Data.prototype.getQuestion = function (pollId, qId = null) {
+Data.prototype.getQuestion = function (pollId, questionRow, questionCol) {
   const poll = this.polls[pollId];
-  console.log("question requested for ", pollId, qId);
+  console.log("question requested for ", pollId, "row", questionRow, "col", questionCol);
   if (typeof poll !== 'undefined') {
-    if (qId !== null) {
-      poll.currentQuestion = qId;
+    if (questionRow !== null && questionCol !== null) {
+      poll.currentQuestion = {row: questionRow, col: questionCol};
     }
-    return poll.questions[poll.currentQuestion];
+    return poll.questions[poll.currentQuestion.row][poll.currentQuestion.col].question;
   }
   return [];
 }
@@ -125,6 +127,7 @@ Data.prototype.retrieveQuestions = function (pollId) {
     const questions = poll.questions;
     return questions;
  }
+ return {};
 }
 
 Data.prototype.retrieveCategories = function (pollId) {
@@ -133,6 +136,26 @@ Data.prototype.retrieveCategories = function (pollId) {
     const categories = poll.categories;
     return categories;
  }
+ return {};
+}
+
+Data.prototype.newParticipant = function (pollId, participantName) {
+  const poll = this.polls[pollId];
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined' && typeof poll !== 'undefined') {
+    this.participants[pollId].push(participantName);
+    console.log(this.participants[pollId]);
+ }
+}
+
+Data.prototype.getParticipants = function (pollId) {
+  const participants = this.participants[pollId];
+  if (typeof participants !== 'undefined') {
+    const allParticipants = participants;
+    console.log(allParticipants);
+    return allParticipants;
+ }
+ return {};
 }
 
 // Export the Data class for use in other modules
