@@ -12,14 +12,14 @@
   </header>
 
   <p> {{ uiLabels.enterNameDescription }} </p>
-  <input type="text" v-model="nameId"/>
+  <input type="text" v-model="participantName"/>
 
   <div>
     <button id="playButton" v-on:click="joinPoll">
       {{ uiLabels.participatePoll }}
     </button>
-    <p v-if="errorIdMessage == true" style="color: red">
-      {{ uiLabels.errorNameIdMessage }}
+    <p v-if="errorNameIdMessage == true" style="color: red">
+      {{ uiLabels.emptyIdMessage }}
     </p>
   </div>
 </template>
@@ -39,9 +39,9 @@ export default {
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      nameId: "", // Input for name ID
+      participantName: "", // Input for name ID
       lang: localStorage.getItem("lang") || "en", // Language setting,
-      errorIdMessage: false,
+      errorNameIdMessage: false,
       pollId: ""
     }
   },
@@ -73,12 +73,12 @@ export default {
       socket.emit("switchLanguage", this.lang);
     },
     joinPoll() {
-      if (this.nameId !== "") {
-        this.errorIdMessage = false;
+      if (this.participantName !== "") {
+        this.errorNameIdMessage = false;
         this.$router.push('/jPollView/' + this.pollId);
       }
       else {
-        this.errorIdMessage = true;
+        this.errorNameIdMessage = true;
       }
     },
     exitCreatorMode() {
