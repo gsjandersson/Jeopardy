@@ -23,7 +23,7 @@ function sockets(io, socket, data) {
 
   socket.on('editQuestion', function (d) {
     data.editQuestion(d.pollId, d.row, d.col, { q: d.q, a: d.a });
-    socket.emit('questionRetrieved', data.retrieveQuestions(d.pollId));
+    socket.emit('questionsRetrieved', data.retrieveQuestions(d.pollId));
   });
 
   socket.on('editCategory', function (d) {
