@@ -32,5 +32,7 @@
 	"answer": "Svar",
 	"playGame": "Nu spelar vi Jeopardy!",
 	"enterNameTitle": "Vem är du?",
-	"enterNameDescription": "Skriv ditt namn"
+	"enterNameDescription": "Skriv ditt namn",
+	"howToHost": "Klar med quiz!",
+	"hostInfo": "Snyggt jobbat, du är klar med ditt Jeopardy!"
 }

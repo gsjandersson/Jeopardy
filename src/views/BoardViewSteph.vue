@@ -2,6 +2,7 @@
   <body>
     <header>
       <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
+      <button id="finishQuizButton" v-on:click="howToHost">{{ uiLabels.howToHost }}</button>
       <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
       <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
     </header>
@@ -127,6 +128,9 @@ export default {
     exitCreatorMode() {
       this.$router.push('/jStartView');
     },
+    howToHost() {
+      this.$router.push('/HowToHostView');
+    },
     runQuestion: function () {
       socket.emit("runQuestion", { pollId: this.pollId, questionNumber: this.questionNumber })
     },
@@ -190,5 +194,16 @@ hr {
   width: 100vw;
   border: none;
   /* Remove the default border */
+}
+
+#finishQuizButton {
+  position: absolute;
+  top: 15px; /* Position at the top of the viewport */
+  left: 150px; /* Position at the right of the viewport */
+  width: 110px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
+  color: #ffff00;
+  font-size: 1em;
+  margin: 1em;
 }
 </style>

@@ -31,5 +31,7 @@
 	"enterNameTitle": "Who are you?",
 	"enterNameDescription": "Enter your name",
 	"answerWhatIsAre": "WHAT IS/ARE...",
-	"answer": "Answer"
+	"answer": "Answer",
+	"howToHost": "Finished with quiz!",
+	"hostInfo": "Great job, you're done with your Jeopardy!"
 }
