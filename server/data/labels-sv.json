@@ -2,7 +2,7 @@
 	"sales-pitch": "Vad. Är. Frågan.",
 	"subHeading": "Klassiskt jeopardy men med dina vänner",
 	"invite": "Bjud in deltagare med den här länken:",
-	"createPoll": "SKAPA",
+	"createPoll": "SKAPA NYTT",
 	"participatePoll": "SPELA",
 	"question": "Fråga",
 	"changeLanguage": "",
@@ -32,5 +32,19 @@
 	"answer": "Svar",
 	"playGame": "Nu spelar vi Jeopardy!",
 	"enterNameTitle": "Vem är du?",
-	"enterNameDescription": "Skriv ditt namn"
+	"enterNameDescription": "Skriv ditt namn",
+	"howToHost": "Klar med quiz!",
+	"hostInfoTitle": "Snyggt jobbat, du är klar med ditt Jeopardy!",
+	"hostInfo": [
+			"Nu kan du presentera ditt Jeopardy för dina vänner!",
+			"För att spela tillsammans, be dem ansluta till ditt Jeopardy med ditt specifika Jeopardy ID på sina egna respektive enheter",
+			"När du trycker på knappen nedan kommer du att komma till värd-vyn.", 
+			"Visa denna vy för dina vänner på en extern skärm för att kunna spela tillsammans.",
+			"HA SÅ KUL!"],
+
+	"boardAgain": "Tillbaka",
+	"goToHostView": "Spela ditt spel",
+	"hostTheGameTitle": "VÄLKOMMEN TILL JEOPARDY",
+	"hostPoll": "VÄRD",
+	"editPoll": "ÄNDRA BEFINTLIGT"
 }

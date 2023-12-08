@@ -13,17 +13,28 @@
         <h3 style="margin:1em">{{ uiLabels.subHeading }}</h3>
       </header>
 
-      <div class="buttonContainer">
-        <div>
+      <div class="buttonRow">
+
           <button id="playButton">
-            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/jJoinView'">{{ uiLabels.participatePoll
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/jJoinView/'">{{ uiLabels.participatePoll
             }}</router-link>
           </button>
-        </div>
-        <div>
-          <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
-            uiLabels.createPoll }}</router-link> </button>
-        </div>
+        
+          <button id="createButton"> 
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
+            uiLabels.createPoll }}</router-link> 
+            </button>
+        
+          <button id="editButton"> 
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
+            uiLabels.editPoll }}</router-link> 
+            </button>
+
+            <button id="hostButton"> 
+             <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/hostWhichPoll/'">{{
+            uiLabels.hostPoll }}</router-link> 
+            </button>
+        
       </div>
 
 
@@ -87,7 +98,7 @@ export default {
 
 main {
   display: grid;
-  grid-template-columns: 2em auto;
+  grid-template-columns: 3em auto;
 }
 
 header {
@@ -97,17 +108,16 @@ header {
 header img {
   margin-top: 100px;
 }
-
-.buttonContainer {
+.buttonRow {
   display: grid;
-  grid-template-columns: 50vw 50vw;
+  grid-template-columns: repeat(4, 1fr); /* Three columns with equal width */
+  gap: 40px; /* Adjust the gap between buttons as needed */
+  margin-left: 180px;
 }
 
-#playButton {
-  margin-left: 10px;
+#playButton, #createButton, #editButton, #hostButton {
+  height: 120px;
+  width: 210px;
 }
 
-#createButton {
-  margin-right: 10px;
-}
 </style>

@@ -2,7 +2,7 @@
 	"sales-pitch": "What's. The. Question.",
 	"subHeading": "Classic Jeopardy but with your friends",
 	"invite": "Invite participants with this link:",
-	"createPoll": "CREATE",
+	"createPoll": "CREATE NEW",
 	"participatePoll": "PLAY",
 	"question": "Question",
 	"changeLanguage": "",
@@ -31,5 +31,18 @@
 	"enterNameTitle": "Who are you?",
 	"enterNameDescription": "Enter your name",
 	"answerWhatIsAre": "WHAT IS/ARE...",
-	"answer": "Answer"
+	"answer": "Answer",
+	"howToHost": "Finished with quiz!",
+	"hostInfoTitle": "Great job, you're done with your Jeopardy!",
+	"hostInfo": [
+		"Now you can present your Jeopardy game to your friends!",
+		"To play together, ask them to connect to your Jeopardy using your specific Jeopardy ID on their own personal devices.",
+		"When you press the button below, you'll go to the host-view.", 
+		"Show this view to your friends on an external screen to play the game together.",
+		"HAVE FUN!"],
+	"boardAgain": "Back to board",
+	"goToHostView": "Host the game",
+	"hostTheGameTitle": "WELCOME TO JEOPARDY",
+	"hostPoll": "HOST",
+	"editPoll": "EDIT EXISTING"
 }
