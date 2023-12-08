@@ -40,5 +40,7 @@
 		"When you press the button below, you'll go to the host-view.", 
 		"Show this view to your friends on an external screen to play the game together.",
 		"HAVE FUN!"],
-	"boardAgain": "Back to board"
+	"boardAgain": "Back to board",
+	"goToHostView": "Host the game",
+	"hostTheGameTitle": "WELCOME TO JEOPARDY"
 }

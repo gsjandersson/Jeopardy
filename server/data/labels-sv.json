@@ -42,6 +42,7 @@
 			"Visa denna vy för dina vänner på en extern skärm för att kunna spela tillsammans.",
 			"HA SÅ KUL!"],
 
-	"boardAgain": "Tillbaka"
-
+	"boardAgain": "Tillbaka",
+	"goToHostView": "Spela ditt spel",
+	"hostTheGameTitle": "VÄLKOMMEN TILL JEOPARDY"
 }

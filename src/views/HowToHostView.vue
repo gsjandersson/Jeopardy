@@ -24,6 +24,9 @@
     Jeopardy ID: {{ pollId }}
       </div>
 
+      <div class="button-container">
+        <button id="hostViewButton" v-on:click="goToHostView">{{ uiLabels.goToHostView }}</button>
+      </div>
 
     </body>
   </template>
@@ -97,7 +100,10 @@
       },
       backToBoard () {
         this.$router.push('/BoardViewSteph/' + this.pollId);
-      }
+      },
+      goToHostView () {
+        this.$router.push('/HostView/' + this.pollId);
+      },
     }
   }
   </script>
@@ -125,4 +131,19 @@
   margin: 1em;
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh; /* Optional: Adjust the height based on your layout */
+}
+
+#hostViewButton {
+  position: absolute;
+  width: 110px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
+  color: #ffff00;
+  font-size: 1em;
+  margin: 1em;
+}
 </style>
