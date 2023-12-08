@@ -12,7 +12,8 @@
   </header>
 
   <p> {{ uiLabels.enterNameDescription }} </p>
-  <input type="text" v-model="nameId"/>
+  <input type="text" v-model="participantName"/>
+  {{ participantName }}
 
   <div>
     <button id="playButton" v-on:click="joinPoll">
@@ -27,7 +28,6 @@
   
 <script>
 // Import required modules
-import QuestionComponent from '@/components/QuestionComponent.vue';
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
@@ -39,7 +39,7 @@ export default {
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      nameId: "", // Input for name ID
+      participantName: "", // Input for name ID
       lang: localStorage.getItem("lang") || "en", // Language setting,
       errorIdMessage: false,
       pollId: ""
@@ -73,9 +73,9 @@ export default {
       socket.emit("switchLanguage", this.lang);
     },
     joinPoll() {
-      if (this.nameId !== "") {
+      if (this.participantName !== "") {
         this.errorIdMessage = false;
-        this.$router.push('/jPollView/' + this.pollId);
+        this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`)
       }
       else {
         this.errorIdMessage = true;

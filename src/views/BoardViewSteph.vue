@@ -79,13 +79,20 @@ export default {
       this.data = data
     );
 
-    socket.on("questionsRetrieved", (questions) => 
-      this.questions = questions
+    socket.on("categoriesRetrieved", (categories) => {
+      this.categories = categories;
+      console.log(categories);
+      console.log("categories gotten");
+    }
     );
 
-    socket.on("categoriesRetrieved", (categories) => 
-      this.categories = categories
+    socket.on("questionsRetrieved", (questions) => {
+      this.questions = questions;
+      console.log(questions);
+      console.log("questions gotten");
+    }
     );
+    
     },
 
   methods: {

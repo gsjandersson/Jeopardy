@@ -3,24 +3,17 @@
     <button id="homescreenButtonTopLeft" v-on:click="exit">{{ uiLabels.exit }}</button>
     
     <header>
-    Poll id: {{ pollId }}
+    Poll Id: {{ pollId }}
     </header>
 
-    <h1> {{ currentQuestion }}</h1>
-
-    <h2> {{ uiLabels.answerWhatIsAre }} </h2>
-    <h2> {{ participants }}</h2>
-
-
-    <div>
-      <input type="text" v-model="participantAnswer" v-bind:placeholder="uiLabels.answer">
-    </div>
+    <h2> You are: {{ participantName }}</h2>
 
     <main>
       <div class="jeopardy-board">
       <!-- Display column titles -->
       <div class="jeopardy-row">
-        <div v-for="(category, index) in categories" :key="index" :style="{ width: `calc(90vw / ${categories.length})` }" 
+        <div v-for="(category, index) in categories" :key="index" 
+        :style="{ width: `calc(90vw / ${categories.length})`}" 
         class="jeopardy-category">
           <div v-if="!category">
             <p> No category title </p>
@@ -38,12 +31,16 @@
       <!-- Display Jeopardy board content -->
       <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
         <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
-          :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleClick(indexRow, indexCol)">
+          :style="{ width: `calc(90vw / ${categories.length})`,
+          backgroundColor: col.completed ? '#0a4c8a' : ''}"
+          @click="handleClick(indexRow, indexCol)">
+          <div>
           <div v-if="!col.question">
             <p> No question </p>
           </div>
           <div v-else>
             <div>${{ (indexRow+1)*100 }} </div>
+          </div>
           </div>
         </div>
       </div>
@@ -72,8 +69,7 @@ export default {
       lang: localStorage.getItem("lang") || "en",
       categories: [],
       questions: [],
-      currentQuestion: "",
-      partName: "partName",
+      participantName: "",
       participants: []
     }
   },
@@ -86,9 +82,9 @@ export default {
     })
     // Set pollId from route parameters and join the poll
     this.pollId = this.$route.params.pollId
-    // socket.emit('joinPoll', this.pollId)
+    this.participantName = this.$route.params.participantName
 
-    socket.emit('joinPoll', {pollId: this.pollId, participantName: "partNamemustchange"})
+    socket.emit('joinPoll', {pollId: this.pollId, participantName: this.participantName})
 
     socket.emit("retrieveQuestions", (this.pollId));
 
@@ -101,21 +97,27 @@ export default {
     socket.on("categoriesRetrieved", (categories) => 
       this.categories = categories
     );
-
-    socket.on('questionChosen', (currentQuestion) =>
-      this.currentQuestion = currentQuestion
-    );
     
     socket.on('participantUpdate', (participants) => {
+      console.log("participant update JpollView")
       this.participants = participants;
     }
     );
+
+    socket.on('goToQuestion', (d) => {
+      this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}/${d.row}/${d.col}`);
+    }
+    );
+
   },
 
   // Methods to interact with the server
   methods: {
     handleClick(rowNo, colNo) {
-      socket.emit("chosenQuestion", {pollId: this.pollId, questionRow: rowNo, questionCol: colNo})
+      let question = this.questions[rowNo][colNo]
+      if (question.completed === false && question.question !== "") {
+        socket.emit('allParticipantsGoToQuestion', {pollId: this.pollId, row: rowNo, col: colNo})
+      } 
     },
     exit() {
       this.$router.push('/jStartView');

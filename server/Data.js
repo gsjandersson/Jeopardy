@@ -39,12 +39,19 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     poll.lang = lang;
     poll.questions = Array.from({ length: questionNo }, () => Array.from({ length: categoryNo }, () => ({
       question: '',
-      answer: ''
+      answer: '',
+      completed: false
     }))),
+    // ha koll på completed
     poll.categories = Array.from({ length: categoryNo }, () => "");
     poll.currentQuestion = 0;
     this.polls[pollId] = poll;
-    this.participants[pollId] = [];
+
+    let participantData = {};
+    participantData.answers = [];
+    participantData.allParticipants = [];
+    this.participants[pollId] = participantData;
+
     console.log("poll created", pollId, poll);
   }
   return this.polls[pollId];
@@ -78,12 +85,10 @@ Data.prototype.editCategory = function (pollId, col, newCategory) {
 // Method to get the current question in a poll
 Data.prototype.getQuestion = function (pollId, questionRow, questionCol) {
   const poll = this.polls[pollId];
-  console.log("question requested for ", pollId, "row", questionRow, "col", questionCol);
-  if (typeof poll !== 'undefined') {
+   if (typeof poll !== 'undefined') {
     if (questionRow !== null && questionCol !== null) {
-      poll.currentQuestion = {row: questionRow, col: questionCol};
+      return poll.questions[questionRow][questionCol].question;
     }
-    return poll.questions[poll.currentQuestion.row][poll.currentQuestion.col].question;
   }
   return [];
 }
@@ -142,20 +147,27 @@ Data.prototype.retrieveCategories = function (pollId) {
 Data.prototype.newParticipant = function (pollId, participantName) {
   const poll = this.polls[pollId];
   const part = this.participants[pollId];
-  if (typeof part !== 'undefined' && typeof poll !== 'undefined') {
-    this.participants[pollId].push(participantName);
-    console.log(this.participants[pollId]);
- }
+  if (typeof part !== 'undefined' && typeof poll !== 'undefined' /*&& !this.participants[pollId].includes(participantName)*/) {
+    part.allParticipants.push(participantName);
+    console.log(part)
+  }
 }
 
 Data.prototype.getParticipants = function (pollId) {
-  const participants = this.participants[pollId];
-  if (typeof participants !== 'undefined') {
-    const allParticipants = participants;
-    console.log(allParticipants);
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    const allParticipants = part.allParticipants;
+    console.log("data getparticipants", allParticipants)
     return allParticipants;
  }
- return {};
+}
+
+Data.prototype.completeQuestion = function (pollId, row, col) {
+  console.log("data complete question")
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    poll.questions[row][col].completed = true;
+  }
 }
 
 // Export the Data class for use in other modules

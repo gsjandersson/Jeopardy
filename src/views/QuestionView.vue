@@ -8,7 +8,7 @@
       </div>
 
       <header>
-        <h1> Question </h1>
+        <h1> {{ question }} </h1>
       </header>
 
       <main>
@@ -17,7 +17,11 @@
         <p> Your answer: </p>
         <input type="text" v-model="answer">
       </div>
-      
+
+      <div>
+        <button @click="submitAnswer"> Submit Answer </button>
+      </div>
+
     
 
     </main>
@@ -26,31 +30,32 @@
 
 <script>
 // Importing components and libraries
-import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
   // Component name and imported components
   name: 'QuestionView',
-  components: {
-    ResponsiveNav
-  },
-
   // Initial data properties
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
       pollId: "", // Input for poll ID
-      lang: localStorage.getItem("lang") || "en" // Language setting
-
+      lang: localStorage.getItem("lang") || "en", // Language setting
+      answer: "",
+      participant: "",
+      question: "",
+      row: "",
+      col: ""
     }
   },
 
   // Lifecycle hook - component creation
   created: function () {
-    // Lifecycle hook - component creation
-    // this.id = this.$route.params.id;
+    this.pollId = this.$route.params.pollId
+    this.participant = this.$route.params.participantName
+    this.row = this.$route.params.row
+    this.col = this.$route.params.col
 
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
@@ -58,14 +63,17 @@ export default {
     // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
-    })
+    });
 
-    this.pollId = this.$route.params.pollId
+    socket.emit('joinPoll', {pollId: this.pollId, participantName: this.participant})
 
-    // Listen for data updates from the server
-    socket.on("dataUpdate", (data) =>
-      this.data = data
-    )
+    socket.emit("chosenQuestion", {pollId: this.pollId, questionRow: this.row, questionCol: this.col});
+
+    socket.on('questionChosen', (question) => {
+      this.question = question;
+      console.log("question view question chosen")
+    }); 
+
 
   },
   // Methods for language switching and toggling the navigation menu
@@ -86,6 +94,11 @@ export default {
     },
     exitCreatorMode() {
       this.$router.push('/jStartView');
+    },
+    submitAnswer: function () {
+      // some answer lagring
+      socket.emit('questionCompleted', {pollId: this.pollId, row: this.row, col: this.col})
+      this.$router.push(`/jPollView/${this.pollId}/${this.participant}`)
     }
   }
 }

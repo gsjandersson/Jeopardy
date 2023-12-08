@@ -18,7 +18,6 @@ function sockets(io, socket, data) {
   socket.on('addQuestion', function (d) {
     data.addQuestion(d.pollId, { q: d.q, a: d.a });
     socket.emit('dataUpdate', data.getAnswers(d.pollId));
-    console.log()
   });
 
   socket.on('editQuestion', function (d) {
@@ -34,7 +33,7 @@ function sockets(io, socket, data) {
   socket.on('joinPoll', function (d) {
     socket.join(d.pollId);
     data.newParticipant(d.pollId, d.participantName);
-    io.to('participantUpdate', data.getParticipants(d.pollId))
+    io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
     // socket.emit('newQuestion', data.getQuestion(pollId))
     // socket.emit('dataUpdate', data.getAnswers(pollId));
   });
@@ -65,6 +64,19 @@ function sockets(io, socket, data) {
   socket.on('chosenQuestion', function (d) {
     io.to(d.pollId).emit('questionChosen', data.getQuestion(d.pollId, d.questionRow, d.questionCol))
   });
+
+  socket.on('questionCompleted', function (d) {
+    data.completeQuestion(d.pollId, d.row, d.col);
+  });
+
+  socket.on('allParticipantsGoToQuestion', function (d) {
+    io.to(d.pollId).emit("goToQuestion", (d));
+  });
+
+  socket.on('allParticipantsGoToBorard', function () {
+    io.to(d.pollId).emit("goToBoard", (d));
+  });
+
 }
 
 export { sockets };
