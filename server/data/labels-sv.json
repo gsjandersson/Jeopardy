@@ -44,5 +44,7 @@
 
 	"boardAgain": "Tillbaka",
 	"goToHostView": "Spela ditt spel",
-	"hostTheGameTitle": "VÄLKOMMEN TILL JEOPARDY"
+	"hostTheGameTitle": "VÄLKOMMEN TILL JEOPARDY",
+	"hostPoll": "VÄRD",
+	"editPoll": "ÄNDRA"
 }

@@ -42,5 +42,7 @@
 		"HAVE FUN!"],
 	"boardAgain": "Back to board",
 	"goToHostView": "Host the game",
-	"hostTheGameTitle": "WELCOME TO JEOPARDY"
+	"hostTheGameTitle": "WELCOME TO JEOPARDY",
+	"hostPoll": "HOST",
+	"editPoll": "EDIT"
 }
