@@ -80,6 +80,12 @@ const router = createRouter({
       path: '/HostView/:pollId',
       name: 'HostView',
       component: () => import('../views/HostView.vue')
+    },
+
+    { 
+      path: '/HostWhichPoll',
+      name: 'HostWichPoll',
+      component: () => import('../views/HostWhichPoll.vue')
     }
   ]
 });

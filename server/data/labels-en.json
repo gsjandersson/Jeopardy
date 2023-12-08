@@ -44,5 +44,6 @@
 	"goToHostView": "Host the game",
 	"hostTheGameTitle": "WELCOME TO JEOPARDY",
 	"hostPoll": "HOST",
-	"editPoll": "EDIT EXISTING"
+	"editPoll": "EDIT EXISTING",
+	"hostViewTitle": "Which quiz are you hosting?"
 }

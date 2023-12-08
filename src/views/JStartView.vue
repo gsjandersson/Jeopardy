@@ -31,7 +31,7 @@
             </button>
 
             <button id="hostButton"> 
-             <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/hostWhichPoll/'">{{
+             <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/HostWhichPoll/'">{{
             uiLabels.hostPoll }}</router-link> 
             </button>
         
