@@ -72,7 +72,7 @@ const router = createRouter({
       component: () => import('../views/QuestionView.vue')
     },
     { 
-      path: '/HowToHostView',
+      path: '/HowToHostView/:pollId',
       name: 'HowToHostView',
       component: () => import('../views/HowToHostView.vue')
     }

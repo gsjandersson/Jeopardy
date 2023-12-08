@@ -8,8 +8,21 @@
         </div>
   
         <header>
-          <h1> {{ uiLabels.hostInfo }} </h1>
+          <h1> {{ uiLabels.hostInfoTitle }} </h1>
         </header>
+
+        <div>
+        <ol>
+          <li v-for="(instruction, index) in uiLabels.hostInfo" :key="index">
+            {{ instruction }}
+          </li>
+        </ol>
+      </div>
+
+      <div>
+    Poll Id: {{ pollId }}
+      </div>
+
     </body>
   </template>
   
@@ -42,11 +55,10 @@
   
     // Lifecycle hook - component creation
     created: function () {
-      // Lifecycle hook - component creation
-      // this.id = this.$route.params.id;
   
       // Emit an event to the server when the page is loaded
       socket.emit("pageLoaded", this.lang);
+      this.pollId = this.$route.params.pollId
   
       // Listen for initialization data from the server
       socket.on("init", (labels) => {
@@ -77,36 +89,6 @@
         }
         localStorage.setItem("lang", this.lang);
         socket.emit("switchLanguage", this.lang)
-      },
-      createPoll: function () {
-        if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
-          this.errorIdMessage = false;
-          this.errorCategoryNo = false;
-          this.errorQuestionNo = false;
-          socket.emit("createPoll", { pollId: this.pollId, lang: this.lang, 
-            questionNo: this.questionNo, categoryNo: this.categoryNo});
-          this.$router.push('/BoardViewSteph/' + this.pollId);
-        }
-        if (this.pollId === "") {
-          this.errorIdMessage = true;
-        }
-        else {
-          this.errorIdMessage = false;
-        }
-  
-        if (this.categoryNo < 1 || this.categoryNo === "") {
-          this.errorCategoryNo = true;
-        }
-        else {
-          this.errorCategoryNo = false;
-        }
-  
-        if (this.questionNo < 1 || this.questionNo === "") {
-          this.errorQuestionNo = true;
-        }
-        else {
-          this.errorQuestionNo = false;
-        }
       },
       exitCreatorMode() {
         this.$router.push('/jStartView');

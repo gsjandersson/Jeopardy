@@ -34,5 +34,11 @@
 	"enterNameTitle": "Vem är du?",
 	"enterNameDescription": "Skriv ditt namn",
 	"howToHost": "Klar med quiz!",
-	"hostInfo": "Snyggt jobbat, du är klar med ditt Jeopardy!"
+	"hostInfoTitle": "Snyggt jobbat, du är klar med ditt Jeopardy!",
+	"hostInfo": [
+			"Nu kan du presentera ditt Jeopardy för dina vänner!",
+			"För att spela tillsammans, be dem ansluta till ditt Jeopardy med ditt specifika Jeoaprdy ID på sina egna respektive enheter",
+			"När du trycker på knappen nedan kommer du att komma till värd-vyn.", 
+			"Visa denna vy för dina vänner på en extern skärm för att kunna spela tillsammans",
+			"HA SÅ KUL!"]
 }

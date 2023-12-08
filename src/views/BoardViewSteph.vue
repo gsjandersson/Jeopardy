@@ -129,7 +129,7 @@ export default {
       this.$router.push('/jStartView');
     },
     howToHost() {
-      this.$router.push('/HowToHostView');
+      this.$router.push('/HowToHostView/'+ this.pollId);
     },
     runQuestion: function () {
       socket.emit("runQuestion", { pollId: this.pollId, questionNumber: this.questionNumber })
