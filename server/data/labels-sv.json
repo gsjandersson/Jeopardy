@@ -2,7 +2,7 @@
 	"sales-pitch": "Vad. Är. Frågan.",
 	"subHeading": "Klassiskt jeopardy men med dina vänner",
 	"invite": "Bjud in deltagare med den här länken:",
-	"createPoll": "SKAPA",
+	"createPoll": "SKAPA NYTT",
 	"participatePoll": "SPELA",
 	"question": "Fråga",
 	"changeLanguage": "",
@@ -46,5 +46,5 @@
 	"goToHostView": "Spela ditt spel",
 	"hostTheGameTitle": "VÄLKOMMEN TILL JEOPARDY",
 	"hostPoll": "VÄRD",
-	"editPoll": "ÄNDRA"
+	"editPoll": "ÄNDRA BEFINTLIGT"
 }
