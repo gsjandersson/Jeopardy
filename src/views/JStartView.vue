@@ -14,20 +14,24 @@
       </header>
 
       <div class="buttonRow">
+
           <button id="playButton">
-            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/jJoinView'">{{ uiLabels.participatePoll
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/jJoinView/'">{{ uiLabels.participatePoll
             }}</router-link>
           </button>
         
-          <button id="createButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
+          <button id="createButton"> 
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
             uiLabels.createPoll }}</router-link> 
             </button>
         
-          <button id="editButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
+          <button id="editButton"> 
+            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
             uiLabels.editPoll }}</router-link> 
             </button>
 
-            <button id="hostButton"> <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/hostWhichPoll/'">{{
+            <button id="hostButton"> 
+             <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/hostWhichPoll/'">{{
             uiLabels.hostPoll }}</router-link> 
             </button>
         
