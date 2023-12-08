@@ -79,6 +79,28 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit("goToBoard", (d));
   });
 
+  socket.on('checkExisting', function (pollId) {
+    socket.emit('existingPoll', data.checkExisting(pollId));
+  });
+
+  socket.on('addParticipantAnswer', function (d) {
+    data.addParticipantAnswer(d.pollId, d.partName, d.partAnswer)
+  });
+
+  socket.on('getCorrectAnswer', function (d){
+    console.log("socket get correct answer")
+    socket.emit('correctAnswer', data.getCorrectAnswer(d.pollId, d.row, d.col))
+  });
+
+  socket.on('updateCashTotal', function (d) {
+    data.updateCashTotal(d.pollId, d.partName, d.row, d.col)
+  });
+
+  socket.on('getCashTotal', function (d) {
+    console.log("socket get cash total")
+    socket.emit('cashTotal', data.getCashTotal(d.pollId, d.partName))
+  });
+
 }
 
 export { sockets };
