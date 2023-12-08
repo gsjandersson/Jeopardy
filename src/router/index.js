@@ -81,11 +81,20 @@ const router = createRouter({
       name: 'HostView',
       component: () => import('../views/HostView.vue')
     },
-
     { 
       path: '/HostWhichPoll',
       name: 'HostWichPoll',
       component: () => import('../views/HostWhichPoll.vue')
+    },
+    { 
+      path: '/AnswerRight',
+      name: 'AnswerRight',
+      component: () => import('../views/AnswerRight.vue')
+    },
+    { 
+      path: '/AnswerWrong',
+      name: 'AnswerWrong',
+      component: () => import('../views/AnswerWrong.vue')
     }
   ]
 });

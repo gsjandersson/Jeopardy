@@ -15,24 +15,20 @@
 
       <div class="buttonRow">
 
-          <button id="playButton">
-            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/jJoinView/'">{{ uiLabels.participatePoll
-            }}</router-link>
+          <button id="playButton" v-on:click="play">
+          {{ uiLabels.participatePoll}}
           </button>
         
-          <button id="createButton"> 
-            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
-            uiLabels.createPoll }}</router-link> 
+          <button id="createButton" v-on:click="create"> 
+          {{uiLabels.createPoll }}
             </button>
         
-          <button id="editButton"> 
-            <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/JCreateInfo/'">{{
-            uiLabels.editPoll }}</router-link> 
+          <button id="editButton" v-on:click="edit"> 
+          {{ uiLabels.editPoll }}
             </button>
 
-            <button id="hostButton"> 
-             <router-link style="color: #ffff00; font-size: 2em" v-bind:to="'/HostWhichPoll/'">{{
-            uiLabels.hostPoll }}</router-link> 
+            <button id="hostButton" v-on:click="host"> 
+          {{ uiLabels.hostPoll }}
             </button>
         
       </div>
@@ -88,7 +84,23 @@ export default {
       }
       localStorage.setItem("lang", this.lang);
       socket.emit("switchLanguage", this.lang)
-    }
+    },
+
+    play () { 
+      this.$router.push('/JJoinView');
+    },
+
+    create () {
+      this.$router.push('/JCreateInfo');
+    },
+
+    edit () {
+      this.$router.push('/JCreateInfo');
+    },
+
+    host () {
+      this.$router.push('/HostWhichPoll');
+    },
   }
 }
 </script>
