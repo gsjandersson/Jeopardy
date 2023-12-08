@@ -124,12 +124,13 @@ header img {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Three columns with equal width */
   gap: 40px; /* Adjust the gap between buttons as needed */
-  margin-left: 180px;
+  margin-left: 155px;
 }
 
 #playButton, #createButton, #editButton, #hostButton {
   height: 120px;
   width: 210px;
+  font-size: 1.5em;
 }
 
 </style>
