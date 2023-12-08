@@ -12,37 +12,38 @@
 
     <main>
       <div class="jeopardy-board">
-      <!-- Display column titles -->
-      <div class="jeopardy-row">
-        <div v-for="(category, index) in categories" :key="index" :style="{ width: `calc(90vw / ${categories.length})` }" 
-        class="jeopardy-square" @click="handleCategoryClick(index)">
-          <div v-if="!category">
-            <p> {{ uiLabels.boardViewCategoryBox }} </p>
+        <!-- Display column titles -->
+        <div class="jeopardy-row">
+          <div v-for="(category, index) in categories" :key="index"
+            :style="{ width: `calc(90vw / ${categories.length})` }" class="jeopardy-square"
+            @click="handleCategoryClick(index)">
+            <div v-if="!category">
+              <p> {{ uiLabels.boardViewCategoryBox }} </p>
+            </div>
+            <div v-else>
+              <div>{{ category }}</div>
+            </div>
           </div>
-          <div v-else>
-            <div>{{ category }}</div>
+        </div>
+
+        <div>
+          <hr>
+        </div>
+
+        <!-- Display Jeopardy board content, gör istället en komponent mha questionskompent, vi ska göra en egen component med all styling etc, klickhantering och layout i kompknent-->
+        <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
+          <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
+            :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleQuestionClick(indexRow, indexCol)">
+            <div v-if="!col.question">
+              <p>{{ uiLabels.boardViewQuestionBox }}</p>
+            </div>
+            <div v-else>
+              <div>Q: {{ col.question }}</div>
+              <div>A: {{ col.answer }}</div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div>
-      <hr>
-      </div>
-
-      <!-- Display Jeopardy board content -->
-      <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
-        <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
-          :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleQuestionClick(indexRow, indexCol)">
-          <div v-if="!col.question">
-            <p>{{ uiLabels.boardViewQuestionBox }}</p>
-          </div>
-          <div v-else>
-            <div>Q: {{ col.question }}</div>
-            <div>A: {{ col.answer }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
     </main>
 
   </body>
@@ -59,7 +60,7 @@ export default {
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      questionNumber: {questionRow: 0, questionColumn: 0},  
+      questionNumber: { questionRow: 0, questionColumn: 0 },
       questions: [],
       categories: []
     };
@@ -77,23 +78,16 @@ export default {
 
     socket.on("pollCreated", (data) =>
       this.data = data
+    );  
+
+    socket.on("questionsRetrieved", (questions) =>
+      this.questions = questions
     );
 
-    socket.on("categoriesRetrieved", (categories) => {
-      this.categories = categories;
-      console.log(categories);
-      console.log("categories gotten");
-    }
+    socket.on("categoriesRetrieved", (categories) =>
+      this.categories = categories
     );
-
-    socket.on("questionsRetrieved", (questions) => {
-      this.questions = questions;
-      console.log(questions);
-      console.log("questions gotten");
-    }
-    );
-    
-    },
+  },
 
   methods: {
     handleQuestionClick(rowNo, colNo) {
@@ -108,11 +102,15 @@ export default {
         newQuestion = prompt('Skriv frågan:');
         newAnswer = prompt('Skriv de korrekta svaret:');
       }
+
       if (newQuestion !== "" && newAnswer !== "") {
-        socket.emit("editQuestion", { pollId: this.pollId, row: rowNo, col: colNo,
-          q: newQuestion, a: newAnswer })
+        socket.emit("editQuestion", {
+          pollId: this.pollId, row: rowNo, col: colNo,
+          q: newQuestion, a: newAnswer
+        });
       }
     },
+
     handleCategoryClick(colNo) {
       let categoryName;
 
@@ -123,7 +121,7 @@ export default {
         categoryName = prompt('Skriv kategorinamnet:');
       }
       if (categoryName !== "") {
-        socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: categoryName})
+        socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: categoryName })
       }
     },
     exitCreatorMode() {
@@ -151,7 +149,6 @@ export default {
 </script>
 
 <style scoped>
-
 main {
   display: flex;
   justify-content: center;
@@ -184,11 +181,14 @@ footer {
 }
 
 hr {
-    color: black; /* Line color */
-    background-color: black; /* Line color for older browsers */
-    height: 5px; /* Line thickness */
-    width: 100vw;
-    border: none; /* Remove the default border */
-  }
-
+  color: black;
+  /* Line color */
+  background-color: black;
+  /* Line color for older browsers */
+  height: 5px;
+  /* Line thickness */
+  width: 100vw;
+  border: none;
+  /* Remove the default border */
+}
 </style>

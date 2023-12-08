@@ -18,7 +18,7 @@ import io from 'socket.io-client';
 const socket = io("localhost:3000");
 
 export default {
-  // Component name and imported components
+  // Component name and imported components, ska prenumerera på ändringar!!! skicka till alla som är anslutna men bara lyssna för de views där det är intreesant
   name: 'ResultView',
   components: {
     BarsComponent
@@ -36,7 +36,7 @@ export default {
   created: function () {
     // Set pollId from route parameters and join the poll
     this.pollId = this.$route.params.id
-    socket.emit('joinPoll', this.pollId)
+    socket.emit('joinPoll', this.pollId) //lyssnar på ändringar i poll, vilka ämdringar vill vi visa//
 
     // Listen for data updates and new questions from the server
     socket.on("dataUpdate", (update) => {

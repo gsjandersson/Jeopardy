@@ -22,7 +22,7 @@ function sockets(io, socket, data) {
 
   socket.on('editQuestion', function (d) {
     data.editQuestion(d.pollId, d.row, d.col, { q: d.q, a: d.a });
-    socket.emit('questionRetrieved', data.retrieveQuestions(d.pollId));
+    socket.emit('questionsRetrieved', data.retrieveQuestions(d.pollId));
   });
 
   socket.on('editCategory', function (d) {
@@ -47,6 +47,8 @@ function sockets(io, socket, data) {
     data.submitAnswer(d.pollId, d.answer);
     io.to(d.pollId).emit('dataUpdate', data.getAnswers(d.pollId));
   });
+
+  //svar till alla anslutna klienter, lägga till fler...//
 
   socket.on('resetAll', () => {
     data = new Data();
