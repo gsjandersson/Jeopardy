@@ -78,7 +78,7 @@ export default {
 
     socket.on("pollCreated", (data) =>
       this.data = data
-    );  
+    );
 
     socket.on("questionsRetrieved", (questions) =>
       this.questions = questions

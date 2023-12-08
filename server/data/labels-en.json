@@ -8,7 +8,7 @@
 	"changeLanguage": "",
 	"about": "About",
 	"errorCreateIdMessage": "Error: Jeopardy ID must not be empty",
-	"errorPlayIdMessage" : "Error: Jeopardy ID must not be empty",
+	"errorPlayIdMessage" : "Error: Jeopardy poll ID does not exist or is empty",
 	"errorNameIDMessage": "OBS: Name can't be empty",
 	"errorCreateQuestionMessage": "Error: There has to be at least one question in each category",
 	"errorCreateCategoryMessage": "Error: There has to be at least one category",

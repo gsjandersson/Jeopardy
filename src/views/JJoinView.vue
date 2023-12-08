@@ -39,7 +39,8 @@ export default {
       uiLabels: {}, // Object for storing UI labels
       pollId: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting,
-      errorIdMessage: false
+      errorIdMessage: false,
+      isExisting: false
     }
   },
 
@@ -49,7 +50,13 @@ export default {
     socket.emit("pageLoaded", this.lang);
     socket.on("init", (labels) => {
       this.uiLabels = labels;
-    })
+    });
+    socket.on('existingPoll', (isExisting) => {
+        this.isExisting = isExisting
+        console.log(isExisting, this.isExisting)
+        }
+      )
+
   },
 
   // Methods to interact with the server
@@ -69,13 +76,19 @@ export default {
       socket.emit("switchLanguage", this.lang);
     },
     goToName() {
-      if (this.pollId !== "") {
+      socket.emit('checkExisting', this.pollId);
+
+    setTimeout(() => {
+      console.log(this.isExisting);
+      if (this.isExisting) {
         this.errorIdMessage = false;
         this.$router.push('/EnterNameView/' + this.pollId);
       }
       else {
         this.errorIdMessage = true;
       }
+    }, 5);
+      
     },
     exitCreatorMode() {
       this.$router.push('/jStartView');

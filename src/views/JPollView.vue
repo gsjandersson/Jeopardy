@@ -7,6 +7,7 @@
     </header>
 
     <h2> You are: {{ participantName }}</h2>
+    <h3> You have: {{ cashTotal }}</h3>
 
     <main>
       <div class="jeopardy-board">
@@ -70,7 +71,8 @@ export default {
       categories: [],
       questions: [],
       participantName: "",
-      participants: []
+      participants: [],
+      cashTotal: 0
     }
   },
 
@@ -90,6 +92,8 @@ export default {
 
     socket.emit("retrieveCategories", (this.pollId));
 
+    socket.emit('getCashTotal', {pollId: this.pollId, partName: this.participantName})
+
     socket.on("questionsRetrieved", (questions) => 
       this.questions = questions
     );
@@ -106,8 +110,11 @@ export default {
 
     socket.on('goToQuestion', (d) => {
       this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}/${d.row}/${d.col}`);
-    }
-    );
+    });
+
+    socket.on('cashTotal', (cashTotal) => {
+      this.cashTotal = cashTotal
+    });
 
   },
 

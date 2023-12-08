@@ -1,17 +1,19 @@
 <template>
   <body>
 
-      <div>
-        <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-        <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-        <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-      </div>
+    <div>
+      <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
+      <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
+      <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
+    </div>
 
-      <header>
-        <h1> {{ question }} </h1>
-      </header>
+    <p v-if="countdown > 0">Countdown: {{ countdown }}</p>
 
-      <main>
+    <header>
+      <h1> {{ question }} </h1>
+    </header>
+
+    <main>
 
       <div>
         <p> Your answer: </p>
@@ -22,7 +24,7 @@
         <button @click="submitAnswer"> Submit Answer </button>
       </div>
 
-    
+
 
     </main>
   </body>
@@ -46,7 +48,9 @@ export default {
       participant: "",
       question: "",
       row: "",
-      col: ""
+      col: "",
+      countdown: 10,
+      correctAnswer: ""
     }
   },
 
@@ -57,6 +61,10 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
+    socket.on('correctAnswer', (correctAnswer) => {
+        this.correctAnswer = correctAnswer
+      });
+
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
 
@@ -65,14 +73,16 @@ export default {
       this.uiLabels = labels
     });
 
-    socket.emit('joinPoll', {pollId: this.pollId, participantName: this.participant})
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
-    socket.emit("chosenQuestion", {pollId: this.pollId, questionRow: this.row, questionCol: this.col});
+    socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
 
     socket.on('questionChosen', (question) => {
       this.question = question;
       console.log("question view question chosen")
-    }); 
+    });
+
+    this.startCountdown();
 
 
   },
@@ -96,8 +106,28 @@ export default {
       this.$router.push('/jStartView');
     },
     submitAnswer: function () {
-      // some answer lagring
-      socket.emit('questionCompleted', {pollId: this.pollId, row: this.row, col: this.col})
+      console.log("submit answr")
+      socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
+
+      setTimeout(() => {
+      if (this.correctAnswer == this.answer) {
+        socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col})
+      }
+      }, 5);
+      
+    },
+    startCountdown() {
+      const countdownInterval = setInterval(() => {
+        if (this.countdown > 0) {
+          this.countdown--;
+        } else {
+          clearInterval(countdownInterval);
+          this.closeQuestionView();
+        }
+      }, 1000); // Update every 1000ms (1 second)
+    },
+    closeQuestionView() {
+      socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col })
       this.$router.push(`/jPollView/${this.pollId}/${this.participant}`)
     }
   }
