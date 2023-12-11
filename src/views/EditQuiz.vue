@@ -26,39 +26,30 @@
     </p>
 
   </template>
-  
   <script>
-//Går fortfarande att redigera quiz som ej är skapade än, vet ej hur man ska lösa detta
-
-
-  // Import required modules
   import io from 'socket.io-client';
   const socket = io("localhost:3000");
   
   export default {
-    // Component name and imported components
     name: 'EditQuiz',
-  
-    // Initial data properties
     data: function () {
       return {
-        uiLabels: {}, // Object for storing UI labels
-        pollId: "", // Input for poll ID
-        lang: localStorage.getItem("lang") || "en", // Language setting,
-        errorIdMessage: false
+        uiLabels: {},
+        pollId: "",
+        lang: localStorage.getItem("lang") || "en",
+        errorIdMessage: false,
+        isExisting: false
       }
     },
-  
-    // Lifecycle hook - component creation
     created: function () {
-      // Emitting an event when the page is loaded and listening for initialization data
       socket.emit("pageLoaded", this.lang);
       socket.on("init", (labels) => {
         this.uiLabels = labels;
-      })
+      });
+      socket.on('existingPoll', (isExisting) => {
+        this.isExisting = isExisting;
+      });
     },
-  
-    // Methods to interact with the server
     methods: {
       switchLanguageEnglish: function () {
         if (this.lang === "sv") {
@@ -75,17 +66,20 @@
         socket.emit("switchLanguage", this.lang);
       },
       goToBoard() {
-        if (this.pollId !== "") {
-          this.errorIdviewMessage = false;
-          this.$router.push('/BoardViewSteph/' + this.pollId);
-        }
-        else {
-          this.errorIdMessage = true;
-        }
+        socket.emit('checkExisting', this.pollId);
+
+        setTimeout(() => {
+          if (this.isExisting) {
+            this.errorIdMessage = false;
+            this.$router.push('/BoardViewSteph/' + this.pollId);
+          } else {
+            this.errorIdMessage = true;
+          }
+        }, 5);
       },
       exitCreatorMode() {
         this.$router.push('/jStartView');
       }
     }
   }
-  </script>
+</script>
