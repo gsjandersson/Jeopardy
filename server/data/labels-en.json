@@ -45,5 +45,7 @@
 	"hostTheGameTitle": "WELCOME TO JEOPARDY",
 	"hostPoll": "HOST",
 	"editPoll": "EDIT EXISTING",
-	"hostViewTitle": "Which quiz are you hosting?"
+	"hostViewTitle": "Which quiz are you hosting?",
+	"editViewTitle": "Which quiz are you editing?",
+	"editThePoll": "Edit"
 }

@@ -95,7 +95,7 @@ export default {
     },
 
     edit () {
-      this.$router.push('/JCreateInfo');
+      this.$router.push('/EditQuiz');
     },
 
     host () {

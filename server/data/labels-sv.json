@@ -47,5 +47,8 @@
 	"hostTheGameTitle": "VÄLKOMMEN TILL JEOPARDY",
 	"hostPoll": "VÄRD",
 	"editPoll": "ÄNDRA BEFINTLIGT",
-	"hostViewTitle": "Vilket quiz vill du vara värd för?"
+	"hostViewTitle": "Vilket quiz vill du vara värd för?",
+	"editViewTitle": "Vilket quiz vill du redigera?",
+	"editThePoll": "Redigera"
 }
+	

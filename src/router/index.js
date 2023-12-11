@@ -95,6 +95,11 @@ const router = createRouter({
       path: '/AnswerWrong',
       name: 'AnswerWrong',
       component: () => import('../views/AnswerWrong.vue')
+    },
+    { 
+      path: '/EditQuiz',
+      name: 'EditQuiz',
+      component: () => import('../views/EditQuiz.vue')
     }
   ]
 });
