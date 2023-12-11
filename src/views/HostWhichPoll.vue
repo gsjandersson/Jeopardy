@@ -69,13 +69,16 @@
         socket.emit("switchLanguage", this.lang);
       },
       goToHost() {
-        if (this.pollId !== "") {
-          this.errorIdMessage = false;
-          this.$router.push('/HostView/' + this.pollId);
-        }
-        else {
-          this.errorIdMessage = true;
-        }
+        socket.emit('checkExisting', this.pollId);
+
+        setTimeout(() => {
+          if (this.isExisting) {
+            this.errorIdMessage = false;
+            this.$router.push('/BoardViewSteph/' + this.pollId);
+          } else {
+            this.errorIdMessage = true;
+          }
+        }, 5);
       },
       exitCreatorMode() {
         this.$router.push('/jStartView');
