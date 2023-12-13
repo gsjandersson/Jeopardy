@@ -241,5 +241,23 @@ Data.prototype.getPollLang = function (pollId) {
   }
 }
 
+// Method to get all participants and their current cashTotal
+Data.prototype.getParticipantsAndCashTotal = function (pollId) {
+  console.log("get participants and cash total data.js")
+  const participantData = this.participants[pollId];
+  if (typeof participantData !== 'undefined') {
+    const participantsAndCashTotal = participantData.allParticipants.map(participant => {
+      return {
+        name: participant,
+        cashTotal: participantData.cashTotal[participant] || 0
+      };
+    });
+
+    // Sort participants by cashTotal in descending order and get the first three
+    return participantsAndCashTotal.sort((a, b) => b.cashTotal - a.cashTotal).slice(0, 3);
+  }
+  return [];
+}
+
 // Export the Data class for use in other modules
 export { Data };
