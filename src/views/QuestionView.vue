@@ -16,7 +16,7 @@
     <main>
 
       <div>
-        <p> {{ uiLabels.yourAnswer }}  </p>
+        <p> Your answer: </p>
         <input type="text" v-model="answer">
       </div>
 
