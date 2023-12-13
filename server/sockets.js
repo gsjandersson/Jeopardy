@@ -36,8 +36,6 @@ function sockets(io, socket, data) {
       data.newParticipant(d.pollId, d.participantName);
     }
     io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
-    // socket.emit('newQuestion', data.getQuestion(pollId))
-    // socket.emit('dataUpdate', data.getAnswers(pollId));
   });
 
   socket.on('runQuestion', function (d) {
@@ -111,6 +109,9 @@ function sockets(io, socket, data) {
     socket.emit('participantTurn', data.participantTurnOrder(pollId))
   });
 
+  socket.on('getPollLang', function (pollId) {
+    socket.emit('pollLang', data.getPollLang(pollId))
+  });
 }
 
 export { sockets };

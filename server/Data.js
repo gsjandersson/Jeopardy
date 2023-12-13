@@ -234,5 +234,12 @@ Data.prototype.updateTurnOrder = function (pollId) {
   }
 }
 
+Data.prototype.getPollLang = function (pollId) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    return poll.lang;
+  }
+}
+
 // Export the Data class for use in other modules
 export { Data };
