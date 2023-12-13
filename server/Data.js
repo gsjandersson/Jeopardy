@@ -53,7 +53,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.turnIndex = 0;
     participantData.turn = "";
     this.participants[pollId] = participantData;
-
+    
     console.log("poll created", pollId, poll);
   }
   return this.polls[pollId];
@@ -239,6 +239,21 @@ Data.prototype.getPollLang = function (pollId) {
   if (typeof poll !== 'undefined') {
     return poll.lang;
   }
+}
+
+// Method to get all participants and their current cashTotal
+Data.prototype.getParticipantsAndCashTotal = function (pollId) {
+  console.log("get participants and cash total data.js")
+  const participantData = this.participants[pollId];
+  if (typeof participantData !== 'undefined') {
+    return participantData.allParticipants.map(participant => {
+      return {
+        name: participant,
+        cashTotal: participantData.cashTotal[participant] || 0
+      };
+    });
+  }
+  return [];
 }
 
 // Export the Data class for use in other modules
