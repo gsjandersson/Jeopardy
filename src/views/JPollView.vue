@@ -8,17 +8,21 @@
 
     <h2> You are: {{ participantName }}</h2>
     <h2> Participant turn: {{ participantTurn }}</h2>
-    <h2> Participants: {{ participants }}</h2>
+    <h2> Participants: </h2>
+    <ul style="list-style-type: none;">
+      <li v-for="(participant, index) in participants" :key="index"
+        style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
+        {{ participant }}
+      </li>
+    </ul>
     <h3> You have: {{ cashTotal }}</h3>
 
     <main>
       <div class="jeopardy-board">
         <!-- Display column titles -->
         <div class="jeopardy-row">
-          <div v-for="(category, index) in categories" 
-          :key="index" 
-          :style="{ width: `calc(90vw / ${categories.length})` }"
-            class="jeopardy-category">
+          <div v-for="(category, index) in categories" :key="index"
+            :style="{ width: `calc(90vw / ${categories.length})` }" class="jeopardy-category">
             <div v-if="!category">
               <p> {{ uiLabels.noCategoryTitle }} </p>
             </div>
@@ -103,11 +107,11 @@ export default {
 
     socket.emit("retrieveCategories", (this.pollId));
 
-    socket.emit('getCashTotal', {pollId: this.pollId, partName: this.participantName})
+    socket.emit('getCashTotal', { pollId: this.pollId, partName: this.participantName })
 
     socket.emit('getParticipantTurn', (this.pollId))
 
-    socket.on("questionsRetrieved", (questions) => 
+    socket.on("questionsRetrieved", (questions) =>
       this.questions = questions
     );
 
