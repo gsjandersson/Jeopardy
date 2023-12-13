@@ -1,12 +1,6 @@
 <template>
   <body>
 
-    <div>
-      <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-      <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-      <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-    </div>
-
     <p v-if="countdown > 0">Countdown: {{ countdown }}</p>
 
     <header>
@@ -63,6 +57,12 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
+    /* socket.emit('getPollLang', (this.pollId))
+
+    socket.on('pollLang', (lang) =>
+      this.lang = lang
+    ); */
+
     socket.on('correctAnswer', (correctAnswer) => {
         this.correctAnswer = correctAnswer
       });
@@ -79,9 +79,10 @@ export default {
 
     socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
 
+    socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
+
     socket.on('questionChosen', (question) => {
       this.question = question;
-      console.log("question view question chosen")
     });
 
     this.startCountdown();
@@ -90,20 +91,6 @@ export default {
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
-    switchLanguageEnglish: function () {
-      if (this.lang === "sv") {
-        this.lang = "en"
-      }
-      localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
-    },
-    switchLanguageSwedish: function () {
-      if (this.lang === "en") {
-        this.lang = "sv"
-      }
-      localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
-    },
     exitCreatorMode() {
       this.$router.push('/jStartView');
     },
@@ -118,7 +105,7 @@ export default {
       this.$refs.submitButton.disabled = true;
       socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
 
-      socket.once('correctAnswer', (correctAnswer) => {
+      socket.on('correctAnswer', (correctAnswer) => {
         this.correctAnswer = correctAnswer;
 
         if (this.correctAnswer == this.answer) {

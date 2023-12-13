@@ -82,21 +82,26 @@ export default {
 
   // Lifecycle hook - component creation
   created: function () {
+    this.pollId = this.$route.params.pollId
+    this.participantName = this.$route.params.participantName
+
+    /*socket.emit('getPollLang', (this.pollId))
+
+    socket.on('pollLang', (lang) =>
+      this.lang = lang
+    );*/
+
     socket.emit("pageLoaded", this.lang);
+
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     })
-    // Set pollId from route parameters and join the poll
-    this.pollId = this.$route.params.pollId
-    this.participantName = this.$route.params.participantName
 
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
 
     socket.emit("retrieveQuestions", (this.pollId));
 
     socket.emit("retrieveCategories", (this.pollId));
-
-    socket.emit('getCashTotal', {pollId: this.pollId, partName: this.participantName})
 
     socket.emit('getCashTotal', {pollId: this.pollId, partName: this.participantName})
 
