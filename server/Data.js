@@ -50,6 +50,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     let participantData = {};
     participantData.cashTotal = {};
     participantData.allParticipants = [];
+    participantData.turnIndex = 0;
     this.participants[pollId] = participantData;
 
     console.log("poll created", pollId, poll);
@@ -206,9 +207,22 @@ Data.prototype.getCashTotal = function (pollId, partName) {
   if (typeof part !== 'undefined') {
     return part.cashTotal[partName];
   } 
-};
+}
 
+Data.prototype.updateTurnOrder = function (pollId) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    part.turnIndex += 1;
+    return part.allParticipants[part.turnIndex];
+  }
+}
 
+Data.prototype.participantTurnOrder = function (pollId) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    return part.allParticipants[part.turnIndex % part.allParticipants.length];
+  }
+}
 
 // Export the Data class for use in other modules
 export { Data };

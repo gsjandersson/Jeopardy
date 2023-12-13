@@ -47,5 +47,8 @@
 	"editPoll": "EDIT EXISTING",
 	"hostViewTitle": "Which quiz are you hosting?",
 	"editViewTitle": "Which quiz are you editing?",
-	"editThePoll": "Edit"
+	"editThePoll": "Edit",
+	"yourAnswer": "Your answer:",
+	"noCategoryTitle": "No category name",
+	"noQuestion": "No question"
 }
