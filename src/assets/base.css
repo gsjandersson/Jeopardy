@@ -17,12 +17,38 @@ body {
   height: 100vh;
 }
 
-#wrong-answer {
-  background-color: red;
+#answer-box-right {
+  background-color: green;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-#right-answer {
-  background-color: green;
+#answer-box-wrong {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: red;
+  width: 700px;
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 #UKflagga {

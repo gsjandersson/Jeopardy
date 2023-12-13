@@ -1,9 +1,10 @@
 <template>
-    <body id="right-answer">
-   <h1>RÄTT SVAR</h1>
-</body>
-  
-  </template>
+  <div id="answer-box-right">
+    <h1>CORRECT</h1>
+    <p>Cash earned:</p>
+  </div>  
+</template>
+
   <script>
   import io from 'socket.io-client';
   const socket = io("localhost:3000");

@@ -1,8 +1,9 @@
 <template>
-    <body id="wrong-answer">
-    <h1>FEL SVAR</h1>
-</body>
-  </template>
+  <div id="answer-box-wrong">
+    <h1>WRONG</h1>
+    <p> No money for you!</p>
+  </div>  
+</template>
 
   <script>
   import io from 'socket.io-client';
