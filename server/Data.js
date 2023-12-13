@@ -51,6 +51,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.cashTotal = {};
     participantData.allParticipants = [];
     participantData.turnIndex = 0;
+    participantData.turn = "";
     this.participants[pollId] = participantData;
 
     console.log("poll created", pollId, poll);
@@ -196,7 +197,7 @@ Data.prototype.getCorrectAnswer = function (pollId, row, col) {
 Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
-    console.log(100*(row + 1))
+    console.log(100 * (row + 1))
     console.log(row)
     part.cashTotal[partName] += (100 * (1 + parseInt(row, 10)));
   }
@@ -206,21 +207,30 @@ Data.prototype.getCashTotal = function (pollId, partName) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     return part.cashTotal[partName];
-  } 
-}
-
-Data.prototype.updateTurnOrder = function (pollId) {
-  const part = this.participants[pollId];
-  if (typeof part !== 'undefined') {
-    part.turnIndex += 1;
-    return part.allParticipants[part.turnIndex];
   }
 }
 
 Data.prototype.participantTurnOrder = function (pollId) {
   const part = this.participants[pollId];
+  if (part.turnIndex === 0) {
+    part.turn = part.allParticipants[0];
+  }
   if (typeof part !== 'undefined') {
-    return part.allParticipants[part.turnIndex % part.allParticipants.length];
+    return part.turn;
+  }
+}
+
+Data.prototype.updateTurnOrder = function (pollId) {
+  const part = this.participants[pollId];
+
+  let i = 0;
+  while (i < part.allParticipants.length) {
+    if (part.allParticipants[i] === part.turn) {
+      part.turnIndex = (part.turnIndex + 1) % part.allParticipants.length;
+      part.turn = part.allParticipants[part.turnIndex];
+      break;
+    }
+    i++;
   }
 }
 
