@@ -103,6 +103,14 @@ function sockets(io, socket, data) {
     socket.emit('cashTotal', data.getCashTotal(d.pollId, d.partName))
   });
 
+  socket.on('updateTurnOrder', function (pollId) {
+    data.updateTurnOrder(pollId)
+  });
+
+  socket.on('getParticipantTurn', function (pollId) {
+    socket.emit('participantTurn', data.participantTurnOrder(pollId))
+  });
+
 }
 
 export { sockets };

@@ -7,16 +7,20 @@
     </header>
 
     <h2> You are: {{ participantName }}</h2>
+    <h2> Participant turn: {{ participantTurn }}</h2>
+    <h2> Participants: {{ participants }}</h2>
     <h3> You have: {{ cashTotal }}</h3>
 
     <main>
       <div class="jeopardy-board">
         <!-- Display column titles -->
         <div class="jeopardy-row">
-          <div v-for="(category, index) in categories" :key="index" :style="{ width: `calc(90vw / ${categories.length})` }"
+          <div v-for="(category, index) in categories" 
+          :key="index" 
+          :style="{ width: `calc(90vw / ${categories.length})` }"
             class="jeopardy-category">
             <div v-if="!category">
-              <p> No category title </p>
+              <p> {{ uiLabels.noCategoryTitle }} </p>
             </div>
             <div v-else>
               <div>{{ category }}</div>
@@ -36,7 +40,7 @@
           }" @click="handleClick(indexRow, indexCol)">
             <div>
               <div v-if="!col.question">
-                <p> No question </p>
+                <p> {{ uiLabels.noQuestion }} </p>
               </div>
               <div v-else>
                 <div>${{ (indexRow + 1) * 100 }} </div>
@@ -71,7 +75,8 @@ export default {
       questions: [],
       participantName: "",
       participants: [],
-      cashTotal: 0
+      cashTotal: 0,
+      participantTurn: ""
     }
   },
 
@@ -93,6 +98,10 @@ export default {
 
     socket.emit('getCashTotal', {pollId: this.pollId, partName: this.participantName})
 
+    socket.emit('getCashTotal', {pollId: this.pollId, partName: this.participantName})
+
+    socket.emit('getParticipantTurn', (this.pollId))
+
     socket.on("questionsRetrieved", (questions) => 
       this.questions = questions
     );
@@ -102,7 +111,6 @@ export default {
     );
 
     socket.on('participantUpdate', (participants) => {
-      console.log("participant update JpollView")
       this.participants = participants;
     }
     );
@@ -115,6 +123,10 @@ export default {
       this.cashTotal = cashTotal
     });
 
+    socket.on('participantTurn', (participant) =>
+      this.participantTurn = participant
+    );
+
   },
 
   // Methods to interact with the server
@@ -122,6 +134,7 @@ export default {
     handleClick(rowNo, colNo) {
       let question = this.questions[rowNo][colNo]
       if (question.completed === false && question.question !== "") {
+        socket.emit('updateTurnOrder', (this.pollId))
         socket.emit('allParticipantsGoToQuestion', { pollId: this.pollId, row: rowNo, col: colNo })
       }
     },
