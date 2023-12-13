@@ -32,7 +32,9 @@ function sockets(io, socket, data) {
 
   socket.on('joinPoll', function (d) {
     socket.join(d.pollId);
-    data.newParticipant(d.pollId, d.participantName);
+    if (d.participantName !== undefined) {
+      data.newParticipant(d.pollId, d.participantName);
+    }
     io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
     // socket.emit('newQuestion', data.getQuestion(pollId))
     // socket.emit('dataUpdate', data.getAnswers(pollId));
