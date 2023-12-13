@@ -12,7 +12,7 @@
         </header>
 
         <div> 
-            <h2>Players:</h2>
+            <h2>{{ uiLabels.players }} </h2>
             <li v-for="(participant, index) in participants" :key="index">
                 {{ participant }}
             </li>
@@ -60,8 +60,7 @@
       socket.on('participantUpdate', (participants) => {
       console.log("participant update JpollView")
       this.participants = participants;
-    }
-    );
+    });
 
       // Emit an event to the server when the page is loaded
       socket.emit("pageLoaded", this.lang);
