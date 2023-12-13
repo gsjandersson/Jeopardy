@@ -21,7 +21,8 @@
       </div>
 
       <div>
-        <button @click="submitAnswer"> Submit Answer </button>
+        <!-- <button @click="submitAnswer"> Submit Answer </button> -->
+        <button ref="submitButton" @click="submitAnswer">Submit Answer</button>
       </div>
 
 
@@ -50,7 +51,8 @@ export default {
       row: "",
       col: "",
       countdown: 10,
-      correctAnswer: ""
+      correctAnswer: "",
+      answerSubmitted: false,
     }
   },
 
@@ -105,17 +107,28 @@ export default {
     exitCreatorMode() {
       this.$router.push('/jStartView');
     },
+
     submitAnswer: function () {
       console.log("submit answr")
+      // Check if the answer has already been submitted
+      if (this.answerSubmitted) {
+        return;
+      }
+      // Disable the button to prevent multiple clicks
+      this.$refs.submitButton.disabled = true;
       socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
 
-      setTimeout(() => {
-      if (this.correctAnswer == this.answer) {
-        socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col})
+      socket.once('correctAnswer', (correctAnswer) => {
+        this.correctAnswer = correctAnswer;
+
+        if (this.correctAnswer == this.answer) {
+          
+            socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
       }
-      }, 5);
-      
-    },
+      this.answerSubmitted = true;
+      this.$refs.submitButton.disabled = false;
+    });
+  },
     startCountdown() {
       const countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
