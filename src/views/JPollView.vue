@@ -16,6 +16,13 @@
       </li>
     </ul>
     <h3> You have: {{ cashTotal }}</h3>
+    <h4>Participants and their Cash Total:</h4>
+    <ul style="list-style-type: none;">
+      <li v-for="(part, index) in participantsAndCashTotal" :key="index"
+        style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
+        {{ part.name }}: {{ part.cashTotal }}
+      </li>
+    </ul>
 
     <main>
       <div class="jeopardy-board">
@@ -80,7 +87,8 @@ export default {
       participantName: "",
       participants: [],
       cashTotal: 0,
-      participantTurn: ""
+      participantTurn: "",
+      participantsAndCashTotal: []
     }
   },
 
@@ -111,6 +119,8 @@ export default {
 
     socket.emit('getParticipantTurn', (this.pollId))
 
+    socket.emit('getParticipantsAndCashTotal', (this.pollId))
+
     socket.on("questionsRetrieved", (questions) =>
       this.questions = questions
     );
@@ -135,6 +145,11 @@ export default {
     socket.on('participantTurn', (participant) =>
       this.participantTurn = participant
     );
+
+    socket.on('participantsAndCashTotal', (participantsAndCashTotal) => {
+      this.participantsAndCashTotal = participantsAndCashTotal
+      console.log("participantsAndCashtotal: " + participantsAndCashTotal)
+    });
 
   },
 

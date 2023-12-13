@@ -112,6 +112,11 @@ function sockets(io, socket, data) {
   socket.on('getPollLang', function (pollId) {
     socket.emit('pollLang', data.getPollLang(pollId))
   });
+
+  socket.on('getParticipantsAndCashTotal', function (pollId) {
+    console.log("get participants and cash total sockets.js")
+    socket.emit('participantsAndCashTotal', data.getParticipantsAndCashTotal(pollId))
+  });
 }
 
 export { sockets };
