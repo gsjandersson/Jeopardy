@@ -140,10 +140,31 @@ export default {
       }, 1000); // Update every 1000ms (1 second)
     },
     closeQuestionView() {
-      socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col })
-      this.$router.push(`/jPollView/${this.pollId}/${this.participant}`)
-    }
+  if (!this.answerSubmitted) {
+    // If the answer was not submitted, handle it as a wrong answer
+    this.showAnswerStatus(false);
+  } else {
+    // If the answer was submitted, check if it's correct
+    const isCorrect = this.answer === this.correctAnswer;
+    this.showAnswerStatus(isCorrect);
   }
+},
+
+showAnswerStatus(isCorrect) {
+  const redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
+
+  // Redirect to the appropriate answer status component
+  this.$router.push({
+    name: redirectRoute,
+    params: { pollId: this.pollId, participant: this.participant },
+  });
+
+  // Wait for 5 seconds before redirecting to jpollview
+  setTimeout(() => {
+    this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
+  }, 5000);
+}
+}
 }
 </script>
 

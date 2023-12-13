@@ -17,6 +17,14 @@ body {
   height: 100vh;
 }
 
+#wrong-answer {
+  background-color: red;
+}
+
+#right-answer {
+  background-color: green;
+}
+
 #UKflagga {
   background-image: url(/img/UKflagga.png);
   background-size: 100px 50px;
