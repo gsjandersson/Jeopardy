@@ -81,7 +81,7 @@
         setTimeout(() => {
           if (this.isExisting) {
             this.errorIdMessage = false;
-            this.$router.push('/BoardViewSteph/' + this.pollId);
+            this.$router.push('/HostView/' + this.pollId);
           } else {
             this.errorIdMessage = true;
           }
