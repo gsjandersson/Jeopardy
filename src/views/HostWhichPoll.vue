@@ -39,18 +39,25 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting,
-        errorIdMessage: false
+        errorIdMessage: false,
+        isExisting: false
       }
     },
   
     // Lifecycle hook - component creation
     created: function () {
-      // Emitting an event when the page is loaded and listening for initialization data
-      socket.emit("pageLoaded", this.lang);
-      socket.on("init", (labels) => {
-        this.uiLabels = labels;
-      })
-    },
+    // Emitting an event when the page is loaded and listening for initialization data
+    socket.emit("pageLoaded", this.lang);
+    socket.on("init", (labels) => {
+      this.uiLabels = labels;
+    });
+    socket.on('existingPoll', (isExisting) => {
+        this.isExisting = isExisting
+        console.log(isExisting, this.isExisting)
+        }
+      )
+
+  },
   
     // Methods to interact with the server
     methods: {
