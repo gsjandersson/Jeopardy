@@ -53,7 +53,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.turnIndex = 0;
     participantData.turn = "";
     this.participants[pollId] = participantData;
-    
+
     console.log("poll created", pollId, poll);
   }
   return this.polls[pollId];
@@ -246,12 +246,15 @@ Data.prototype.getParticipantsAndCashTotal = function (pollId) {
   console.log("get participants and cash total data.js")
   const participantData = this.participants[pollId];
   if (typeof participantData !== 'undefined') {
-    return participantData.allParticipants.map(participant => {
+    const participantsAndCashTotal = participantData.allParticipants.map(participant => {
       return {
         name: participant,
         cashTotal: participantData.cashTotal[participant] || 0
       };
     });
+
+    // Sort participants by cashTotal in descending order and get the first three
+    return participantsAndCashTotal.sort((a, b) => b.cashTotal - a.cashTotal).slice(0, 3);
   }
   return [];
 }

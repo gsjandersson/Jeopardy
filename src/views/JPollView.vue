@@ -16,7 +16,7 @@
       </li>
     </ul>
     <h3> You have: {{ cashTotal }}</h3>
-    <h4>Participants and their Cash Total:</h4>
+    <h4>Leaderboard:</h4>
     <ul style="list-style-type: none;">
       <li v-for="(part, index) in participantsAndCashTotal" :key="index"
         style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">

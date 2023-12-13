@@ -55,11 +55,11 @@ function sockets(io, socket, data) {
     data.initializeData();
   });
 
-  socket.on('retrieveQuestions', function (pollId){
+  socket.on('retrieveQuestions', function (pollId) {
     socket.emit('questionsRetrieved', data.retrieveQuestions(pollId));
   });
 
-  socket.on('retrieveCategories', function (pollId){
+  socket.on('retrieveCategories', function (pollId) {
     socket.emit('categoriesRetrieved', data.retrieveCategories(pollId))
   });
 
@@ -87,7 +87,7 @@ function sockets(io, socket, data) {
     data.addParticipantAnswer(d.pollId, d.partName, d.partAnswer)
   });
 
-  socket.on('getCorrectAnswer', function (d){
+  socket.on('getCorrectAnswer', function (d) {
     console.log("socket get correct answer")
     socket.emit('correctAnswer', data.getCorrectAnswer(d.pollId, d.row, d.col))
   });
