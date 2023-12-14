@@ -97,6 +97,11 @@ const router = createRouter({
       component: () => import('../views/AnswerWrong.vue')
     },
     { 
+      path: '/NoAnswer',
+      name: 'NoAnswer',
+      component: () => import('../views/NoAnswer.vue')
+    },
+    { 
       path: '/EditQuiz',
       name: 'EditQuiz',
       component: () => import('../views/EditQuiz.vue')

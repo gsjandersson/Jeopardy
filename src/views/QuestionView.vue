@@ -148,7 +148,7 @@ showAnswerStatus(isCorrect) {
   // Wait for 5 seconds before redirecting to jpollview
   setTimeout(() => {
     this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
-  }, 5000);
+  }, 3000);
 }
 }
 }
