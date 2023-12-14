@@ -9,7 +9,7 @@
     <h2> You are: {{ participantName }}</h2>
     <h2> Participant turn: {{ participantTurn }}</h2>
     <h2> Participants: {{ participants }}</h2>
-    <h3> You have: {{ cashTotal }}</h3>
+    <h3> You have: ${{ cashTotal }}</h3>
 
     <main>
       <div class="jeopardy-board">
@@ -138,7 +138,7 @@ export default {
   methods: {
     handleClick(rowNo, colNo) {
       let question = this.questions[rowNo][colNo]
-      if (question.completed === false && question.question !== "") {
+      if (question.completed === false && question.question !== "" && this.participantTurn == this.participantName) {
         socket.emit('updateTurnOrder', (this.pollId))
         socket.emit('allParticipantsGoToQuestion', { pollId: this.pollId, row: rowNo, col: colNo })
       }
