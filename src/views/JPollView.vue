@@ -15,7 +15,7 @@
         {{ participant }}
       </li>
     </ul>
-    <h3> You have: {{ cashTotal }}</h3>
+    <h3> You have: {{ cashTotal }}$ </h3>
     <h4>Leaderboard:</h4>
     <ul style="list-style-type: none;">
       <li v-for="(part, index) in participantsAndCashTotal" :key="index"
@@ -157,7 +157,7 @@ export default {
   methods: {
     handleClick(rowNo, colNo) {
       let question = this.questions[rowNo][colNo]
-      if (question.completed === false && question.question !== "") {
+      if (question.completed === false && question.question !== "" && this.participantName == this.participantTurn) {
         socket.emit('updateTurnOrder', (this.pollId))
         socket.emit('allParticipantsGoToQuestion', { pollId: this.pollId, row: rowNo, col: colNo })
       }
