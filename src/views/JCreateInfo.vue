@@ -1,17 +1,17 @@
 <template>
   <body>
 
-      <div>
-        <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-        <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-        <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-      </div>
+    <div>
+      <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
+      <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
+      <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
+    </div>
 
-      <header>
-        <h1> {{ uiLabels.createInfoTitle }} </h1>
-      </header>
+    <header>
+      <h1> {{ uiLabels.createInfoTitle }} </h1>
+    </header>
 
-      <main>
+    <main>
       <!--gör array i labels som man loopar över, för mycket kladd slay-->
       <div>
         <ol>
@@ -22,15 +22,15 @@
       </div>
 
       <div>
-        <p> Jeopardy ID: </p>
-        <input type="text" v-model="pollId">
+        <p>Jeopardy ID:</p>
+        <p style="font-size: 2em;">{{ autoPollId }}</p>
       </div>
 
       <div>
         <p>{{ uiLabels.numberCategories }}:</p>
         <input type="number" v-model="categoryNo" min=1 step=1>
       </div>
-      
+
       <div>
         <p>{{ uiLabels.numberQuestions }}:</p>
         <input type="number" v-model="questionNo" min=1 step=1>
@@ -38,17 +38,17 @@
 
       <div>
         <button v-on:click="createPoll">
-          {{ uiLabels.createPoll }} 
+          {{ uiLabels.createPoll }}
         </button>
-      <p v-if="errorIdMessage == true" style="color: red">
-        {{ uiLabels.errorCreateIdMessage }}
-      </p>
-      <p v-if="errorCategoryNo == true" style="color: red">
-        {{ uiLabels.errorCreateCategoryMessage }}
-      </p>
-      <p v-if="errorQuestionNo == true" style="color: red">
-        {{ uiLabels.errorCreateQuestionMessage }}
-      </p>
+        <p v-if="errorIdMessage == true" style="color: red">
+          {{ uiLabels.errorCreateIdMessage }}
+        </p>
+        <p v-if="errorCategoryNo == true" style="color: red">
+          {{ uiLabels.errorCreateCategoryMessage }}
+        </p>
+        <p v-if="errorQuestionNo == true" style="color: red">
+          {{ uiLabels.errorCreateQuestionMessage }}
+        </p>
       </div>
     </main>
   </body>
@@ -77,7 +77,8 @@ export default {
       errorCategoryNo: false,
       errorQuestionNo: false,
       categoryNo: 5,
-      questionNo: 5
+      questionNo: 5,
+      autoPollId: ""
     }
   },
 
@@ -88,6 +89,9 @@ export default {
 
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
+
+    // Emit an event to update and fetch the J Poll ID 
+    socket.emit("updateAutoPollId");
 
     // Listen for initialization data from the server
     socket.on("init", (labels) => {
@@ -102,6 +106,11 @@ export default {
     // Listen for the event when a poll is created
     socket.on("pollCreated", (data) =>
       this.data = data)
+
+    // Listen for the event where the pollId is updated
+    socket.on("autoPollIdUpdated", (autoPollId) =>
+      this.autoPollId = autoPollId
+    )
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
@@ -120,13 +129,15 @@ export default {
       socket.emit("switchLanguage", this.lang)
     },
     createPoll: function () {
-      if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
+      if (this.autoPollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
         this.errorIdMessage = false;
         this.errorCategoryNo = false;
         this.errorQuestionNo = false;
-        socket.emit("createPoll", { pollId: this.pollId, lang: this.lang, 
-          questionNo: this.questionNo, categoryNo: this.categoryNo});
-        this.$router.push('/BoardViewSteph/' + this.pollId);
+        socket.emit("createPoll", {
+          pollId: this.autoPollId, lang: this.lang,
+          questionNo: this.questionNo, categoryNo: this.categoryNo
+        });
+        this.$router.push('/BoardViewSteph/' + this.autoPollId);
       }
       if (this.pollId === "") {
         this.errorIdMessage = true;

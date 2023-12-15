@@ -118,8 +118,22 @@ function sockets(io, socket, data) {
   });
 
   socket.on('getParticipantsAndCashTotal', function (pollId) {
-    console.log("get participants and cash total sockets.js")
     socket.emit('participantsAndCashTotal', data.getParticipantsAndCashTotal(pollId))
+  });
+
+  socket.on('updateAutoPollId', () => {
+    socket.emit('autoPollIdUpdated', data.updateAutoPollId())
+  });
+
+  socket.on("participantAnswerRegistered", function (pollId) {
+    const hasAllAnswered = data.participantAnswerRegistered(pollId)
+    if (hasAllAnswered) {
+      socket.emit("hasAllAnswered")
+    }
+  });
+
+  socket.on("resetAnswerCount", function (pollId) {
+    data.resetAnswerCount(pollId)
   });
 }
 

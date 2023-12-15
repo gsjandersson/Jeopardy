@@ -91,11 +91,6 @@
         socket.emit("switchLanguage", this.lang)
 
       },
-
-      goToQuestion() {
-            this.$router.push('/PlayerTurnView/' + this.pollId);
-        },
-
       createPoll: function () {
         if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
           this.errorIdMessage = false;

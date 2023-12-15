@@ -1,7 +1,7 @@
 <template>
   <div id="answer-box-wrong">
     <h1>{{ uiLabels.wrong }}</h1>
-    <p>{{ uiLabels.noMoneyForYou }}</p>
+    <p>{{ uiLabels.noMoneyForYou }}: ${{100*1+row}}</p>
   </div>  
 </template>
 
@@ -16,17 +16,13 @@
         uiLabels: {},
         pollId: "",
         lang: localStorage.getItem("lang") || "en",
-        errorIdMessage: false,
-        isExisting: false
+        row: ""
       }
     },
     created: function () {
       socket.emit("pageLoaded", this.lang);
       socket.on("init", (labels) => {
         this.uiLabels = labels;
-      });
-      socket.on('existingPoll', (isExisting) => {
-        this.isExisting = isExisting;
       });
     },
     methods: {
@@ -45,17 +41,8 @@
         socket.emit("switchLanguage", this.lang);
       },
       goToBoard() {
-        socket.emit('checkExisting', this.pollId);
-
-        setTimeout(() => {
-          if (this.isExisting) {
-            this.errorIdMessage = false;
-            this.$router.push('/BoardViewSteph/' + this.pollId);
-          } else {
-            this.errorIdMessage = true;
-          }
-        }, 5);
-      },
+          this.$router.push('/BoardViewSteph/' + this.pollId);
+        },
       exitCreatorMode() {
         this.$router.push('/jStartView');
       }
