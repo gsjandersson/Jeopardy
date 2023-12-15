@@ -1,3 +1,4 @@
+<!-- Kod från hostwhichpoll -->
 <template>
     <body>
   
@@ -11,13 +12,6 @@
           <h1> {{ uiLabels.hostTheGameTitle }} </h1>
         </header>
 
-        <div> 
-            <h2>{{ uiLabels.players }} </h2>
-            <li v-for="(participant, index) in participants" :key="index">
-                {{ participant }}
-            </li>
-        </div>
-  
     </body>
   </template>
   
@@ -40,7 +34,11 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting
-        participants: ''
+        errorIdMessage: false,
+        errorCategoryNo: false,
+        errorQuestionNo: false,
+        categoryNo: 5,
+        questionNo: 5
       }
     },
   
@@ -49,14 +47,6 @@
       // Lifecycle hook - component creation
       // this.id = this.$route.params.id;
   
-      this.pollId = this.$route.params.pollId
-      socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
-
-      socket.on('participantUpdate', (participants) => {
-      console.log("participant update JpollView")
-      this.participants = participants;
-    });
-
       // Emit an event to the server when the page is loaded
       socket.emit("pageLoaded", this.lang);
   
@@ -89,13 +79,8 @@
         }
         localStorage.setItem("lang", this.lang);
         socket.emit("switchLanguage", this.lang)
-
       },
-
-      goToQuestion() {
-            this.$router.push('/PlayerTurnView/' + this.pollId);
-        },
-
+       
       createPoll: function () {
         if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
           this.errorIdMessage = false;
@@ -145,3 +130,4 @@
     overflow: scroll;
   }
   </style>
+  

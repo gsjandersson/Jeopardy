@@ -12,6 +12,7 @@ function Data() {
   // Object to store poll data
   this.polls = {};
   this.participants = {};
+  this.autoPollId = 0;
 }
 
 /***********************************************
@@ -258,6 +259,12 @@ Data.prototype.getParticipantsAndCashTotal = function (pollId) {
     return participantsAndCashTotal.sort((a, b) => b.cashTotal - a.cashTotal).slice(0, 3);
   }
   return [];
+}
+
+//Method to update pollId
+Data.prototype.updateAutoPollId = function () {
+  this.autoPollId += 1;
+  return this.autoPollId;
 }
 
 Data.prototype.participantAnswerRegistered = function (pollId) {
