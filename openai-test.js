@@ -1,14 +1,33 @@
-import OpenAI from "openai";
+const { create, Configuration, Completion } = require('openai');
+const fs = require('fs');
+const apiKey = process.env.OPENAI_API_KEY;
 
-const openai = new OpenAI();
+// Set your OpenAI API key
+const configuration = new Configuration({
+  apiKey: apiKey,
+});
 
-async function main() {
-  const completion = await openai.chat.completions.create({
-    messages: [{ role: "system", content: "You are a helpful assistant." }],
-    model: "gpt-3.5-turbo",
-  });
+// Initialize the OpenAI client
+const openai = create(configuration);
 
-  console.log(completion.choices[0]);
-}
+// Define a prompt for generating quiz questions and answers
+const prompt = "Generate a quiz on the topic of...";
 
-main();
+// Generate quiz questions and answers
+openai.completions.create(
+  {
+    engine: 'text-davinci-003',  // Use the appropriate engine
+    prompt: prompt,
+    max_tokens: 800,  // Adjust as needed based on expected length of questions and answers
+  },
+  (error, response) => {
+    if (error) throw error;
+
+    // Extract and print the generated content
+    const generatedContent = response.choices[0].text;
+    console.log(generatedContent);
+
+    // Save the generated content to a JSON file
+    fs.writeFileSync('quiz.json', JSON.stringify({ content: generatedContent }, null, 2));
+  }
+);
