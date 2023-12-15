@@ -121,6 +121,8 @@ export default {
 
     socket.emit('getParticipantsAndCashTotal', (this.pollId))
 
+    socket.emit('updateParticipants', (this.pollId))
+
     socket.on("questionsRetrieved", (questions) =>
       this.questions = questions
     );
