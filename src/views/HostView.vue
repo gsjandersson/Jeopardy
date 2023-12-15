@@ -17,7 +17,11 @@
                 {{ participant }}
             </li>
         </div>
-  
+        <div class="button-container">
+          <button id="playButton" v-on:click="goToQuestion">
+            {{ uiLabels.letsplay }}
+          </button>
+        </div>
     </body>
   </template>
   
@@ -139,6 +143,10 @@
   ol {
     text-align: left;
     display: inline-block;
+  }
+
+  .button-container {
+    margin-top: 20px;
   }
   
   main {

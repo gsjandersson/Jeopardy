@@ -61,6 +61,8 @@
 	"wrong": "FEL",
 	"noMoneyForYou": "Inga pengar för dig, du missade precis",
 	"numberCategories": "Antal kategorier",
-	"numberQuestions": "Antal frågor per kategori"
+	"numberQuestions": "Antal frågor per kategori",
+	"letsplay": "Starta spelet!",
+	"PlayerTurnTitle": "Det är dags att välja en fråga"
 }
 	
