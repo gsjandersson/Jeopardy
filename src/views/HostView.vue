@@ -10,7 +10,10 @@
         <header>
           <h1> {{ uiLabels.hostTheGameTitle }} </h1>
         </header>
-  
+        <div>
+        <button id="letsplayButton" v-on:click="goToQuestion">
+        {{ uiLabels.letsplay }}
+      </button></div>
     </body>
   </template>
   
@@ -79,6 +82,11 @@
         localStorage.setItem("lang", this.lang);
         socket.emit("switchLanguage", this.lang)
       },
+
+      goToQuestion() {
+            this.$router.push('/PlayerTurnView/' + this.pollId);
+        },
+
       createPoll: function () {
         if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
           this.errorIdMessage = false;

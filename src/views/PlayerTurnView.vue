@@ -1,4 +1,4 @@
-
+<!-- Kod från hostwhichpoll -->
 <template>
     <body>
   
@@ -11,7 +11,7 @@
         <header>
           <h1> {{ uiLabels.hostTheGameTitle }} </h1>
         </header>
-  
+
     </body>
   </template>
   
@@ -80,6 +80,7 @@
         localStorage.setItem("lang", this.lang);
         socket.emit("switchLanguage", this.lang)
       },
+       
       createPoll: function () {
         if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
           this.errorIdMessage = false;
