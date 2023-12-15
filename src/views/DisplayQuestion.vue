@@ -3,12 +3,14 @@
   
         <div>
           <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-          <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-          <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
         </div>
   
         <header>
+<<<<<<< HEAD
           <h1> </h1> 
+=======
+          <h1> {{ question }} </h1> 
+>>>>>>> ad328ef87efdd8f8f419c38e03203b4bf081c628
         </header>
 
         <div>
@@ -26,6 +28,7 @@
       name: 'DisplayQuestion',
       data: function () {
         return {
+<<<<<<< HEAD
     uiLabels: {},
     pollId: "",
     lang: localStorage.getItem("lang") || "en",
@@ -45,7 +48,36 @@
     this.selectedQuestion = question;
     this.questionValue = value;
   });
+=======
+          uiLabels: {},
+          pollId: "",
+          lang: localStorage.getItem("lang") || "en",
+          row: "",
+          col: "",
+          question: ""
+        }
       },
+      created: function () {
+        this.pollId = this.$route.params.pollId
+        this.row = this.$route.params.row
+        this.col = this.$route.params.col
+
+        socket.emit("pageLoaded", this.lang);
+        socket.on("init", (labels) => {
+          this.uiLabels = labels;
+        });
+
+        socket.on('questionChosen', (question) => {
+          this.question = question;
+        });
+
+        socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
+
+        socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
+        
+>>>>>>> ad328ef87efdd8f8f419c38e03203b4bf081c628
+      },
+
       methods: {
         switchLanguageEnglish: function () {
           if (this.lang === "sv") {
