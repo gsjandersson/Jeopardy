@@ -68,5 +68,7 @@
 	"PartTurn": "Participants turn: ",
 	"Parts": "Participants:",
 	"YouHave": "You have:",
-	"Participant": "Participant"
+	"Participant": "Participant",
+	"Winnertitle": "Let's present the winners...", 
+	"JeopardyID": "Jeopardy ID:"
 }
