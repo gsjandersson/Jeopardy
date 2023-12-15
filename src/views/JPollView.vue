@@ -20,7 +20,7 @@
     <ul style="list-style-type: none;">
       <li v-for="(part, index) in participantsAndCashTotal" :key="index"
         style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
-        {{ part.name }}: {{ part.cashTotal }}
+        {{ part.name }}: {{ part.cashTotal }}$
       </li>
     </ul>
 
