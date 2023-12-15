@@ -48,5 +48,17 @@
 	"hostViewTitle": "Which quiz are you hosting?",
 	"editViewTitle": "Which quiz are you editing?",
 	"editThePoll": "Edit",
+	"players": "Players:",
+	"yourAnswer": "Your answer:",
+	"noCategoryTitle": "No category name",
+	"noQuestion": "No question",
+	"tooSlow": "TOO SLOW",
+	"noCashEarned": "If you don't try, you fail",
+	"correct": "CORRECT",
+	"cashEarned": "Cash earned",
+	"wrong": "WRONG",
+	"noMoneyForYou": "No money for you: $0",
+	"numberCategories": "Number of categories",
+	"numberQuestions": "Number of questions per category",
 	"letsplay": "Let's Play!"
 }
