@@ -40,11 +40,6 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting
-        errorIdMessage: false,
-        errorCategoryNo: false,
-        errorQuestionNo: false,
-        categoryNo: 5,
-        questionNo: 5,
         participants: ''
       }
     },
