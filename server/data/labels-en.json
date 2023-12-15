@@ -14,14 +14,11 @@
 	"errorCreateCategoryMessage": "Error: There has to be at least one category",
 	"createInfoTitle": "HOW TO CREATE A QUIZ",
 	"createInfo": [
-	  "Write 5 topics",
-      "Click on each $ box to create a new question",
-      "Type the question",
-      "Click on YES or NO to mark the right answer",
-      "Press Complete and return to Jeopardy Board to lock in the answer",
-      "The completed questions will be marked with a lighter colour",
-      "Continue to fill in the rest of the questions",
-      "Great job, you have created your own Jeopardy!" 
+	
+	"Choose the size of your Jeopardy board",
+	"Type in your choice of categories, questions and answers",
+	"When you've finished, your friends can play your game using your Jeopardy ID!",
+	"Have fun!"
 	],
 	"boardViewQuestionBox": "Click to add question",
 	"boardViewCategoryBox": "Click to add category name",

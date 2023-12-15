@@ -14,14 +14,10 @@
 	"errorCreateCategoryMessage": "OBS: Det måste vara minst en kategori",
 	"createInfoTitle": "HUR SKAPAR DU ETT QUIZ",
 	"createInfo": [
-		"Skriv 5 ämnen",
-		"Klicka på de olika $ i tabellen för att skapa nya frågor",
-		"Skiv ut frågan",
-		"Klicka på JA eller NEJ för att märkera rätt svar",
-		"Tryck klar och returnera till Jeopardy brädan för att låsa in svaret",
-		"De klarskrivna frågorna märkeras med en ljusare färg",
-		"Fortsätt att fylla i resten av frågorna",
-		"Bra jobbat, du har skapat ditt eget Jeopardy!"
+		"Välj storleken på ditt Jeopardy-spelbräde.",
+		"Skriv in dina val av kategorier, frågor och svar.",
+		"När du är klar kan dina vänner spela ditt spel med hjälp av ditt Jeopardy-ID!",
+		"Ha kul!"
 	],
 	"boardViewQuestionBox": "Klicka för att lägga till frågan",
 	"boardViewCategoryBox": "Klicka för att lägga till kategoriens namn",

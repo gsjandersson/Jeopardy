@@ -10,6 +10,10 @@
         <header>
           <h1> {{ uiLabels.hostTheGameTitle }} </h1>
         </header>
+        <div>
+        <h3> Jeopardy ID:</h3>
+        <h1> {{ pollId }}</h1>
+        </div>
 
         <div> 
             <h2>{{ uiLabels.players }} </h2>
