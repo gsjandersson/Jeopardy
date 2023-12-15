@@ -86,20 +86,20 @@ const router = createRouter({
       name: 'HostWichPoll',
       component: () => import('../views/HostWhichPoll.vue')
     },
-    { 
-      path: '/AnswerRight',
+    {   
+      path: '/AnswerRight/:pollId/:participantName',
       name: 'AnswerRight',
       component: () => import('../views/AnswerRight.vue')
     },
     { 
-      path: '/AnswerWrong',
+      path: '/AnswerWrong/:pollId/:participantName',
       name: 'AnswerWrong',
       component: () => import('../views/AnswerWrong.vue')
     },
     { 
-      path: '/NoAnswer',
-      name: 'NoAnswer',
-      component: () => import('../views/NoAnswer.vue')
+      path: '/AnswerNone/:pollId/:participantName',
+      name: 'AnswerNone',
+      component: () => import('../views/AnswerNone.vue')
     },
     { 
       path: '/EditQuiz',

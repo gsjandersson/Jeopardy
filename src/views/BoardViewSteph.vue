@@ -8,7 +8,7 @@
     </header>
 
     <h1>{{ uiLabels.boardViewTitle }}</h1>
-    <p class="pollDisplay"> Poll Id: {{ pollId }}</p>
+    <p class="pollDisplay"> Jeopardy Id: {{ pollId }}</p>
 
 
     <main>

@@ -1,7 +1,7 @@
 <template>
   <div id="answer-box-wrong">
-    <h1>WRONG</h1>
-    <p> No money for you!</p>
+    <h1>{{ uiLabels.wrong }}</h1>
+    <p>{{ uiLabels.noMoneyForYou }}</p>
   </div>  
 </template>
 

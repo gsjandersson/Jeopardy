@@ -3,7 +3,7 @@
     <button id="homescreenButtonTopLeft" v-on:click="exit">{{ uiLabels.exit }}</button>
 
     <header>
-      Poll Id: {{ pollId }}
+      Jeopardy Id: {{ pollId }}
     </header>
 
     <h2> You are: {{ participantName }}</h2>
@@ -97,29 +97,9 @@ export default {
     this.pollId = this.$route.params.pollId
     this.participantName = this.$route.params.participantName
 
-    /*socket.emit('getPollLang', (this.pollId))
-
-    socket.on('pollLang', (lang) =>
+    socket.on("pollLang", (lang) =>
       this.lang = lang
-    );*/
-
-    socket.emit("pageLoaded", this.lang);
-
-    socket.on("init", (labels) => {
-      this.uiLabels = labels;
-    })
-
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
-
-    socket.emit("retrieveQuestions", (this.pollId));
-
-    socket.emit("retrieveCategories", (this.pollId));
-
-    socket.emit('getCashTotal', { pollId: this.pollId, partName: this.participantName })
-
-    socket.emit('getParticipantTurn', (this.pollId))
-
-    socket.emit('getParticipantsAndCashTotal', (this.pollId))
+    );
 
     socket.emit('updateParticipants', (this.pollId))
 
@@ -127,14 +107,17 @@ export default {
       this.questions = questions
     );
 
+    socket.on("init", (labels) => {
+      this.uiLabels = labels;
+    })
+
     socket.on("categoriesRetrieved", (categories) =>
       this.categories = categories
     );
 
     socket.on('participantUpdate', (participants) => {
       this.participants = participants;
-    }
-    );
+    });
 
     socket.on('goToQuestion', (d) => {
       this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}/${d.row}/${d.col}`);
@@ -149,9 +132,25 @@ export default {
     );
 
     socket.on('participantsAndCashTotal', (participantsAndCashTotal) => {
-      console.log("participantsAndCashtotal: " + participantsAndCashTotal)
+      this.participantsAndCashTotal = participantsAndCashTotal
     });
 
+    // socket.emit("getPollLang", this.pollId);
+
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
+
+    socket.emit("retrieveQuestions", (this.pollId));
+
+    socket.emit("retrieveCategories", (this.pollId));
+
+    socket.emit('getCashTotal', { pollId: this.pollId, partName: this.participantName })
+
+    socket.emit('getParticipantTurn', (this.pollId))
+
+    socket.emit('getParticipantsAndCashTotal', (this.pollId))
+
+    socket.emit("pageLoaded", this.lang);
+    
   },
 
   // Methods to interact with the server

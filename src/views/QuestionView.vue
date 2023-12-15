@@ -70,6 +70,8 @@ export default {
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
 
+    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
+
     // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
@@ -85,9 +87,11 @@ export default {
       this.question = question;
     });
 
+    socket.on('correctAnswer', (correctAnswer) => {
+      this.correctAnswer = correctAnswer;
+    });
+
     this.startCountdown();
-
-
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
@@ -96,25 +100,17 @@ export default {
     },
 
     submitAnswer: function () {
-      console.log("submit answr")
-      // Check if the answer has already been submitted
-      if (this.answerSubmitted) {
-        return;
-      }
-      // Disable the button to prevent multiple clicks
-      this.$refs.submitButton.disabled = true;
-      socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
-
-      socket.on('correctAnswer', (correctAnswer) => {
-        this.correctAnswer = correctAnswer;
-
+      if (!this.answerSubmitted) {
         if (this.correctAnswer == this.answer) {
           socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
-      }
+        }
       this.answerSubmitted = true;
-      this.$refs.submitButton.disabled = false;
-    });
-  },
+      
+      //this.$refs.submitButton.disabled = false;
+      }
+      // Disable the button to prevent multiple clicks
+      // this.$refs.submitButton.disabled = true;
+    },
     startCountdown() {
       const countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
@@ -126,23 +122,30 @@ export default {
       }, 1000); // Update every 1000ms (1 second)
     },
     closeQuestionView() {
-  if (!this.answerSubmitted) {
-    // If the answer was not submitted, handle it as a wrong answer
-    this.showAnswerStatus(false);
-  } else {
-    // If the answer was submitted, check if it's correct
-    const isCorrect = this.answer === this.correctAnswer;
-    this.showAnswerStatus(isCorrect);
-  }
-},
+      if (!this.answerSubmitted) {
+      // If the answer was not submitted, handle it as a wrong answer
+        this.showAnswerStatus("not submitted");
+      } 
+      else {
+      // If the answer was submitted, check if it's correct
+        const isCorrect = this.answer === this.correctAnswer;
+        this.showAnswerStatus(isCorrect);
+      }
+    },
 
 showAnswerStatus(isCorrect) {
-  const redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
-
+  let redirectRoute;
+  if (isCorrect === true || isCorrect === false) {
+    redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
+  }
+  else {
+    redirectRoute = 'AnswerNone';
+  }
+  
   // Redirect to the appropriate answer status component
   this.$router.push({
     name: redirectRoute,
-    params: { pollId: this.pollId, participant: this.participant },
+    params: { pollId: this.pollId, participant: this.participant, row: this.row },
   });
 
   // Wait for 5 seconds before redirecting to jpollview

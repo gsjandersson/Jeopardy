@@ -27,13 +27,13 @@
       </div>
 
       <div>
-        <p> Number of categories: </p>
-        <input type="number" v-model="categoryNo" min="1" step="1">
+        <p>{{ uiLabels.numberCategories }}:</p>
+        <input type="number" v-model="categoryNo" min=1 step=1>
       </div>
 
       <div>
-        <p> Number of questions per category: </p>
-        <input type="number" v-model="questionNo" min="1" step="1">
+        <p>{{ uiLabels.numberQuestions }}:</p>
+        <input type="number" v-model="questionNo" min=1 step=1>
       </div>
 
       <div>
