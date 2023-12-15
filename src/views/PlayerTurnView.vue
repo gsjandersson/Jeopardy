@@ -10,9 +10,9 @@
         <header>
           <h1> {{ uiLabels.PlayerTurnTitle }} </h1>
         </header>
-        <!-- <div>
+         <div>
             <h2> Player: {{ participantTurn }} will pick question. </h2>
-        </div> -->
+        </div> 
     </body>
   </template>
   
@@ -35,35 +35,32 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting
-        errorIdMessage: false,
-        errorCategoryNo: false,
-        errorQuestionNo: false,
-        categoryNo: 5,
-        questionNo: 5
       }
     },
   
     // Lifecycle hook - component creation
     created: function () {
+      this.pollId = this.$route.params.pollId
       // Lifecycle hook - component creation
       // this.id = this.$route.params.id;
   
       // Emit an event to the server when the page is loaded
+        this.participantTurn = this.$route.params.participantTurn
       socket.emit("pageLoaded", this.lang);
+
+      socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
+
+      socket.on('goToQuestion', (d) => {
+        this.$router.push(`/DisplayQuestion/${this.pollId}/${d.row}/${d.col}`);
+      });
   
       // Listen for initialization data from the server
       socket.on("init", (labels) => {
         this.uiLabels = labels
       })
   
-      // Listen for data updates from the server
-      socket.on("dataUpdate", (data) =>
-        this.data = data
-      )
-  
-      // Listen for the event when a poll is created
-      socket.on("pollCreated", (data) =>
-        this.data = data)
+      socket.emit('getParticipantTurn', (this.pollId))
+    
     },
     // Methods for language switching and toggling the navigation menu
     methods: {
@@ -81,40 +78,9 @@
         localStorage.setItem("lang", this.lang);
         socket.emit("switchLanguage", this.lang)
       },
-       
-      createPoll: function () {
-        if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
-          this.errorIdMessage = false;
-          this.errorCategoryNo = false;
-          this.errorQuestionNo = false;
-          socket.emit("createPoll", { pollId: this.pollId, lang: this.lang, 
-            questionNo: this.questionNo, categoryNo: this.categoryNo});
-          this.$router.push('/BoardViewSteph/' + this.pollId);
-        }
-        if (this.pollId === "") {
-          this.errorIdMessage = true;
-        }
-        else {
-          this.errorIdMessage = false;
-        }
-  
-        if (this.categoryNo < 1 || this.categoryNo === "") {
-          this.errorCategoryNo = true;
-        }
-        else {
-          this.errorCategoryNo = false;
-        }
-  
-        if (this.questionNo < 1 || this.questionNo === "") {
-          this.errorQuestionNo = true;
-        }
-        else {
-          this.errorQuestionNo = false;
-        }
-      },
       exitCreatorMode() {
         this.$router.push('/jStartView');
-      }
+      }, 
     }
   }
   </script>

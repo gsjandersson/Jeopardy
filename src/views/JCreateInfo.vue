@@ -140,7 +140,7 @@ export default {
         this.$router.push('/BoardViewSteph/' + this.autoPollId);
       }
       if (this.pollId === "") {
-        this.errorIdMessage = true;
+        // this.errorIdMessage = true;
       }
       else {
         this.errorIdMessage = false;
