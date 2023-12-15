@@ -50,6 +50,18 @@
           {{ uiLabels.errorCreateQuestionMessage }}
         </p>
       </div>
+
+      <!-- Knappar för autoGenerateQuiz -->
+      <div>
+        <p>{{ uiLabels.quizTopic }}:</p>
+        <input type="text" v-model="quizTopic">
+      </div>
+      <div>
+        <button v-on:click="autoGenerateQuiz">
+          {{ uiLabels.autoGenerateQuiz }}
+        </button>
+      </div>
+
     </main>
   </body>
 </template>
@@ -78,7 +90,8 @@ export default {
       errorQuestionNo: false,
       categoryNo: 5,
       questionNo: 5,
-      autoPollId: ""
+      autoPollId: "",
+      quizTopic: ""
     }
   },
 
@@ -162,6 +175,14 @@ export default {
     },
     exitCreatorMode() {
       this.$router.push('/jStartView');
+    },
+
+    // Autogenerera quiz
+    autoGenerateQuiz() {
+      socket.emit("autoGeneratePoll", {
+        pollId: this.autoPollId, lang: this.lang
+      });
+      this.$router.push('/BoardViewSteph/' + this.autoPollId);
     }
   }
 }

@@ -272,10 +272,10 @@ Data.prototype.participantAnswerRegistered = function (pollId) {
   if (typeof part !== 'undefined') {
     part.numberAnswers += 1
     if (part.numberAnswers == part.allParticipants.length) {
-      return(true);
+      return (true);
     }
   }
-  return(false);
+  return (false);
 }
 
 Data.prototype.resetAnswerCount = function (pollId) {
@@ -283,6 +283,39 @@ Data.prototype.resetAnswerCount = function (pollId) {
   if (typeof part !== 'undefined') {
     part.numberAnswers = 0
   }
+}
+
+Data.prototype.autoGenerateQuiz = function (pollId, lang) {
+  let poll = {};
+  poll.lang = lang;
+  let questionNo = 5;
+  let categoryNo = 5;
+
+  poll.questions = Array.from({ length: questionNo }, () => Array.from({ length: categoryNo }, () => ({
+    question: '',
+    answer: '',
+    completed: false
+  }))),
+
+    poll.categories = Array.from({ length: categoryNo }, () => "");
+  poll.currentQuestion = 0;
+
+// Fyll quizzen med autogenererade frågor och kategorier här:
+
+
+  this.polls[pollId] = poll;
+
+  let participantData = {};
+  participantData.cashTotal = {};
+  participantData.allParticipants = [];
+  participantData.turnIndex = 0;
+  participantData.turn = "";
+  participantData.numberAnswers = 0;
+  this.participants[pollId] = participantData;
+
+  console.log("poll created", pollId, poll);
+
+  return this.polls[pollId];
 }
 
 // Export the Data class for use in other modules

@@ -1,0 +1,43 @@
+{
+    "lang": "en",
+    "questions": [
+      [
+        { "question": "What is the capital of France?", "answer": "Paris", "completed": false },
+        { "question": "Who wrote 'Romeo and Juliet'?", "answer": "William Shakespeare", "completed": false },
+        { "question": "What is the largest mammal on Earth?", "answer": "Blue Whale", "completed": false },
+        { "question": "In which year did World War II end?", "answer": "1945", "completed": false },
+        { "question": "What is the square root of 64?", "answer": "8", "completed": false }
+      ],
+      [
+        { "question": "Who is the current president of the United States?", "answer": "Joe Biden", "completed": false },
+        { "question": "What is the capital of Japan?", "answer": "Tokyo", "completed": false },
+        { "question": "What is the formula for the area of a circle?", "answer": "πr^2", "completed": false },
+        { "question": "Which planet is known as the 'Red Planet'?", "answer": "Mars", "completed": false },
+        { "question": "Who painted the Mona Lisa?", "answer": "Leonardo da Vinci", "completed": false }
+      ],
+      [
+        { "question": "What is the currency of India?", "answer": "Indian Rupee", "completed": false },
+        { "question": "Who developed the theory of relativity?", "answer": "Albert Einstein", "completed": false },
+        { "question": "What is the tallest mountain in the world?", "answer": "Mount Everest", "completed": false },
+        { "question": "Which gas do plants absorb during photosynthesis?", "answer": "Carbon Dioxide", "completed": false },
+        { "question": "Who wrote 'To Kill a Mockingbird'?", "answer": "Harper Lee", "completed": false }
+      ],
+      [
+        { "question": "What is the capital of Australia?", "answer": "Canberra", "completed": false },
+        { "question": "What is the chemical symbol for gold?", "answer": "Au", "completed": false },
+        { "question": "Who was the first woman to win a Nobel Prize?", "answer": "Marie Curie", "completed": false },
+        { "question": "What is the speed of light?", "answer": "299,792 kilometers per second", "completed": false },
+        { "question": "In which year did the Titanic sink?", "answer": "1912", "completed": false }
+      ],
+      [
+        { "question": "Who is the author of '1984'?", "answer": "George Orwell", "completed": false },
+        { "question": "What is the largest ocean on Earth?", "answer": "Pacific Ocean", "completed": false },
+        { "question": "What is the formula for water?", "answer": "H2O", "completed": false },
+        { "question": "Who discovered penicillin?", "answer": "Alexander Fleming", "completed": false },
+        { "question": "What is the main ingredient in guacamole?", "answer": "Avocado", "completed": false }
+      ]
+    ],
+    "categories": ["Geography", "Science", "History", "Literature", "General Knowledge"],
+    "currentQuestion": 0
+  }
+  

@@ -62,5 +62,6 @@
 	"numberQuestions": "Number of questions per category",
 	"letsplay": "Let's Play!",
 	"PlayerTurnTitle": "It's time to pick a question",
-	"Leaderboard": "Leaderboard"
+	"Leaderboard": "Leaderboard",
+	"autoGenerateQuiz": "Auto-generate quiz"
 }
