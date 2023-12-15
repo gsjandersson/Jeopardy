@@ -108,10 +108,6 @@ export default {
 <style scoped>
 /* Scoped styles for the component */
 
-main {
-  display: grid;
-  grid-template-columns: 3em auto;
-}
 
 header {
   margin-bottom: 50px;
@@ -122,17 +118,13 @@ header img {
   width: 50vw;
 }
 .buttonRow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Three columns with equal width */
-  gap: 0em; /* Adjust the gap between buttons as needed */
-  width: 500px;
-  margin-left: 10vw;
+  display: flex;
+  justify-content: center;
 }
 
 .buttonRow button {
   height: 80px;
-  width: auto;
-  min-width: 100px;
+  width: 160px;
   font-size: 1.2em;
   margin: 8px;
 }

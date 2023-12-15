@@ -1,7 +1,7 @@
 <template>
   <div id="answer-box-wrong">
     <h1>{{ uiLabels.wrong }}</h1>
-    <p>{{ uiLabels.noMoneyForYou }}: ${{100*1+row}}</p>
+    <p>{{ uiLabels.noMoneyForYou }}! ${{100*1+row}} </p>
   </div>  
 </template>
 

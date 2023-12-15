@@ -1,0 +1,23 @@
+name: test_api
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '14'
+
+    - name: Use secret API key
+      run: echo "Using secret API key"
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+
+        

@@ -89,7 +89,6 @@ export default {
       cashTotal: 0,
       participantTurn: "",
       participantsAndCashTotal: [],
-      questionChosen: ""
     }
   },
 
@@ -101,8 +100,6 @@ export default {
     socket.on("pollLang", (lang) =>
       this.lang = lang
     );
-
-    socket.emit('updateParticipants', (this.pollId))
 
     socket.on("questionsRetrieved", (questions) =>
       this.questions = questions
