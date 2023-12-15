@@ -22,8 +22,8 @@
       </div>
 
       <div>
-        <p> Jeopardy ID: </p>
-        {{ autoPollId }}
+        <p>Jeopardy ID:</p>
+        <p style="font-size: 2em;">{{ autoPollId }}</p>
       </div>
 
       <div>
