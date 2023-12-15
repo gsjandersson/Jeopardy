@@ -59,8 +59,8 @@
 	"correct": "RÄTT",
 	"cashEarned": "Tjänade pengar",
 	"wrong": "FEL",
-	"noMoneyForYou": "Inga pengar för dig: $0",
-	"numberCategories": "Kategoriantal",
-	"numberQuestions": "Frågeantal per kategori"
+	"noMoneyForYou": "Inga pengar för dig, du missade precis",
+	"numberCategories": "Antal kategorier",
+	"numberQuestions": "Antal frågor per kategori"
 }
 	
