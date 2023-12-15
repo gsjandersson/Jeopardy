@@ -101,6 +101,8 @@ export default {
       this.lang = lang
     );
 
+    socket.emit('updateParticipants', (this.pollId))
+
     socket.on("questionsRetrieved", (questions) =>
       this.questions = questions
     );
