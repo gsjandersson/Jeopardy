@@ -18,7 +18,7 @@
             </li>
         </div>
         <div class="button-container">
-          <button id="playButton" v-on:click="goToQuestion">
+          <button id="playButton" v-on:click="goToPlayerTurn">
             {{ uiLabels.letsplay }}
           </button>
         </div>
@@ -57,9 +57,8 @@
       socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
       socket.on('participantUpdate', (participants) => {
-      console.log("participant update JpollView")
-      this.participants = participants;
-    });
+        this.participants = participants;
+      });
 
       // Emit an event to the server when the page is loaded
       socket.emit("pageLoaded", this.lang);
@@ -68,15 +67,7 @@
       socket.on("init", (labels) => {
         this.uiLabels = labels
       })
-  
-      // Listen for data updates from the server
-      socket.on("dataUpdate", (data) =>
-        this.data = data
-      )
-  
-      // Listen for the event when a poll is created
-      socket.on("pollCreated", (data) =>
-        this.data = data)
+
     },
     // Methods for language switching and toggling the navigation menu
     methods: {
@@ -93,42 +84,9 @@
         }
         localStorage.setItem("lang", this.lang);
         socket.emit("switchLanguage", this.lang)
-
       },
-
-      goToQuestion() {
-            this.$router.push('/PlayerTurnView/' + this.pollId);
-        },
-
-      createPoll: function () {
-        if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
-          this.errorIdMessage = false;
-          this.errorCategoryNo = false;
-          this.errorQuestionNo = false;
-          socket.emit("createPoll", { pollId: this.pollId, lang: this.lang, 
-            questionNo: this.questionNo, categoryNo: this.categoryNo});
-          this.$router.push('/BoardViewSteph/' + this.pollId);
-        }
-        if (this.pollId === "") {
-          this.errorIdMessage = true;
-        }
-        else {
-          this.errorIdMessage = false;
-        }
-  
-        if (this.categoryNo < 1 || this.categoryNo === "") {
-          this.errorCategoryNo = true;
-        }
-        else {
-          this.errorCategoryNo = false;
-        }
-  
-        if (this.questionNo < 1 || this.questionNo === "") {
-          this.errorQuestionNo = true;
-        }
-        else {
-          this.errorQuestionNo = false;
-        }
+      goToPlayerTurn() {
+        this.$router.push('/PlayerTurnView/' + this.pollId);
       },
       exitCreatorMode() {
         this.$router.push('/jStartView');
