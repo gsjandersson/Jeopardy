@@ -38,6 +38,10 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
   });
 
+  socket.on('updateParticipants', function (d) {
+    io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
+  })
+
   socket.on('runQuestion', function (d) {
     io.to(d.pollId).emit('newQuestion', data.getQuestion(d.pollId, d.questionRow, d.questionCol));
     io.to(d.pollId).emit('dataUpdate', data.getAnswers(d.pollId));

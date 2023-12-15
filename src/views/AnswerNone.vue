@@ -1,7 +1,7 @@
 <template>
     <div id="answer-box-none">
-      <h1>TOO SLOW</h1>
-      <p>no cash earned</p>
+      <h1>{{ uiLabels.tooSlow }}</h1>
+      <p>{{ uiLabels.noCashEarned }}</p>
     </div>  
   </template>
   
