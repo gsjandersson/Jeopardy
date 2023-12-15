@@ -53,6 +53,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.allParticipants = [];
     participantData.turnIndex = 0;
     participantData.turn = "";
+    participantData.numberAnswers = 0;
     this.participants[pollId] = participantData;
 
     console.log("poll created", pollId, poll);
@@ -264,6 +265,24 @@ Data.prototype.getParticipantsAndCashTotal = function (pollId) {
 Data.prototype.updateAutoPollId = function () {
   this.autoPollId += 1;
   return this.autoPollId;
+}
+
+Data.prototype.participantAnswerRegistered = function (pollId) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    part.numberAnswers += 1
+    if (part.numberAnswers == part.allParticipants.length) {
+      return(true);
+    }
+  }
+  return(false);
+}
+
+Data.prototype.resetAnswerCount = function (pollId) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    part.numberAnswers = 0
+  }
 }
 
 // Export the Data class for use in other modules

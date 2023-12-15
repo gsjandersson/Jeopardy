@@ -124,6 +124,17 @@ function sockets(io, socket, data) {
   socket.on('updateAutoPollId', () => {
     socket.emit('autoPollIdUpdated', data.updateAutoPollId())
   });
+
+  socket.on("participantAnswerRegistered", function (pollId) {
+    const hasAllAnswered = data.participantAnswerRegistered(pollId)
+    if (hasAllAnswered) {
+      socket.emit("hasAllAnswered")
+    }
+  });
+
+  socket.on("resetAnswerCount", function (pollId) {
+    data.resetAnswerCount(pollId)
+  });
 }
 
 export { sockets };
