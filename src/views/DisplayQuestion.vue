@@ -6,11 +6,7 @@
         </div>
   
         <header>
-<<<<<<< HEAD
-          <h1> </h1> 
-=======
           <h1> {{ question }} </h1> 
->>>>>>> ad328ef87efdd8f8f419c38e03203b4bf081c628
         </header>
 
         <div>
@@ -28,27 +24,6 @@
       name: 'DisplayQuestion',
       data: function () {
         return {
-<<<<<<< HEAD
-    uiLabels: {},
-    pollId: "",
-    lang: localStorage.getItem("lang") || "en",
-    selectedQuestion: "",
-    questionValue: 0,
-        }
-      },
-      ccreated: function () {
-  socket.emit("pageLoaded", this.lang);
-  socket.on("init", (labels) => {
-    this.uiLabels = labels;
-  });
-
-  // Listen for the selected question event
-  socket.on("displaySelectedQuestion", ({ question, value }) => {
-    // Update local data to display the selected question
-    this.selectedQuestion = question;
-    this.questionValue = value;
-  });
-=======
           uiLabels: {},
           pollId: "",
           lang: localStorage.getItem("lang") || "en",
@@ -75,7 +50,6 @@
 
         socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
         
->>>>>>> ad328ef87efdd8f8f419c38e03203b4bf081c628
       },
 
       methods: {
