@@ -149,7 +149,6 @@ export default {
     );
 
     socket.on('participantsAndCashTotal', (participantsAndCashTotal) => {
-      this.participantsAndCashTotal = participantsAndCashTotal
       console.log("participantsAndCashtotal: " + participantsAndCashTotal)
     });
 
