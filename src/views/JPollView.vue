@@ -89,7 +89,6 @@ export default {
       cashTotal: 0,
       participantTurn: "",
       participantsAndCashTotal: [],
-      questionChosen: ""
     }
   },
 

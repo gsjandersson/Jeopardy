@@ -8,13 +8,11 @@
         </div>
   
         <header>
-          <h1> Let's play Jeopardy </h1> 
+          <h1> </h1> 
         </header>
 
         <div>
             <div>
-            <jpollview @question-selected="updateSelectedQuestion" />
-            <displayquestion :selectedQuestion="selectedQuestion" />
             </div>
         </div>
     </body>
@@ -28,16 +26,25 @@
       name: 'DisplayQuestion',
       data: function () {
         return {
-          uiLabels: {},
-          pollId: "",
-          lang: localStorage.getItem("lang") || "en",
+    uiLabels: {},
+    pollId: "",
+    lang: localStorage.getItem("lang") || "en",
+    selectedQuestion: "",
+    questionValue: 0,
         }
       },
-      created: function () {
-        socket.emit("pageLoaded", this.lang);
-        socket.on("init", (labels) => {
-          this.uiLabels = labels;
-        });
+      ccreated: function () {
+  socket.emit("pageLoaded", this.lang);
+  socket.on("init", (labels) => {
+    this.uiLabels = labels;
+  });
+
+  // Listen for the selected question event
+  socket.on("displaySelectedQuestion", ({ question, value }) => {
+    // Update local data to display the selected question
+    this.selectedQuestion = question;
+    this.questionValue = value;
+  });
       },
       methods: {
         switchLanguageEnglish: function () {
