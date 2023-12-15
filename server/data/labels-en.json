@@ -62,5 +62,11 @@
 	"numberQuestions": "Number of questions per category",
 	"letsplay": "Let's Play!",
 	"PlayerTurnTitle": "It's time to pick a question",
-	"Leaderboard": "Leaderboard"
+	"Leaderboard": "Leaderboard",
+	"YouAre": "You are: ",
+	"letsplayjeopardy": "Let's play Jeopardy!",
+	"PartTurn": "Participants turn: ",
+	"Parts": "Participants:",
+	"YouHave": "You have:",
+	"Participant": "Participant"
 }

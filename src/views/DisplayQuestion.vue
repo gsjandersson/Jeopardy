@@ -8,7 +8,7 @@
         </div>
   
         <header>
-          <h1> Let's play Jeopardy </h1> 
+          <h1> {{ uiLabels.letsplayjeopardy }} </h1> 
         </header>
 
         <div>

@@ -65,6 +65,11 @@
 	"letsplay": "Starta spelet!",
 	"PlayerTurnTitle": "Det är dags att välja en fråga",
 	"Leaderboard": "Topplista",
-	"YouAre": "Du är"
+	"YouAre": "Du är",
+	"letsplayjeopardy": "Nu spelar vi Jeopardy!",
+	"PartTurn": "Deltagares tur: ",
+	"Parts": "Deltagare:",
+	"YouHave": "Du har:",
+	"Participant": "Deltagare"
 }
 	
