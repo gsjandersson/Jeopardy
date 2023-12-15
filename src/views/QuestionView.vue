@@ -70,6 +70,8 @@ export default {
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
 
+    socket.emit("resetAnswerCount", this.pollId);
+
     socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
 
     // Listen for initialization data from the server
@@ -91,6 +93,11 @@ export default {
       this.correctAnswer = correctAnswer;
     });
 
+    socket.on('hasAllAnswered', () => {
+      console.log("all have answered")
+      // returns true if all have answered
+    });
+
     this.startCountdown();
   },
   // Methods for language switching and toggling the navigation menu
@@ -101,15 +108,13 @@ export default {
 
     submitAnswer: function () {
       if (!this.answerSubmitted) {
-        if (this.correctAnswer == this.answer) {
+        socket.emit("participantAnswerRegistered", (this.pollId))
+        if (this.correctAnswer === this.answer) {
           socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
         }
       this.answerSubmitted = true;
-      
-      //this.$refs.submitButton.disabled = false;
       }
-      // Disable the button to prevent multiple clicks
-      // this.$refs.submitButton.disabled = true;
+
     },
     startCountdown() {
       const countdownInterval = setInterval(() => {
