@@ -10,7 +10,7 @@
     <main>
 
       <div>
-        <p> Your answer: </p>
+        <p> {{ uiLabels.answer }} </p>
         <input type="text" v-model="answer">
       </div>
 
@@ -109,8 +109,7 @@ export default {
         this.correctAnswer = correctAnswer;
 
         if (this.correctAnswer == this.answer) {
-          
-            socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
+          socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
       }
       this.answerSubmitted = true;
       this.$refs.submitButton.disabled = false;

@@ -8,28 +8,28 @@
       </div>
 
       <header>
-        <img src="/img/jeopardy.png" style="width: 50vw">
+        <img src="/img/jeopardy.png">
         <h2 style="margin:1em">{{ uiLabels["sales-pitch"] }}</h2>
         <h3 style="margin:1em">{{ uiLabels.subHeading }}</h3>
       </header>
 
       <div class="buttonRow">
 
-          <button id="playButton" v-on:click="play">
+          <button v-on:click="play">
           {{ uiLabels.participatePoll}}
           </button>
         
-          <button id="createButton" v-on:click="create"> 
+          <button v-on:click="create"> 
           {{uiLabels.createPoll }}
-            </button>
+          </button>
         
-          <button id="editButton" v-on:click="edit"> 
+          <button v-on:click="edit"> 
           {{ uiLabels.editPoll }}
-            </button>
+          </button>
 
-            <button id="hostButton" v-on:click="host"> 
+          <button v-on:click="host"> 
           {{ uiLabels.hostPoll }}
-            </button>
+          </button>
         
       </div>
 
@@ -119,18 +119,22 @@ header {
 
 header img {
   margin-top: 100px;
+  width: 50vw;
 }
 .buttonRow {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Three columns with equal width */
-  gap: 40px; /* Adjust the gap between buttons as needed */
-  margin-left: 155px;
+  gap: 0em; /* Adjust the gap between buttons as needed */
+  width: 500px;
+  margin-left: 10vw;
 }
 
-#playButton, #createButton, #editButton, #hostButton {
-  height: 120px;
-  width: 210px;
-  font-size: 1.5em;
+.buttonRow button {
+  height: 80px;
+  width: auto;
+  min-width: 100px;
+  font-size: 1.2em;
+  margin: 8px;
 }
 
 </style>
