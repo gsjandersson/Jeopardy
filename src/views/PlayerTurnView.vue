@@ -10,9 +10,9 @@
         <header>
           <h1> {{ uiLabels.PlayerTurnTitle }} </h1>
         </header>
-        <!-- <div>
+         <div>
             <h2> Player: {{ participantTurn }} will pick question. </h2>
-        </div> -->
+        </div> 
     </body>
   </template>
   
@@ -45,6 +45,7 @@
       // this.id = this.$route.params.id;
   
       // Emit an event to the server when the page is loaded
+        this.participantTurn = this.$route.params.participantTurn
       socket.emit("pageLoaded", this.lang);
 
       socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
@@ -58,7 +59,8 @@
         this.uiLabels = labels
       })
   
-
+      socket.emit('getParticipantTurn', (this.pollId))
+    
     },
     // Methods for language switching and toggling the navigation menu
     methods: {
@@ -78,7 +80,7 @@
       },
       exitCreatorMode() {
         this.$router.push('/jStartView');
-      }
+      }, 
     }
   }
   </script>
