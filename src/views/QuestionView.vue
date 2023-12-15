@@ -126,6 +126,7 @@ export default {
         }
       }, 1000); // Update every 1000ms (1 second)
     },
+    
     closeQuestionView() {
       if (!this.answerSubmitted) {
       // If the answer was not submitted, handle it as a wrong answer

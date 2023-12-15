@@ -59,10 +59,12 @@
 	"correct": "RÄTT",
 	"cashEarned": "Tjänade pengar",
 	"wrong": "FEL",
-	"noMoneyForYou": "Inga pengar för dig, du missade precis",
+	"noMoneyForYou": "Inga pengar för dig",
 	"numberCategories": "Antal kategorier",
 	"numberQuestions": "Antal frågor per kategori",
 	"letsplay": "Starta spelet!",
-	"PlayerTurnTitle": "Det är dags att välja en fråga"
+	"PlayerTurnTitle": "Det är dags att välja en fråga",
+	"Leaderboard": "Topplista",
+	"YouAre": "Du är"
 }
 	

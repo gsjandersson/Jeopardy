@@ -110,6 +110,11 @@ const router = createRouter({
       path: '/PlayerTurnView/:pollId',
       name: 'PlayerTurnView',
       component: () => import('../views/PlayerTurnView.vue')
+    },
+    { 
+      path: '/DisplayQuestion',
+      name: 'DisplayQuestion',
+      component: () => import('../views/DisplayQuestion.vue')
     }
   ]
 });
