@@ -32,11 +32,15 @@ function sockets(io, socket, data) {
 
   socket.on('joinPoll', function (d) {
     socket.join(d.pollId);
-    data.newParticipant(d.pollId, d.participantName);
+    if (d.participantName !== undefined) {
+      data.newParticipant(d.pollId, d.participantName);
+    }
     io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
-    // socket.emit('newQuestion', data.getQuestion(pollId))
-    // socket.emit('dataUpdate', data.getAnswers(pollId));
   });
+
+  socket.on('updateParticipants', function (d) {
+    io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
+  })
 
   socket.on('runQuestion', function (d) {
     io.to(d.pollId).emit('newQuestion', data.getQuestion(d.pollId, d.questionRow, d.questionCol));
@@ -55,11 +59,11 @@ function sockets(io, socket, data) {
     data.initializeData();
   });
 
-  socket.on('retrieveQuestions', function (pollId){
+  socket.on('retrieveQuestions', function (pollId) {
     socket.emit('questionsRetrieved', data.retrieveQuestions(pollId));
   });
 
-  socket.on('retrieveCategories', function (pollId){
+  socket.on('retrieveCategories', function (pollId) {
     socket.emit('categoriesRetrieved', data.retrieveCategories(pollId))
   });
 
@@ -87,7 +91,7 @@ function sockets(io, socket, data) {
     data.addParticipantAnswer(d.pollId, d.partName, d.partAnswer)
   });
 
-  socket.on('getCorrectAnswer', function (d){
+  socket.on('getCorrectAnswer', function (d) {
     console.log("socket get correct answer")
     socket.emit('correctAnswer', data.getCorrectAnswer(d.pollId, d.row, d.col))
   });
@@ -101,6 +105,25 @@ function sockets(io, socket, data) {
     socket.emit('cashTotal', data.getCashTotal(d.pollId, d.partName))
   });
 
+  socket.on('updateTurnOrder', function (pollId) {
+    data.updateTurnOrder(pollId)
+  });
+
+  socket.on('getParticipantTurn', function (pollId) {
+    socket.emit('participantTurn', data.participantTurnOrder(pollId))
+  });
+
+  socket.on('getPollLang', function (pollId) {
+    socket.emit('pollLang', data.getPollLang(pollId))
+  });
+
+  socket.on('getParticipantsAndCashTotal', function (pollId) {
+    socket.emit('participantsAndCashTotal', data.getParticipantsAndCashTotal(pollId))
+  });
+
+  socket.on('updateAutoPollId', () => {
+    socket.emit('autoPollIdUpdated', data.updateAutoPollId())
+  });
 }
 
 export { sockets };

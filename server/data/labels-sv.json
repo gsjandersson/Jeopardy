@@ -8,7 +8,7 @@
 	"changeLanguage": "",
 	"about": "Om oss",
 	"errorCreateIdMessage": "OBS: Jeopardy ID kan ej vara tom",
-	"errorPlayIdMessage" : "OBS: Jeopardy poll ID existerar inte eller är tom",
+	"errorPlayIdMessage" : "OBS: Jeopardy ID existerar inte eller är tom",
 	"errorNameIDMessage": "OBS: Namn kan inte vara tomt",
 	"errorCreateQuestionMessage": "OBS: Det måste vara minst en fråga i en kategori",
 	"errorCreateCategoryMessage": "OBS: Det måste vara minst en kategori",
@@ -49,6 +49,18 @@
 	"editPoll": "ÄNDRA BEFINTLIGT",
 	"hostViewTitle": "Vilket quiz vill du vara värd för?",
 	"editViewTitle": "Vilket quiz vill du redigera?",
-	"editThePoll": "Redigera"
+	"editThePoll": "Redigera",
+	"players": "Spelare:",
+	"yourAnswer": "Ditt svar:",
+	"noCategoryTitle": "Ingen kategori titel",
+	"noQuestion": "Ingen fråga",
+	"tooSlow": "FÖR LÅNGSAM",
+	"noCashEarned": "Om du inte försöker, failar du",
+	"correct": "RÄTT",
+	"cashEarned": "Tjänade pengar",
+	"wrong": "FEL",
+	"noMoneyForYou": "Inga pengar för dig: $0",
+	"numberCategories": "Kategoriantal",
+	"numberQuestions": "Frågeantal per kategori"
 }
 	

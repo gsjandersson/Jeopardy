@@ -12,6 +12,7 @@ function Data() {
   // Object to store poll data
   this.polls = {};
   this.participants = {};
+  this.autoPollId = 0;
 }
 
 /***********************************************
@@ -50,6 +51,8 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     let participantData = {};
     participantData.cashTotal = {};
     participantData.allParticipants = [];
+    participantData.turnIndex = 0;
+    participantData.turn = "";
     this.participants[pollId] = participantData;
 
     console.log("poll created", pollId, poll);
@@ -195,7 +198,7 @@ Data.prototype.getCorrectAnswer = function (pollId, row, col) {
 Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
-    console.log(100*(row + 1))
+    console.log(100 * (row + 1))
     console.log(row)
     part.cashTotal[partName] += (100 * (1 + parseInt(row, 10)));
   }
@@ -205,10 +208,63 @@ Data.prototype.getCashTotal = function (pollId, partName) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     return part.cashTotal[partName];
-  } 
-};
+  }
+}
 
+Data.prototype.participantTurnOrder = function (pollId) {
+  const part = this.participants[pollId];
+  if (part.turnIndex === 0) {
+    part.turn = part.allParticipants[0];
+  }
+  if (typeof part !== 'undefined') {
+    return part.turn;
+  }
+}
 
+Data.prototype.updateTurnOrder = function (pollId) {
+  const part = this.participants[pollId];
+
+  let i = 0;
+  while (i < part.allParticipants.length) {
+    if (part.allParticipants[i] === part.turn) {
+      part.turnIndex = (part.turnIndex + 1) % part.allParticipants.length;
+      part.turn = part.allParticipants[part.turnIndex];
+      break;
+    }
+    i++;
+  }
+}
+
+Data.prototype.getPollLang = function (pollId) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    return poll.lang;
+  }
+}
+
+// Method to get all participants and their current cashTotal
+Data.prototype.getParticipantsAndCashTotal = function (pollId) {
+  console.log("get participants and cash total data.js")
+  const participantData = this.participants[pollId];
+  if (typeof participantData !== 'undefined') {
+    const participantsAndCashTotal = participantData.allParticipants.map(participant => {
+      return {
+        name: participant,
+        cashTotal: participantData.cashTotal[participant] || 0
+      };
+    });
+
+    // Sort participants by cashTotal in descending order and get the first three
+    return participantsAndCashTotal.sort((a, b) => b.cashTotal - a.cashTotal).slice(0, 3);
+  }
+  return [];
+}
+
+//Method to update pollId
+Data.prototype.updateAutoPollId = function () {
+  this.autoPollId += 1;
+  return this.autoPollId;
+}
 
 // Export the Data class for use in other modules
 export { Data };

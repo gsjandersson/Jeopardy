@@ -1,12 +1,6 @@
 <template>
   <body>
 
-    <div>
-      <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-      <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-      <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-    </div>
-
     <p v-if="countdown > 0">Countdown: {{ countdown }}</p>
 
     <header>
@@ -16,7 +10,7 @@
     <main>
 
       <div>
-        <p> Your answer: </p>
+        <p> {{ uiLabels.answer }} </p>
         <input type="text" v-model="answer">
       </div>
 
@@ -63,12 +57,20 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
+    /* socket.emit('getPollLang', (this.pollId))
+
+    socket.on('pollLang', (lang) =>
+      this.lang = lang
+    ); */
+
     socket.on('correctAnswer', (correctAnswer) => {
         this.correctAnswer = correctAnswer
       });
 
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
+
+    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
 
     // Listen for initialization data from the server
     socket.on("init", (labels) => {
@@ -79,56 +81,36 @@ export default {
 
     socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
 
+    socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
+
     socket.on('questionChosen', (question) => {
       this.question = question;
-      console.log("question view question chosen")
+    });
+
+    socket.on('correctAnswer', (correctAnswer) => {
+      this.correctAnswer = correctAnswer;
     });
 
     this.startCountdown();
-
-
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
-    switchLanguageEnglish: function () {
-      if (this.lang === "sv") {
-        this.lang = "en"
-      }
-      localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
-    },
-    switchLanguageSwedish: function () {
-      if (this.lang === "en") {
-        this.lang = "sv"
-      }
-      localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
-    },
     exitCreatorMode() {
       this.$router.push('/jStartView');
     },
 
     submitAnswer: function () {
-      console.log("submit answr")
-      // Check if the answer has already been submitted
-      if (this.answerSubmitted) {
-        return;
+      if (!this.answerSubmitted) {
+        if (this.correctAnswer == this.answer) {
+          socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
+        }
+      this.answerSubmitted = true;
+      
+      //this.$refs.submitButton.disabled = false;
       }
       // Disable the button to prevent multiple clicks
-      this.$refs.submitButton.disabled = true;
-      socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
-
-      socket.once('correctAnswer', (correctAnswer) => {
-        this.correctAnswer = correctAnswer;
-
-        if (this.correctAnswer == this.answer) {
-          
-            socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
-      }
-      this.answerSubmitted = true;
-      this.$refs.submitButton.disabled = false;
-    });
-  },
+      // this.$refs.submitButton.disabled = true;
+    },
     startCountdown() {
       const countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
@@ -140,10 +122,38 @@ export default {
       }, 1000); // Update every 1000ms (1 second)
     },
     closeQuestionView() {
-      socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col })
-      this.$router.push(`/jPollView/${this.pollId}/${this.participant}`)
-    }
+      if (!this.answerSubmitted) {
+      // If the answer was not submitted, handle it as a wrong answer
+        this.showAnswerStatus("not submitted");
+      } 
+      else {
+      // If the answer was submitted, check if it's correct
+        const isCorrect = this.answer === this.correctAnswer;
+        this.showAnswerStatus(isCorrect);
+      }
+    },
+
+showAnswerStatus(isCorrect) {
+  let redirectRoute;
+  if (isCorrect === true || isCorrect === false) {
+    redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
   }
+  else {
+    redirectRoute = 'AnswerNone';
+  }
+  
+  // Redirect to the appropriate answer status component
+  this.$router.push({
+    name: redirectRoute,
+    params: { pollId: this.pollId, participant: this.participant, row: this.row },
+  });
+
+  // Wait for 5 seconds before redirecting to jpollview
+  setTimeout(() => {
+    this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
+  }, 3000);
+}
+}
 }
 </script>
 

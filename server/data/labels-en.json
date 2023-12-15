@@ -8,7 +8,7 @@
 	"changeLanguage": "",
 	"about": "About",
 	"errorCreateIdMessage": "Error: Jeopardy ID must not be empty",
-	"errorPlayIdMessage" : "Error: Jeopardy poll ID does not exist or is empty",
+	"errorPlayIdMessage" : "Error: Jeopardy ID does not exist or is empty",
 	"errorNameIDMessage": "OBS: Name can't be empty",
 	"errorCreateQuestionMessage": "Error: There has to be at least one question in each category",
 	"errorCreateCategoryMessage": "Error: There has to be at least one category",
@@ -47,5 +47,17 @@
 	"editPoll": "EDIT EXISTING",
 	"hostViewTitle": "Which quiz are you hosting?",
 	"editViewTitle": "Which quiz are you editing?",
-	"editThePoll": "Edit"
+	"editThePoll": "Edit",
+	"players": "Players:",
+	"yourAnswer": "Your answer:",
+	"noCategoryTitle": "No category name",
+	"noQuestion": "No question",
+	"tooSlow": "TOO SLOW",
+	"noCashEarned": "If you don't try, you fail",
+	"correct": "CORRECT",
+	"cashEarned": "Cash earned",
+	"wrong": "WRONG",
+	"noMoneyForYou": "No money for you: $0",
+	"numberCategories": "Number of categories",
+	"numberQuestions": "Number of questions per category"
 }

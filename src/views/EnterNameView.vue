@@ -74,7 +74,7 @@ export default {
     },
     joinPoll() {
       if (this.participantName !== "") {
-        this.errorIdMessage = false;
+        this.errorNameIdMessage = false;
         this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`)
       }
       else {
