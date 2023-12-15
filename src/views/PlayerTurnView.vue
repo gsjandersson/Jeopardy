@@ -10,9 +10,9 @@
         <header>
           <h1> {{ uiLabels.PlayerTurnTitle }} </h1>
         </header>
-        <!-- <div>
+         <div>
             <h2> Player: {{ participantTurn }} will pick question. </h2>
-        </div> -->
+        </div> 
     </body>
   </template>
   
@@ -39,16 +39,14 @@
         errorCategoryNo: false,
         errorQuestionNo: false,
         categoryNo: 5,
-        questionNo: 5
+        questionNo: 5,
+        participantTurn:""
       }
     },
   
     // Lifecycle hook - component creation
     created: function () {
-      // Lifecycle hook - component creation
-      // this.id = this.$route.params.id;
-  
-      // Emit an event to the server when the page is loaded
+        this.participantTurn = this.$route.params.participantTurn
       socket.emit("pageLoaded", this.lang);
   
       // Listen for initialization data from the server
@@ -63,7 +61,11 @@
   
       // Listen for the event when a poll is created
       socket.on("pollCreated", (data) =>
-        this.data = data)
+        this.data = data),
+      socket.on('participantTurn', (participant) =>
+        this.participantTurn = participant
+    );
+    socket.emit('getParticipantTurn', (this.pollId))
     },
     // Methods for language switching and toggling the navigation menu
     methods: {
@@ -114,7 +116,7 @@
       },
       exitCreatorMode() {
         this.$router.push('/jStartView');
-      }
+      }, 
     }
   }
   </script>
