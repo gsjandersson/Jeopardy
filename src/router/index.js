@@ -107,9 +107,14 @@ const router = createRouter({
       component: () => import('../views/EditQuiz.vue')
     },
     { 
-      path: '/PlayerTurnView',
+      path: '/PlayerTurnView/:pollId',
       name: 'PlayerTurnView',
       component: () => import('../views/PlayerTurnView.vue')
+    },
+    { 
+      path: '/DisplayQuestion',
+      name: 'DisplayQuestion',
+      component: () => import('../views/DisplayQuestion.vue')
     }
   ]
 });

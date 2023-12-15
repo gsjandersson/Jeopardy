@@ -8,7 +8,7 @@
 	"changeLanguage": "",
 	"about": "Om oss",
 	"errorCreateIdMessage": "OBS: Jeopardy ID kan ej vara tom",
-	"errorPlayIdMessage" : "OBS: Jeopardy ID existerar inte eller är tom",
+	"errorPlayIdMessage" : "OBS: Jeopardy poll ID existerar inte eller är tom",
 	"errorNameIDMessage": "OBS: Namn kan inte vara tomt",
 	"errorCreateQuestionMessage": "OBS: Det måste vara minst en fråga i en kategori",
 	"errorCreateCategoryMessage": "OBS: Det måste vara minst en kategori",
@@ -59,8 +59,12 @@
 	"correct": "RÄTT",
 	"cashEarned": "Tjänade pengar",
 	"wrong": "FEL",
-	"noMoneyForYou": "Inga pengar för dig: $0",
-	"numberCategories": "Kategoriantal",
-	"numberQuestions": "Frågeantal per kategori"
+	"noMoneyForYou": "Inga pengar för dig",
+	"numberCategories": "Antal kategorier",
+	"numberQuestions": "Antal frågor per kategori",
+	"letsplay": "Starta spelet!",
+	"PlayerTurnTitle": "Det är dags att välja en fråga",
+	"Leaderboard": "Topplista",
+	"YouAre": "Du är"
 }
 	
