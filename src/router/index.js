@@ -105,6 +105,11 @@ const router = createRouter({
       path: '/EditQuiz',
       name: 'EditQuiz',
       component: () => import('../views/EditQuiz.vue')
+    },
+    { 
+      path: '/DisplayQuestion',
+      name: 'DisplayQuestion',
+      component: () => import('../views/DisplayQuestion.vue')
     }
   ]
 });
