@@ -16,32 +16,30 @@
           uiLabels: {},
           pollId: "",
           lang: localStorage.getItem("lang") || "en",
-          row: ""
+          row: "",
+          participant: ""
         }
       },
       created: function () {
+        this.pollId = this.$route.params.pollId
+        this.participant = this.$route.params.participantName
+        this.row = this.$route.params.row
+
+        socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
+    
         socket.emit("pageLoaded", this.lang);
         socket.on("init", (labels) => {
           this.uiLabels = labels;
         });
+
+        socket.on('goToBoard', () => {
+        this.goToBoard();
+        });
+
       },
       methods: {
-        switchLanguageEnglish: function () {
-          if (this.lang === "sv") {
-            this.lang = "en";
-          }
-          localStorage.setItem("lang", this.lang);
-          socket.emit("switchLanguage", this.lang);
-        },
-        switchLanguageSwedish: function () {
-          if (this.lang === "en") {
-            this.lang = "sv";
-          }
-          localStorage.setItem("lang", this.lang);
-          socket.emit("switchLanguage", this.lang);
-        },
         goToBoard() {
-          this.$router.push('/BoardViewSteph/' + this.pollId);
+          this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
         },
         exitCreatorMode() {
           this.$router.push('/jStartView');

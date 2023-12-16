@@ -35,6 +35,7 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting
+        participantTurn: ""
       }
     },
   
@@ -45,7 +46,7 @@
       // this.id = this.$route.params.id;
   
       // Emit an event to the server when the page is loaded
-        this.participantTurn = this.$route.params.participantTurn
+
       socket.emit("pageLoaded", this.lang);
 
       socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
@@ -58,6 +59,10 @@
       socket.on("init", (labels) => {
         this.uiLabels = labels
       })
+
+      socket.on('participantTurn', (participant) =>
+        this.participantTurn = participant
+      );
   
       socket.emit('getParticipantTurn', (this.pollId))
     

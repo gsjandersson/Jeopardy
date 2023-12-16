@@ -1,8 +1,6 @@
 <template>
   <body>
 
-    <p v-if="countdown > 0">Countdown: {{ countdown }}</p>
-
     <header>
       <h1> {{ question }} </h1>
     </header>
@@ -44,7 +42,6 @@ export default {
       question: "",
       row: "",
       col: "",
-      countdown: 10,
       correctAnswer: "",
       answerSubmitted: false,
     }
@@ -70,8 +67,6 @@ export default {
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
 
-    socket.emit("resetAnswerCount", this.pollId);
-
     socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
 
     // Listen for initialization data from the server
@@ -83,8 +78,6 @@ export default {
 
     socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
 
-    socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
-
     socket.on('questionChosen', (question) => {
       this.question = question;
     });
@@ -93,12 +86,11 @@ export default {
       this.correctAnswer = correctAnswer;
     });
 
-    socket.on('hasAllAnswered', () => {
-      console.log("all have answered")
-      // returns true if all have answered
+    socket.on('goToAnswerResult', () => {
+      console.log("got ot answer relsut");
+      this.closeQuestionView();
     });
 
-    this.startCountdown();
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
@@ -116,16 +108,6 @@ export default {
       }
 
     },
-    startCountdown() {
-      const countdownInterval = setInterval(() => {
-        if (this.countdown > 0) {
-          this.countdown--;
-        } else {
-          clearInterval(countdownInterval);
-          this.closeQuestionView();
-        }
-      }, 1000); // Update every 1000ms (1 second)
-    },
     
     closeQuestionView() {
       if (!this.answerSubmitted) {
@@ -139,28 +121,19 @@ export default {
       }
     },
 
-showAnswerStatus(isCorrect) {
-  let redirectRoute;
-  if (isCorrect === true || isCorrect === false) {
-    redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
-  }
-  else {
-    redirectRoute = 'AnswerNone';
-  }
-  
-  // Redirect to the appropriate answer status component
-  this.$router.push({
-    name: redirectRoute,
-    params: { pollId: this.pollId, participant: this.participant, row: this.row },
-  });
-
-  // Wait for 5 seconds before redirecting to jpollview
-  setTimeout(() => {
-    this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
-  }, 3000);
-}
-}
-}
+    showAnswerStatus(isCorrect) {
+      let redirectRoute;
+      if (isCorrect === true || isCorrect === false) {
+        redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
+      }
+      else {
+        redirectRoute = 'AnswerNone';
+      }
+      // Redirect to the appropriate answer status component
+      this.$router.push(`/${redirectRoute}/${this.pollId}/${this.participant}/${this.row}`);
+    }
+    }
+    }
 </script>
 
 <style scoped>

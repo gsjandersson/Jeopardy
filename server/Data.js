@@ -92,6 +92,7 @@ Data.prototype.getQuestion = function (pollId, questionRow, questionCol) {
   if (typeof poll !== 'undefined') {
     if (questionRow !== null && questionCol !== null) {
       return poll.questions[questionRow][questionCol].question;
+
     }
   }
   return [];

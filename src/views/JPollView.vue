@@ -16,13 +16,6 @@
       </li>
     </ul>
     <h3> You have: {{ cashTotal }}$ </h3>
-    <h4>{{ uiLabels.Leaderboard }}</h4>
-    <ul style="list-style-type: none;">
-      <li v-for="(part, index) in participantsAndCashTotal" :key="index"
-        style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
-        {{ part.name }}: {{ part.cashTotal }}$
-      </li>
-    </ul>
 
     <main>
       <div class="jeopardy-board">
@@ -88,7 +81,6 @@ export default {
       participants: [],
       cashTotal: 0,
       participantTurn: "",
-      participantsAndCashTotal: [],
       questionChosen: ""
     }
   },
@@ -130,10 +122,6 @@ export default {
       this.participantTurn = participant
     );
 
-    socket.on('participantsAndCashTotal', (participantsAndCashTotal) => {
-      this.participantsAndCashTotal = participantsAndCashTotal
-    });
-
     // socket.emit("getPollLang", this.pollId);
 
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
@@ -145,8 +133,6 @@ export default {
     socket.emit('getCashTotal', { pollId: this.pollId, partName: this.participantName })
 
     socket.emit('getParticipantTurn', (this.pollId))
-
-    socket.emit('getParticipantsAndCashTotal', (this.pollId))
 
     socket.emit("pageLoaded", this.lang);
     

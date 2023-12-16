@@ -6,9 +6,19 @@
         </div>
   
         <header>
-          <h1> {{ question }} </h1> 
-          {{ countdown }}
+          <h1> QUESTION RESULT VIEW </h1> 
+          <h2> The correct answer was: </h2>
+          <h3>{{ correctAnswer }}</h3>
         </header>
+
+        <h4>{{ uiLabels.Leaderboard }}</h4>
+        <ul style="list-style-type: none;">
+        <li v-for="(part, index) in participantsAndCashTotal" :key="index"
+        style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
+        {{ part.name }}: {{ part.cashTotal }}$
+        </li>
+        </ul>
+
     </body>
   </template>
   
@@ -17,7 +27,7 @@
     const socket = io("localhost:3000");
     
     export default {
-      name: 'DisplayQuestion',
+      name: 'QuestionResultView',
       data: function () {
         return {
           uiLabels: {},
@@ -26,7 +36,9 @@
           row: "",
           col: "",
           question: "",
+          correctAnswer: "",
           countdown: 10,
+          participantsAndCashTotal: []
         }
       },
       created: function () {
@@ -34,27 +46,30 @@
         this.row = this.$route.params.row
         this.col = this.$route.params.col
 
-        socket.emit("resetAnswerCount", this.pollId);
+        socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
         socket.emit("pageLoaded", this.lang);
         socket.on("init", (labels) => {
           this.uiLabels = labels;
         });
 
-        socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
+        socket.on('correctAnswer', (correctAnswer) => {
+          this.correctAnswer = correctAnswer
+        });
+
+        socket.on('participantsAndCashTotal', (participantsAndCashTotal) => {
+          this.participantsAndCashTotal = participantsAndCashTotal
+        });
+
+        socket.emit('getParticipantsAndCashTotal', (this.pollId))
+
+        socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
 
         socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
 
         socket.on('questionChosen', (question) => {
           console.log("question chosen", question)
           this.question = question;
-        });
-
-        socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
-
-        socket.on('hasAllAnswered', () => {
-          console.log("all have answered")
-          // returns true if all have answered
         });
 
         this.startCountdown();
@@ -68,8 +83,8 @@
           this.countdown--;
         } else {
           clearInterval(countdownInterval);
-          socket.emit('allParticipantsGoToAnswerResult', this.pollId);
-          this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
+          socket.emit('allParticipantsGoToBoard', this.pollId);
+          this.$router.push('/PlayerTurnView/' + this.pollId);
         }
       }, 1000); // Update every 1000ms (1 second)
     },

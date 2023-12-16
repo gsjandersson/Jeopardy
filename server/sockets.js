@@ -75,8 +75,12 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit("goToQuestion", (d));
   });
 
-  socket.on('allParticipantsGoToBorard', function () {
-    io.to(d.pollId).emit("goToBoard", (d));
+  socket.on('allParticipantsGoToBoard', function (pollId) {
+    io.to(pollId).emit("goToBoard");
+  });
+
+  socket.on('allParticipantsGoToAnswerResult', function (pollId) {
+    io.to(pollId).emit("goToAnswerResult");
   });
 
   socket.on('checkExisting', function (pollId) {
@@ -88,7 +92,6 @@ function sockets(io, socket, data) {
   });
 
   socket.on('getCorrectAnswer', function (d) {
-    console.log("socket get correct answer")
     socket.emit('correctAnswer', data.getCorrectAnswer(d.pollId, d.row, d.col))
   });
 
@@ -124,7 +127,7 @@ function sockets(io, socket, data) {
   socket.on("participantAnswerRegistered", function (pollId) {
     const hasAllAnswered = data.participantAnswerRegistered(pollId)
     if (hasAllAnswered) {
-      socket.emit("hasAllAnswered")
+      io.to(pollId).emit("hasAllAnswered")
     }
   });
 

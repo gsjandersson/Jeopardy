@@ -87,17 +87,17 @@ const router = createRouter({
       component: () => import('../views/HostWhichPoll.vue')
     },
     {   
-      path: '/AnswerRight/:pollId/:participantName',
+      path: '/AnswerRight/:pollId/:participantName/:row',
       name: 'AnswerRight',
       component: () => import('../views/AnswerRight.vue')
     },
     { 
-      path: '/AnswerWrong/:pollId/:participantName',
+      path: '/AnswerWrong/:pollId/:participantName/:row',
       name: 'AnswerWrong',
       component: () => import('../views/AnswerWrong.vue')
     },
     { 
-      path: '/AnswerNone/:pollId/:participantName',
+      path: '/AnswerNone/:pollId/:participantName/:row',
       name: 'AnswerNone',
       component: () => import('../views/AnswerNone.vue')
     },
@@ -115,6 +115,11 @@ const router = createRouter({
       path: '/DisplayQuestion/:pollId/:row/:col',
       name: 'DisplayQuestion',
       component: () => import('../views/DisplayQuestion.vue')
+    },
+    { 
+      path: '/QuestionResultView/:pollId/:row/:col',
+      name: 'QuestionResultView',
+      component: () => import('../views/QuestionResultView.vue')
     }
   ]
 });

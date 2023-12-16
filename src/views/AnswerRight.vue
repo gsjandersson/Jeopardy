@@ -1,7 +1,7 @@
 <template>
   <div id="answer-box-right">
     <h1>{{ uiLabels.correct }}</h1>
-    <p>{{ uiLabels.cashEarned }}: ${{100*1+row}} </p>
+    <p>{{ uiLabels.cashEarned }}: ${{100*(1+parseInt(row))}} </p>
   </div>  
 </template>
 
@@ -12,36 +12,33 @@
   export default {
     name: 'AnswerRight',
     data: function () {
-      return {
-        uiLabels: {},
-        pollId: "",
-        lang: localStorage.getItem("lang") || "en",
-        row: ""
-      }
-    },
-    created: function () {
-      socket.emit("pageLoaded", this.lang);
-      socket.on("init", (labels) => {
-        this.uiLabels = labels;
-      });
+        return {
+          uiLabels: {},
+          pollId: "",
+          lang: localStorage.getItem("lang") || "en",
+          row: "",
+          participant: ""
+        }
+      },
+      created: function () {
+        this.pollId = this.$route.params.pollId
+        this.participant = this.$route.params.participantName
+        this.row = this.$route.params.row
+
+        socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
+    
+        socket.emit("pageLoaded", this.lang);
+        socket.on("init", (labels) => {
+          this.uiLabels = labels;
+        });
+
+        socket.on('goToBoard', () => {
+        this.goToBoard();
+        });
     },
     methods: {
-      switchLanguageEnglish: function () {
-        if (this.lang === "sv") {
-          this.lang = "en";
-        }
-        localStorage.setItem("lang", this.lang);
-        socket.emit("switchLanguage", this.lang);
-      },
-      switchLanguageSwedish: function () {
-        if (this.lang === "en") {
-          this.lang = "sv";
-        }
-        localStorage.setItem("lang", this.lang);
-        socket.emit("switchLanguage", this.lang);
-      },
       goToBoard() {
-          this.$router.push('/BoardViewSteph/' + this.pollId);
+        this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
         },
       exitCreatorMode() {
         this.$router.push('/jStartView');
