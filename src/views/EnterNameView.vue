@@ -13,7 +13,6 @@
 
   <p> {{ uiLabels.enterNameDescription }} </p>
   <input type="text" v-model="participantName"/>
-  {{ participantName }}
 
   <div>
     <button id="playButton" v-on:click="joinPoll">

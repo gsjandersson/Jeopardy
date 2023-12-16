@@ -11,7 +11,7 @@
           <h1> {{ uiLabels.PlayerTurnTitle }} </h1>
         </header>
          <div>
-            <h2> Player: {{ participantTurn }} will pick question. </h2>
+            <h2> {{ uiLabels.Participant }} {{ participantTurn }} will pick question. </h2>
         </div> 
     </body>
   </template>

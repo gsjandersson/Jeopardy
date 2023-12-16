@@ -264,7 +264,17 @@ Data.prototype.getParticipantsAndCashTotal = function (pollId) {
 
 //Method to update pollId
 Data.prototype.updateAutoPollId = function () {
-  this.autoPollId += 1;
+  if (!this.usedNumbers) {
+    this.usedNumbers = new Set();
+  }
+  
+  let newNumber;
+  do {
+    newNumber = Math.floor(Math.random() * 100000) + 1;
+  } while (this.usedNumbers.has(newNumber));
+
+  this.usedNumbers.add(newNumber);
+  this.autoPollId = newNumber;
   return this.autoPollId;
 }
 

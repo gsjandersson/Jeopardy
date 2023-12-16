@@ -6,9 +6,9 @@
       Jeopardy Id: {{ pollId }}
     </header>
 
-    <h2> You are: {{ participantName }}</h2>
-    <h2> Participant turn: {{ participantTurn }}</h2>
-    <h2> Participants: </h2>
+    <h2> {{ uiLabels.YouAre }} {{ participantName }}</h2>
+    <h2> {{ uiLabels.PartTurn }} {{ participantTurn }}</h2>
+    <h2> {{ uiLabels.Parts }} </h2>
     <ul style="list-style-type: none;">
       <li v-for="(participant, index) in participants" :key="index"
         style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
