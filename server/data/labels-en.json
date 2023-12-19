@@ -63,5 +63,6 @@
 	"letsplay": "Let's Play!",
 	"PlayerTurnTitle": "It's time to pick a question",
 	"Leaderboard": "Leaderboard",
-	"autoGenerateQuiz": "Auto-generate quiz"
+	"autoGenerateQuiz": "Auto-generate quiz",
+	"quizIsBeingGenerated": "Autogenerating..."
 }
