@@ -41,11 +41,14 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     poll.questions = Array.from({ length: questionNo }, () => Array.from({ length: categoryNo }, () => ({
       question: '',
       answer: '',
-      completed: false
+      completed: false,
+      numberAnswers: 0
     }))),
       // ha koll på completed
-      poll.categories = Array.from({ length: categoryNo }, () => "");
+    poll.categories = Array.from({ length: categoryNo }, () => "");
     poll.currentQuestion = 0;
+    poll.isJoinable = false;
+    poll.isActive = false;
     this.polls[pollId] = poll;
 
     let participantData = {};
@@ -53,7 +56,6 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.allParticipants = [];
     participantData.turnIndex = 0;
     participantData.turn = "";
-    participantData.numberAnswers = 0;
     this.participants[pollId] = participantData;
 
     console.log("poll created", pollId, poll);
@@ -278,11 +280,15 @@ Data.prototype.updateAutoPollId = function () {
   return this.autoPollId;
 }
 
-Data.prototype.participantAnswerRegistered = function (pollId) {
+Data.prototype.participantAnswerRegistered = function (pollId, row, col) {
   const part = this.participants[pollId];
+  const poll = this.polls[pollId];
+
   if (typeof part !== 'undefined') {
-    part.numberAnswers += 1
-    if (part.numberAnswers == part.allParticipants.length) {
+    console.log("data participant answer registered")
+    poll.questions[row][col].numberAnswers += 1
+    const numberAnswers = poll.questions[row][col].numberAnswers
+    if (numberAnswers == part.allParticipants.length) {
       return(true);
     }
   }
@@ -290,9 +296,45 @@ Data.prototype.participantAnswerRegistered = function (pollId) {
 }
 
 Data.prototype.resetAnswerCount = function (pollId) {
-  const part = this.participants[pollId];
-  if (typeof part !== 'undefined') {
-    part.numberAnswers = 0
+  const poll = this.polls[pollId];
+  // for loop over all quesitons
+}
+
+Data.prototype.updateJoinable = function (pollId, makeJoinable) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    if (makeJoinable) {
+      poll.isJoinable = true;
+    }
+    else {
+      poll.isJoinable = false;
+    }
+  }
+}
+
+Data.prototype.isJoinable = function (pollId) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    return poll.isJoinable;
+  }
+}
+
+Data.prototype.updateActive = function (pollId, makeActive) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    if (makeActive) {
+      poll.isActive = true;
+    }
+    else {
+      poll.isActive = false;
+    }
+  }
+}
+
+Data.prototype.isActive = function (pollId) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    return poll.isActive;
   }
 }
 

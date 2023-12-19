@@ -9,12 +9,12 @@
 
       <div>
         <p> {{ uiLabels.answer }} </p>
-        <input type="text" v-model="answer">
+        <input type="text" v-model="answer" v-on:keydown.enter="submitAnswer">
       </div>
 
       <div>
         <!-- <button @click="submitAnswer"> Submit Answer </button> -->
-        <button ref="submitButton" @click="submitAnswer">Submit Answer</button>
+        <button ref="submitButton" @click="submitAnswer">{{ uiLabels.submitAnswer }}</button>
       </div>
 
 
@@ -100,7 +100,7 @@ export default {
 
     submitAnswer: function () {
       if (!this.answerSubmitted) {
-        socket.emit("participantAnswerRegistered", (this.pollId))
+        socket.emit("participantAnswerRegistered", {pollId: this.pollId, row: this.row, col: this.col})
         if (this.correctAnswer === this.answer) {
           socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
         }

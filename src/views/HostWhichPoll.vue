@@ -12,14 +12,14 @@
     </header>
   
     <p> Jeopardy ID: </p>
-    <input type="text" v-model="pollId">
+    <input type="text" v-model="pollId" v-on:keydown.enter="goToHost">
   
     <div>
       <button id="playButton" v-on:click="goToHost">
         {{ uiLabels.participatePoll }}
       </button>
       <p v-if="errorIdMessage == true" style="color: red">
-          {{ uiLabels.errorPlayIdMessage }}
+          {{ uiLabels.errorIdNotExist }}
       </p>
     </div>
   </template>
@@ -81,6 +81,7 @@
         setTimeout(() => {
           if (this.isExisting) {
             this.errorIdMessage = false;
+            socket.emit("updateJoinable", {pollId: this.pollId, makeJoinable: true});
             this.$router.push('/HostView/' + this.pollId);
           } else {
             this.errorIdMessage = true;

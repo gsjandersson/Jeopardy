@@ -90,6 +90,8 @@ export default {
     this.pollId = this.$route.params.pollId
     this.participantName = this.$route.params.participantName
 
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
+
     socket.on("pollLang", (lang) =>
       this.lang = lang
     );
@@ -111,6 +113,7 @@ export default {
     });
 
     socket.on('goToQuestion', (d) => {
+      console.log("go to question j poll view")
       this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}/${d.row}/${d.col}`);
     });
 
@@ -123,8 +126,6 @@ export default {
     );
 
     // socket.emit("getPollLang", this.pollId);
-
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
 
     socket.emit("retrieveQuestions", (this.pollId));
 

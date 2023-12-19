@@ -115,6 +115,11 @@ const router = createRouter({
       path: '/QuestionResultView/:pollId/:row/:col',
       name: 'QuestionResultView',
       component: () => import('../views/QuestionResultView.vue')
+    },
+    { 
+      path: '/WaitingRoom/:pollId/:participantName',
+      name: 'WaitingRoom',
+      component: () => import('../views/WaitingRoom.vue')
     }
   ]
 });

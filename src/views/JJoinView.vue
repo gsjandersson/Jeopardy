@@ -12,15 +12,22 @@
   </header>
 
   <p> Jeopardy ID: </p>
-  <input type="text" v-model="pollId">
+  <input type="text" v-model="pollId" v-on:keydown.enter="goToName">
 
   <div>
     <button id="playButton" v-on:click="goToName">
       {{ uiLabels.participatePoll }}
     </button>
-    <p v-if="errorIdMessage == true" style="color: red">
-        {{ uiLabels.errorPlayIdMessage }}
+    <p v-if="errorIdNotExist == true" style="color: red">
+        {{ uiLabels.errorIdNotExist }}
     </p>
+    <p v-if="errorIdNotJoinable == true" style="color: red">
+        {{ uiLabels.errorIdNotJoinable }}
+    </p>
+    <p v-if="errorIdEmpty == true" style="color: red">
+        {{ uiLabels.errorIdEmpty }}
+    </p>
+
   </div>
 </template>
 
@@ -39,8 +46,12 @@ export default {
       uiLabels: {}, // Object for storing UI labels
       pollId: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting,
-      errorIdMessage: false,
-      isExisting: false
+      errorIdNotExist: false,
+      errorIdNotJoinable: false,
+      errorIdEmpty: false,
+      isExisting: false,
+      isJoinable: false,
+      isNotEmpty: false
     }
   },
 
@@ -52,10 +63,12 @@ export default {
       this.uiLabels = labels;
     });
     socket.on('existingPoll', (isExisting) => {
-        this.isExisting = isExisting
-        console.log(isExisting, this.isExisting)
-        }
-      )
+      this.isExisting = isExisting
+    }
+    )
+    socket.on('joinablePoll', (isJoinable) => {
+      this.isJoinable = isJoinable
+    })
 
   },
 
@@ -77,15 +90,39 @@ export default {
     },
     goToName() {
       socket.emit('checkExisting', this.pollId);
+      socket.emit('checkJoinable', this.pollId);
 
-    setTimeout(() => {
-      console.log(this.isExisting);
-      if (this.isExisting) {
-        this.errorIdMessage = false;
-        this.$router.push('/EnterNameView/' + this.pollId);
+      if (this.pollId === "") {
+        this.isNotEmpty = false;
       }
       else {
-        this.errorIdMessage = true;
+        this.isNotEmpty = true;
+      }
+
+    setTimeout(() => {
+      if (!this.isExisting) {
+        this.errorIdNotExist = true;
+      }
+      else {
+        this.errorIdNotExist = false;
+      }
+      if (!this.isJoinable) {
+        this.errorIdNotJoinable = true;
+      }
+      else {
+        this.errorIdNotJoinable = false;
+      }
+      if (!this.isNotEmpty) {
+        this.errorIdEmpty = true;
+      }
+      else {
+        this.errorIdEmpty = false;
+      }
+      if (this.isExisting && this.isJoinable && this.isNotEmpty) {
+        this.errorIdNotExist = false;
+        this.errorIdNotJoinable = false;
+        this.errorIdEmpty = false;
+        this.$router.push('/EnterNameView/' + this.pollId);
       }
     }, 5);
       

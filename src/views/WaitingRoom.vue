@@ -3,29 +3,16 @@
   
         <div>
           <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-          <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-          <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-        </div>
+          </div>
   
         <header>
-          <h1> {{ uiLabels.hostTheGameTitle }} </h1>
+          <h1> WAITING FOR PLAYERS TO JOIN </h1>
         </header>
         <div>
         <h3> Jeopardy ID:</h3>
         <h1> {{ pollId }}</h1>
         </div>
 
-        <div> 
-            <h2>{{ uiLabels.players }} </h2>
-            <li v-for="(participant, index) in participants" :key="index">
-                {{ participant }}
-            </li>
-        </div>
-        <div class="button-container">
-          <button id="playButton" v-on:click="goToPlayerTurn">
-            {{ uiLabels.letsplay }}
-          </button>
-        </div>
     </body>
   </template>
   
@@ -48,7 +35,7 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting
-        participants: ''
+        participantName: ""
       }
     },
   
@@ -58,6 +45,8 @@
       // this.id = this.$route.params.id;
   
       this.pollId = this.$route.params.pollId
+      this.participantName = this.$route.params.participantName
+
       socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
       socket.on('participantUpdate', (participants) => {
@@ -71,6 +60,12 @@
       socket.on("init", (labels) => {
         this.uiLabels = labels
       })
+
+      socket.on('goToBoard', () => {
+        this.$router.push(`/JPollView/${this.pollId}/${this.participantName}`)
+      });
+
+
 
     },
     // Methods for language switching and toggling the navigation menu
@@ -90,9 +85,7 @@
         socket.emit("switchLanguage", this.lang)
       },
       goToPlayerTurn() {
-        socket.emit("updateActive", {pollId: this.pollId, makeActive: true})
-        socket.emit('allParticipantsGoToBoard', this.pollId);
-        this.$router.push('/PlayerTurnView/' + this.pollId);
+        this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`)
       },
       exitCreatorMode() {
         this.$router.push('/jStartView');

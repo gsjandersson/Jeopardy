@@ -38,6 +38,10 @@ function sockets(io, socket, data) {
     io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
   });
 
+  socket.on('getParticipants', function (pollId) {
+    socket.emit("participants", data.getParticipants(pollId))
+  });
+
   socket.on('runQuestion', function (d) {
     io.to(d.pollId).emit('newQuestion', data.getQuestion(d.pollId, d.questionRow, d.questionCol));
     io.to(d.pollId).emit('dataUpdate', data.getAnswers(d.pollId));
@@ -124,15 +128,33 @@ function sockets(io, socket, data) {
     socket.emit('autoPollIdUpdated', data.updateAutoPollId())
   });
 
-  socket.on("participantAnswerRegistered", function (pollId) {
-    const hasAllAnswered = data.participantAnswerRegistered(pollId)
+  socket.on("participantAnswerRegistered", function (d) {
+    const hasAllAnswered = data.participantAnswerRegistered(d.pollId, d.row, d.col)
+    console.log("socket answer logged")
     if (hasAllAnswered) {
-      io.to(pollId).emit("hasAllAnswered")
+      console.log("socket all answered")
+      io.to(d.pollId).emit("hasAllAnswered")
     }
   });
 
   socket.on("resetAnswerCount", function (pollId) {
     data.resetAnswerCount(pollId)
+  });
+
+  socket.on("updateJoinable", function (d) {
+    data.updateJoinable(d.pollId, d.makeJoinable)
+  });
+
+  socket.on("checkJoinable", function (pollId) {
+    socket.emit("joinablePoll", data.isJoinable(pollId))
+  });
+
+  socket.on("updateActive", function (d) {
+    data.updateActive(d.pollId, d.makeActive)
+  });
+
+  socket.on("checkActive", function (pollId) {
+    socket.emit("activePoll", data.isActive(pollId))
   });
 }
 

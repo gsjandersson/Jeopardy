@@ -8,8 +8,12 @@
 	"changeLanguage": "",
 	"about": "Om oss",
 	"errorCreateIdMessage": "OBS: Jeopardy ID kan ej vara tom",
-	"errorPlayIdMessage" : "OBS: Jeopardy poll ID existerar inte eller är tom",
-	"errorNameIDMessage": "OBS: Namn kan inte vara tomt",
+	"errorPlayIdMessage" : "OBS: Jeopardy ID existerar inte eller har ingen värd",
+	"errorIdNotExist": "OBS: Jeopardy ID existerar inte",
+	"errorIdNotJoinable": "OBS: Jeopardy ID har ingen värd",
+	"errorIdEmpty": "OBS: Jeopardy ID kan ej vara tom",
+	"errorNameEmptyMessage": "OBS: Namn kan inte vara tomt",
+	"errorNameExistsMessage": "OBS: Deltagare med det namnet existserar redan",
 	"errorCreateQuestionMessage": "OBS: Det måste vara minst en fråga i en kategori",
 	"errorCreateCategoryMessage": "OBS: Det måste vara minst en kategori",
 	"createInfoTitle": "HUR SKAPAR DU ETT QUIZ",
@@ -67,6 +71,7 @@
 	"Parts": "Deltagare:",
 	"YouHave": "Du har:",
 	"Participant": "Deltagare",
-	"Winnertitle": "Låt oss presentera vinnarna..."
+	"Winnertitle": "Låt oss presentera vinnarna...",
+	"submitAnswer": "Skicka svar"
 }
 	

@@ -14,7 +14,7 @@
     <div>
         <div>
         <p> Jeopardy ID: </p>
-        <input type="text" v-model="pollId">
+        <input type="text" v-model="pollId" v-on:keydown.enter="goToBoard">
       </div>      
     </div>
     
@@ -22,7 +22,7 @@
       {{ uiLabels.editThePoll }}
     </button>
     <p v-if="errorIdMessage == true" style="color: red">
-        {{ uiLabels.errorPlayIdMessage }}
+        {{ uiLabels.errorIdNotExist }}
     </p>
 
   </template>

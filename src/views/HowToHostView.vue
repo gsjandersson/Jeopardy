@@ -21,7 +21,7 @@
       </div>
 
       <div>
-    Jeopardy ID: {{ pollId }}
+        Jeopardy ID: {{ pollId }}
       </div>
 
       <div class="button-container">
@@ -102,6 +102,7 @@
         this.$router.push('/BoardViewSteph/' + this.pollId);
       },
       goToHostView () {
+        socket.emit("updateJoinable", {pollId: this.pollId, makeJoinable: true});
         this.$router.push('/HostView/' + this.pollId);
       },
     }

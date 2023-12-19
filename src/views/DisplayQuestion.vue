@@ -53,8 +53,12 @@
         socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
 
         socket.on('hasAllAnswered', () => {
-          console.log("all have answered")
+          setTimeout(() => {
+            console.log("all jas answered registered")
+          socket.emit('allParticipantsGoToAnswerResult', this.pollId);
+          this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
           // returns true if all have answered
+        }, 1000);
         });
 
         this.startCountdown();

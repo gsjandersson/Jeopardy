@@ -8,8 +8,12 @@
 	"changeLanguage": "",
 	"about": "About",
 	"errorCreateIdMessage": "Error: Jeopardy ID must not be empty",
-	"errorPlayIdMessage" : "Error: Jeopardy poll ID does not exist or is empty",
-	"errorNameIDMessage": "OBS: Name can't be empty",
+	"errorPlayIdMessage" : "Error: Jeopardy ID does not exist or is not hosted",
+	"errorIdNotExist": "Error: Jeopardy ID does not exist",
+	"errorIdNotJoinable": "Error: Jeopardy ID has no host",
+	"errorIdEmpty": "Error: Jeopardy ID must not be empty",
+	"errorNameEmptyMessage": "Error: Name can't be empty",
+	"errorNameExistsMessage": "Error: Participant with that name already exists",
 	"errorCreateQuestionMessage": "Error: There has to be at least one question in each category",
 	"errorCreateCategoryMessage": "Error: There has to be at least one category",
 	"createInfoTitle": "HOW TO CREATE A QUIZ",
@@ -67,5 +71,6 @@
 	"YouHave": "You have:",
 	"Participant": "Participant",
 	"Winnertitle": "Let's present the winners...", 
-	"JeopardyID": "Jeopardy ID:"
+	"JeopardyID": "Jeopardy ID:",
+	"submitAnswer": "Submit answer"
 }
