@@ -1,11 +1,14 @@
 // Use strict mode for better error handling
 'use strict';
 
-// Array of supported languages
-const languages = ["en", "se"];
-
-// Importing the readFileSync function from the 'fs' module
-import { readFileSync } from "fs";
+import { readFileSync } from 'fs';
+import { readFile } from 'fs';
+import { writeFile } from 'fs';
+import { writeFileSync } from 'fs';
+import { promises } from 'fs';
+import OpenAI from 'openai';
+import { config } from 'dotenv';
+config();
 
 // Data class constructor
 function Data() {
@@ -283,10 +286,10 @@ Data.prototype.participantAnswerRegistered = function (pollId) {
   if (typeof part !== 'undefined') {
     part.numberAnswers += 1
     if (part.numberAnswers == part.allParticipants.length) {
-      return(true);
+      return (true);
     }
   }
-  return(false);
+  return (false);
 }
 
 Data.prototype.resetAnswerCount = function (pollId) {
@@ -295,6 +298,139 @@ Data.prototype.resetAnswerCount = function (pollId) {
     part.numberAnswers = 0
   }
 }
+
+Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
+  let poll = {};
+  poll.lang = lang;
+  poll.currentQuestion = 0;
+  let questionNo = 5;
+  let categoryNo = 5;
+
+  poll.questions = Array.from({ length: questionNo }, () => Array.from({ length: categoryNo }, () => ({
+    question: '',
+    answer: '',
+    completed: false
+  })));
+
+  poll.categories = Array.from({ length: categoryNo }, () => "");
+
+  const openai = new OpenAI({
+    apiKey: process.env.API_KEY,
+  });
+
+  // Define the JSON structure''
+
+  const jsonStructure = {
+    "questions": [
+      [
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" }
+      ],
+      [
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" }
+      ],
+      [
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" }
+      ],
+      [
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" }
+      ],
+      [
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" },
+        { "question": "", "answer": "" }
+      ],
+
+    ],
+    "categories": ["", "", "", "", ""]
+  };
+
+  // Convert the JSON structure to a string
+  const jsonString = JSON.stringify(jsonStructure);
+
+  // Define the prompt with the JSON structure
+  const prompt = `Fill this with questions, answers and categories: ${jsonString}`;
+
+  // Generate quiz questions and answers
+  try {
+    console.log("1");
+    const response = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a helpful assistant designed to output JSON. The answers to the questions should be short and simple to answer",
+        },
+        { role: "user", content: prompt },
+      ],
+      model: "gpt-3.5-turbo-1106",
+      response_format: { type: "json_object" },
+    });
+    console.log("2");
+
+    // Extract the assistant's response from the API response
+    const assistantResponse = response.choices[0].message.content;
+
+    // Log assistantResponse to the console
+    console.log('assistantResponse:', assistantResponse);
+
+    // Parse the assistant's response as JSON
+    const assistantData = JSON.parse(assistantResponse);
+
+    // Now you can use assistantData as needed
+    console.log(assistantData);
+
+    if ('questions' in assistantData) {
+      poll.questions = assistantData.questions;
+
+      // Iterate over the outer array
+      for (const innerArray of poll.questions) {
+        // Iterate over the inner array
+        for (const questionObject of innerArray) {
+          console.log(`Question: ${questionObject.question}`);
+          console.log(`Answer: ${questionObject.answer}`);
+        }
+      }
+    }
+    if ('categories' in assistantData) {
+      poll.categories = assistantData.categories;
+    }
+  } catch (error) {
+    console.error('Error: AI querying unsuccessful', error);
+  }
+
+
+  this.polls[pollId] = poll;
+
+  let participantData = {};
+  participantData.cashTotal = {};
+  participantData.allParticipants = [];
+  participantData.turnIndex = 0;
+  participantData.turn = "";
+  participantData.numberAnswers = 0;
+  this.participants[pollId] = participantData;
+
+  console.log("poll created", pollId, poll);
+
+  return this.polls[pollId];
+}
+
 
 // Export the Data class for use in other modules
 export { Data };

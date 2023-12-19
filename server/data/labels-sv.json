@@ -62,6 +62,8 @@
 	"PlayerTurnTitle": "Det är dags att välja en fråga",
 	"Leaderboard": "Topplista",
 	"YouAre": "Du är",
+	"autoGenerateQuiz": "Auto-generera quiz",
+	"quizIsBeingGenerated": "Autogenererar...",
 	"letsplayjeopardy": "Nu spelar vi Jeopardy!",
 	"PartTurn": "Deltagares tur: ",
 	"Parts": "Deltagare:",
