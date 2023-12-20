@@ -6,8 +6,11 @@
         </div>
   
         <header>
+          The question is:
           <h1> {{ question }} </h1> 
-          {{ countdown }}
+
+          <h3> You have: {{ countdown }} seconds left </h3>
+          
         </header>
     </body>
   </template>
