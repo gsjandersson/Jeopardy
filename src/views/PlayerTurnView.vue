@@ -20,7 +20,7 @@
   // Importing components and libraries
   import ResponsiveNav from '@/components/ResponsiveNav.vue';
   import io from 'socket.io-client';
-  const socket = io("localhost:3000");
+  const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     // Component name and imported components

@@ -4,8 +4,8 @@ import { Server } from "socket.io";
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET"],
+    origin: "*", // only use on local wifi, don't publish with these settings
+    methods: ["GET"], // little damage since we are only getting
     credentials: true
   }
 });

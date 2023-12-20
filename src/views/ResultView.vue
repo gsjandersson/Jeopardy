@@ -15,7 +15,7 @@
 // Import required modules
 import BarsComponent from '@/components/BarsComponent.vue';
 import io from 'socket.io-client';
-const socket = io("localhost:3000");
+const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components, ska prenumerera på ändringar!!! skicka till alla som är anslutna men bara lyssna för de views där det är intreesant
