@@ -129,10 +129,10 @@ export default {
             this.$router.push(`/WaitingRoom/${this.pollId}/${this.participantName}`);
           }
         }
-      }, 5);
+      }, 100);
     },
     exitCreatorMode() {
-      this.$router.push('/jStartView');
+      this.$router.push('/');
     }
   }
 }

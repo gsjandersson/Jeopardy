@@ -6,10 +6,10 @@
         </div>
   
         <header>
-          The question is:
+          {{ uiLabels.questionIs }}
           <h1> {{ question }} </h1> 
 
-          <h3> You have: {{ countdown }} seconds left </h3>
+          <h3> {{ uiLabels.youHave }} {{ countdown }} {{ uiLabels.secondsLeft }} </h3>
           
         </header>
     </body>
@@ -29,7 +29,7 @@
           row: "",
           col: "",
           question: "",
-          countdown: 10,
+          countdown: 20,
         }
       },
       created: function () {
@@ -81,7 +81,7 @@
       }, 1000); // Update every 1000ms (1 second)
     },
         exitCreatorMode() {
-          this.$router.push('/jStartView');
+          this.$router.push('/');
         }
       }
     }

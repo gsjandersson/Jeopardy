@@ -42,7 +42,7 @@
           this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
         },
         exitCreatorMode() {
-          this.$router.push('/jStartView');
+          this.$router.push('/');
         }
       }
     }

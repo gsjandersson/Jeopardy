@@ -126,7 +126,7 @@ export default {
       }
     },
     exitCreatorMode() {
-      this.$router.push('/jStartView');
+      this.$router.push('/');
     },
     howToHost() {
       this.$router.push('/HowToHostView/'+ this.pollId);

@@ -74,5 +74,13 @@
 	"Participant": "Participant",
 	"Winnertitle": "Let's present the winners...", 
 	"JeopardyID": "Jeopardy ID:",
-	"submitAnswer": "Submit answer"
+	"submitAnswer": "Submit answer",
+	"questionIs": "The question is",
+	"youHave": "You have",
+	"secondsLeft": "seconds left",
+	"willPickQuestion": "will pick a question",
+	"questionResult": "QUESTION RESULT",
+	"correctAnswerWas": "The correct answer was",
+	"waitingPlayersJoin": "WAITING FOR PLAYERS TO JOIN",
+	"moneyInBank": "Money in the bank"
 }

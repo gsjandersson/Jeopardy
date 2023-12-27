@@ -86,10 +86,10 @@
           } else {
             this.errorIdMessage = true;
           }
-        }, 5);
+        }, 100);
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }
     }
   }

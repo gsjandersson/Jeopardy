@@ -96,7 +96,7 @@
         socket.emit("switchLanguage", this.lang)
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       },
       backToBoard () {
         this.$router.push('/BoardViewSteph/' + this.pollId);

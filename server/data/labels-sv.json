@@ -74,6 +74,14 @@
 	"YouHave": "Du har:",
 	"Participant": "Deltagare",
 	"Winnertitle": "Låt oss presentera vinnarna...",
-	"submitAnswer": "Skicka svar"
+	"submitAnswer": "Skicka svar",
+	"questionIs": "Frågan är",
+	"youHave": "Du har",
+	"secondsLeft": "sekunder kvar",
+	"willPickQuestion": "ska välja en fråga",
+	"questionResult": "FRÅGERESULTAT",
+	"correctAnswerWas": "Rätt svar var",
+	"waitingPlayersJoin": "VÄNTAR FÖR SPELARE ATT GÅ MED",
+	"moneyInBank": "Pengar på bankkontot"
 }
 	

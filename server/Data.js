@@ -36,6 +36,61 @@ Data.prototype.getUILabels = function (lang = "en") {
   return JSON.parse(labels);
 }
 
+Data.prototype.createTestQuiz = function () {
+  console.log("create test quiz")
+  let poll = {};
+    poll.lang = "en";
+    poll.questions = [
+      [
+        { "question": "Traditional Christmas color", "answer": "red", "completed": false, "numberAnswers": 0 },
+        { "question": "Festive sweet treats often hung on trees", "answer": "candy canes", "completed": false, "numberAnswers": 0 },
+        { "question": "Activity of decorating a tree with ornaments", "answer": "trimming the tree", "completed": false, "numberAnswers": 0 },
+        { "question": "Jolly bearded man who delivers gifts", "answer": "santa claus", "completed": false, "numberAnswers": 0 },
+        { "question": "Christmas song with the lyrics 'Jingle Bells'", "answer": "jingle bells", "completed": false, "numberAnswers": 0 }
+      ],
+      [
+        { "question": "Color of Santa's suit", "answer": "red", "completed": false, "numberAnswers": 0 },
+        { "question": "Popular Christmas beverage with spices", "answer": "eggnog", "completed": false, "numberAnswers": 0 },
+        { "question": "Holiday where people exchange gifts", "answer": "christmas", "completed": false, "numberAnswers": 0 },
+        { "question": "Fictional character who wants to steal Christmas presents", "answer": "grinch", "completed": false, "numberAnswers": 0 },
+        { "question": "Famous Christmas poem about a visit from St. Nicholas", "answer": "twas the night before christmas", "completed": false, "numberAnswers": 0 }
+      ],
+      [
+        { "question": "Shiny color often used in decorations", "answer": "gold", "completed": false, "numberAnswers": 0 },
+        { "question": "Traditional Christmas dessert with fruit and nuts", "answer": "fruitcake", "completed": false, "numberAnswers": 0 },
+        { "question": "Traditional Christmas meal with turkey", "answer": "christmas dinner", "completed": false, "numberAnswers": 0 },
+        { "question": "Christmas character who checks if you've been naughty or nice", "answer": "santa claus", "completed": false, "numberAnswers": 0 },
+        { "question": "Christmas movie about a boy left home alone", "answer": "home alone", "completed": false, "numberAnswers": 0 }
+      ],
+      [
+        { "question": "Color associated with mistletoe", "answer": "green", "completed": false, "numberAnswers": 0 },
+        { "question": "Sweet baked goods often exchanged during the holidays", "answer": "cookies", "completed": false, "numberAnswers": 0 },
+        { "question": "Winter activity where you slide on frozen water", "answer": "ice skating", "completed": false, "numberAnswers": 0 },
+        { "question": "Fictional character who tries to stop Christmas", "answer": "scrooge", "completed": false, "numberAnswers": 0 },
+        { "question": "Christmas-themed ballet with a Nutcracker Prince", "answer": "nutcracker", "completed": false, "numberAnswers": 0 }
+      ],
+      [
+        { "question": "Color of Rudolph's nose", "answer": "red", "completed": false, "numberAnswers": 0 },
+        { "question": "Delicious treat made from sugar, butter, and nuts", "answer": "pralines", "completed": false, "numberAnswers": 0 },
+        { "question": "Activity of singing holiday songs door-to-door", "answer": "caroling", "completed": false, "numberAnswers": 0 },
+        { "question": "Magical character who guides Santa's sleigh", "answer": "rudolph", "completed": false, "numberAnswers": 0 },
+        { "question": "Holiday song about a winter wonderland", "answer": "let it snow", "completed": false, "numberAnswers": 0 }
+      ]
+    ];
+    poll.categories = ["Color", "Sweet Treats", "Traditions", "Characters", "Songs and Stories"];
+    poll.isJoinable = false;
+    poll.isActive = false;
+    this.polls["testquiz"] = poll;
+
+    let participantData = {};
+    participantData.cashTotal = {};
+    participantData.allParticipants = [];
+    participantData.turnIndex = 0;
+    participantData.turn = "";
+    this.participants["testquiz"] = participantData;
+  }
+
+
 // Method to create a new poll
 Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categoryNo = 5) {
   if (typeof this.polls[pollId] === "undefined") {
@@ -49,7 +104,6 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     }))),
       // ha koll på completed
     poll.categories = Array.from({ length: categoryNo }, () => "");
-    poll.currentQuestion = 0;
     poll.isJoinable = false;
     poll.isActive = false;
     this.polls[pollId] = poll;
@@ -457,22 +511,17 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
     console.error('Error: AI querying unsuccessful', error);
   }
 
-
-  this.polls[pollId] = poll;
-
   let participantData = {};
-  participantData.cashTotal = {};
-  participantData.allParticipants = [];
-  participantData.turnIndex = 0;
-  participantData.turn = "";
-  participantData.numberAnswers = 0;
-  this.participants[pollId] = participantData;
+    participantData.cashTotal = {};
+    participantData.allParticipants = [];
+    participantData.turnIndex = 0;
+    participantData.turn = "";
+    this.participants[pollId] = participantData;
 
-  console.log("poll created", pollId, poll);
-
+    console.log("poll created", pollId, poll);
+  
   return this.polls[pollId];
 }
-
 
 // Export the Data class for use in other modules
 export { Data };

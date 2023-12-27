@@ -6,7 +6,7 @@
           </div>
   
         <header>
-          <h1> WAITING FOR PLAYERS TO JOIN </h1>
+          <h1> {{ uiLabels.waitingPlayersJoin }} </h1>
         </header>
         <div>
         <h3> Jeopardy ID:</h3>
@@ -66,7 +66,6 @@
       });
 
 
-
     },
     // Methods for language switching and toggling the navigation menu
     methods: {
@@ -88,7 +87,7 @@
         this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`)
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }
     }
   }

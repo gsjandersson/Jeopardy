@@ -108,7 +108,7 @@
         }
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }, 
     }
   }
