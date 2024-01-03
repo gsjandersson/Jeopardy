@@ -1,7 +1,8 @@
 <template>
     <body>
-  
+      <audio ref="audioElement" src="/music/lobbyMusic.mp3"></audio>
         <div>
+          <button v-on:click="toggleMusic">Play/Pause Music</button>
           <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
           <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
           <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
@@ -13,6 +14,7 @@
         <div>
         <h3> Jeopardy ID:</h3>
         <h1> {{ pollId }}</h1>
+        <img :src="qrCodeUrl" alt="QR Code">
         </div>
 
         <div> 
@@ -33,7 +35,8 @@
   // Importing components and libraries
   import ResponsiveNav from '@/components/ResponsiveNav.vue';
   import io from 'socket.io-client';
-  const socket = io("localhost:3000");
+  import QRCode from 'qrcode';
+  const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     // Component name and imported components
@@ -48,7 +51,8 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting
-        participants: ''
+        participants: '',
+        qrCodeUrl: ''
       }
     },
   
@@ -58,6 +62,14 @@
       // this.id = this.$route.params.id;
   
       this.pollId = this.$route.params.pollId
+
+      let data = "http:/"+ sessionStorage.getItem("ipAdress") + ":5173" + "/EnterNameView/" + this.pollId;
+
+      QRCode.toDataURL(data,  { color: { dark: '#ffff00', light: '#0000' }}, (err, url) => {
+        if (err) console.log('Error: ' + err);
+        this.qrCodeUrl = url;
+      });
+
       socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
       socket.on('participantUpdate', (participants) => {
@@ -70,11 +82,23 @@
       // Listen for initialization data from the server
       socket.on("init", (labels) => {
         this.uiLabels = labels
-      })
+      });
 
     },
+    
     // Methods for language switching and toggling the navigation menu
     methods: {
+      playMusic() {
+        this.$refs.audioElement.play();
+      },
+      toggleMusic() {
+        if (this.$refs.audioElement.paused) {
+          this.$refs.audioElement.play();
+        } 
+        else {
+          this.$refs.audioElement.pause();
+        }
+      },
       switchLanguageEnglish: function () {
         if (this.lang === "sv") {
           this.lang = "en"
@@ -95,7 +119,7 @@
         this.$router.push('/PlayerTurnView/' + this.pollId);
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }
     }
   }

@@ -6,16 +6,8 @@
       Jeopardy Id: {{ pollId }}
     </header>
 
-    <h2> {{ uiLabels.YouAre }} {{ participantName }}</h2>
-    <h2> {{ uiLabels.PartTurn }} {{ participantTurn }}</h2>
-    <h2> {{ uiLabels.Parts }} </h2>
-    <ul style="list-style-type: none;">
-      <li v-for="(participant, index) in participants" :key="index"
-        style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
-        {{ participant }}
-      </li>
-    </ul>
-    <h3> You have: {{ cashTotal }}$ </h3>
+    <h2> {{ uiLabels.YouAre }} {{ participantName }} </h2>
+    <h3> {{ uiLabels.moneyInBank }}: {{ cashTotal }}$ </h3>
 
     <main>
       <div class="jeopardy-board">
@@ -62,7 +54,7 @@
 <script>
 // Import required modules
 import io from 'socket.io-client';
-const socket = io("localhost:3000");
+const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components
@@ -149,7 +141,7 @@ export default {
       }
     },
     exit() {
-      this.$router.push('/jStartView');
+      this.$router.push('/');
     }
   }
 }

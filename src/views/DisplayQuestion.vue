@@ -6,15 +6,18 @@
         </div>
   
         <header>
+          {{ uiLabels.questionIs }}
           <h1> {{ question }} </h1> 
-          {{ countdown }}
+
+          <h3> {{ uiLabels.youHave }} {{ countdown }} {{ uiLabels.secondsLeft }} </h3>
+          
         </header>
     </body>
   </template>
   
     <script>
     import io from 'socket.io-client';
-    const socket = io("localhost:3000");
+    const socket = io(sessionStorage.getItem("ipAdressSocket"));
     
     export default {
       name: 'DisplayQuestion',
@@ -26,7 +29,7 @@
           row: "",
           col: "",
           question: "",
-          countdown: 10,
+          countdown: 20,
         }
       },
       created: function () {
@@ -65,11 +68,25 @@
         
       },
 
+      computed: {
+    countdownClass() {
+      // Define classes for different countdown values
+      if (this.countdown >= 8) {
+        return 'countdown-large';
+      } else if (this.countdown >= 5) {
+        return 'countdown-medium';
+      } else {
+        return 'countdown-small';
+      }
+    }
+  },
+
       methods: {
-        startCountdown() {
-          const countdownInterval = setInterval(() => {
+    startCountdown() {
+      const countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
+          this.countdownSize -= 0.1; // Adjust the rate of size decrease as per your preference
         } else {
           clearInterval(countdownInterval);
           socket.emit('allParticipantsGoToAnswerResult', this.pollId);
@@ -78,8 +95,26 @@
       }, 1000); // Update every 1000ms (1 second)
     },
         exitCreatorMode() {
-          this.$router.push('/jStartView');
+          this.$router.push('/');
         }
       }
     }
   </script>
+
+  <style>
+
+.countdown-large {
+  font-size: 3em; /* Change the font size as per your requirement */
+  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
+}
+
+.countdown-medium {
+  font-size: 2em; /* Change the font size as per your requirement */
+  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
+}
+
+.countdown-small {
+  font-size: 1em; /* Change the font size as per your requirement */
+  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
+}
+</style>

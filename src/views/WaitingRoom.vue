@@ -6,7 +6,7 @@
           </div>
   
         <header>
-          <h1> WAITING FOR PLAYERS TO JOIN </h1>
+          <h1> {{ uiLabels.waitingPlayersJoin }} </h1>
         </header>
         <div>
         <h3> Jeopardy ID:</h3>
@@ -20,7 +20,7 @@
   // Importing components and libraries
   import ResponsiveNav from '@/components/ResponsiveNav.vue';
   import io from 'socket.io-client';
-  const socket = io("localhost:3000");
+  const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     // Component name and imported components
@@ -66,7 +66,6 @@
       });
 
 
-
     },
     // Methods for language switching and toggling the navigation menu
     methods: {
@@ -88,7 +87,7 @@
         this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`)
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }
     }
   }

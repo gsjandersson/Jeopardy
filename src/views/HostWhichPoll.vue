@@ -27,7 +27,7 @@
   <script>
   // Import required modules
   import io from 'socket.io-client';
-  const socket = io("localhost:3000");
+  const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     // Component name and imported components
@@ -86,10 +86,10 @@
           } else {
             this.errorIdMessage = true;
           }
-        }, 5);
+        }, 100);
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }
     }
   }

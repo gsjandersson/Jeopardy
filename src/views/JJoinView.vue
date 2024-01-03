@@ -34,7 +34,7 @@
 <script>
 // Import required modules
 import io from 'socket.io-client';
-const socket = io("localhost:3000");
+const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components
@@ -100,35 +100,41 @@ export default {
       }
 
     setTimeout(() => {
-      if (!this.isExisting) {
-        this.errorIdNotExist = true;
-      }
-      else {
-        this.errorIdNotExist = false;
-      }
-      if (!this.isJoinable) {
-        this.errorIdNotJoinable = true;
-      }
-      else {
-        this.errorIdNotJoinable = false;
-      }
       if (!this.isNotEmpty) {
         this.errorIdEmpty = true;
+        this.errorIdNotExist = false;
+        this.errorIdNotJoinable = false;
       }
       else {
         this.errorIdEmpty = false;
+
+        if (!this.isExisting) {
+        this.errorIdNotExist = true;
+        }
+        else {
+          this.errorIdNotExist = false;
+
+          if (!this.isJoinable) {
+            this.errorIdNotJoinable = true;
+          }
+          else {
+            this.errorIdNotJoinable = false;
+          }
+        }
+
       }
+
       if (this.isExisting && this.isJoinable && this.isNotEmpty) {
         this.errorIdNotExist = false;
         this.errorIdNotJoinable = false;
         this.errorIdEmpty = false;
         this.$router.push('/EnterNameView/' + this.pollId);
       }
-    }, 5);
+    }, 100);
       
     },
     exitCreatorMode() {
-      this.$router.push('/jStartView');
+      this.$router.push('/');
     }
   }
 }

@@ -7,7 +7,7 @@
 
   <script>
   import io from 'socket.io-client';
-  const socket = io("localhost:3000");
+  const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     name: 'AnswerWrong',
@@ -45,7 +45,7 @@
         this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
         },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }
     }
   }
