@@ -2,7 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Importing Vue component views
-import StartView from '../views/StartView.vue';
+import JStartView from '../views/JStartView.vue';
 
 // Creating a Vue Router instance
 const router = createRouter({
@@ -13,28 +13,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Start',
-      component: StartView // Default route displaying the StartView component
-    },
-    {
-      path: '/poll/:id',
-      name: 'PollView',
-      component: () => import('../views/PollView.vue') // Route for displaying a poll, dynamically loading the PollView component
-    },
-    {
-      path: '/create/',
-      name: 'CreateView',
-      component: () => import('../views/CreateView.vue') // Route for creating a new poll, dynamically loading the CreateView component
-    },
-    {
-      path: '/result/:id',
-      name: 'ResultView',
-      component: () => import('../views/ResultView.vue') // Route for viewing poll results, dynamically loading the ResultView component
-    },
-    {
-      path: '/jStartView',
       name: 'JStartView',
-      component: () => import('../views/JStartView.vue')
+      component: JStartView
     },
     { 
       path: '/jCreateInfo',
@@ -115,6 +95,11 @@ const router = createRouter({
       path: '/QuestionResultView/:pollId/:row/:col',
       name: 'QuestionResultView',
       component: () => import('../views/QuestionResultView.vue')
+    },
+    { 
+      path: '/WaitingRoom/:pollId/:participantName',
+      name: 'WaitingRoom',
+      component: () => import('../views/WaitingRoom.vue')
     }
   ]
 });

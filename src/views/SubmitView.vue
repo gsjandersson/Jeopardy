@@ -2,20 +2,13 @@
   <body>
 
     <header>
-      <h1> {{ question }} </h1>
+      <h1> You have submitted your answer. </h1>
+      <h2> Waiting for the other participants to answer. </h2>
+
     </header>
 
     <main>
 
-      <div>
-        <p> {{ uiLabels.answer }} </p>
-        <input type="text" v-model="answer" v-on:keydown.enter="submitAnswer">
-      </div>
-
-      <div>
-        <!-- <button @click="submitAnswer"> Submit Answer </button> -->
-        <button ref="submitButton" @click="submitAnswer">{{ uiLabels.submitAnswer }}</button>
-      </div>
 
 
 

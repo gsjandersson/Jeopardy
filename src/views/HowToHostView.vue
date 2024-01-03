@@ -21,7 +21,7 @@
       </div>
 
       <div>
-    Jeopardy ID: {{ pollId }}
+        Jeopardy ID: {{ pollId }}
       </div>
 
       <div class="button-container">
@@ -35,7 +35,7 @@
   // Importing components and libraries
   import ResponsiveNav from '@/components/ResponsiveNav.vue';
   import io from 'socket.io-client';
-  const socket = io("localhost:3000");
+  const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     // Component name and imported components
@@ -96,12 +96,13 @@
         socket.emit("switchLanguage", this.lang)
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       },
       backToBoard () {
         this.$router.push('/BoardViewSteph/' + this.pollId);
       },
       goToHostView () {
+        socket.emit("updateJoinable", {pollId: this.pollId, makeJoinable: true});
         this.$router.push('/HostView/' + this.pollId);
       },
     }

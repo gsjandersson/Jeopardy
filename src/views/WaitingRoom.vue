@@ -3,21 +3,16 @@
   
         <div>
           <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-          <button id="UKflagga" v-on:click="switchLanguageEnglish">{{ uiLabels.changeLanguage }}</button>
-          <button id="sverigeflagga" v-on:click="switchLanguageSwedish">{{ uiLabels.changeLanguage }}</button>
-        </div>
+          </div>
   
         <header>
-          <h1> {{ uiLabels.hostTheGameTitle }} </h1>
+          <h1> {{ uiLabels.waitingPlayersJoin }} </h1>
         </header>
-
-        <div> 
-            <h2>{{ uiLabels.players }} </h2>
-            <li v-for="(participant, index) in participants" :key="index">
-                {{ participant }}
-            </li>
+        <div>
+        <h3> Jeopardy ID:</h3>
+        <h1> {{ pollId }}</h1>
         </div>
-  
+
     </body>
   </template>
   
@@ -40,7 +35,7 @@
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
         lang: localStorage.getItem("lang") || "en", // Language setting
-        participants: ''
+        participantName: ""
       }
     },
   
@@ -50,12 +45,13 @@
       // this.id = this.$route.params.id;
   
       this.pollId = this.$route.params.pollId
+      this.participantName = this.$route.params.participantName
+
       socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
       socket.on('participantUpdate', (participants) => {
-      console.log("participant update JpollView")
-      this.participants = participants;
-    });
+        this.participants = participants;
+      });
 
       // Emit an event to the server when the page is loaded
       socket.emit("pageLoaded", this.lang);
@@ -64,15 +60,12 @@
       socket.on("init", (labels) => {
         this.uiLabels = labels
       })
-  
-      // Listen for data updates from the server
-      socket.on("dataUpdate", (data) =>
-        this.data = data
-      )
-  
-      // Listen for the event when a poll is created
-      socket.on("pollCreated", (data) =>
-        this.data = data)
+
+      socket.on('goToBoard', () => {
+        this.$router.push(`/JPollView/${this.pollId}/${this.participantName}`)
+      });
+
+
     },
     // Methods for language switching and toggling the navigation menu
     methods: {
@@ -89,40 +82,12 @@
         }
         localStorage.setItem("lang", this.lang);
         socket.emit("switchLanguage", this.lang)
-
       },
-      createPoll: function () {
-        if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
-          this.errorIdMessage = false;
-          this.errorCategoryNo = false;
-          this.errorQuestionNo = false;
-          socket.emit("createPoll", { pollId: this.pollId, lang: this.lang, 
-            questionNo: this.questionNo, categoryNo: this.categoryNo});
-          this.$router.push('/BoardViewSteph/' + this.pollId);
-        }
-        if (this.pollId === "") {
-          this.errorIdMessage = true;
-        }
-        else {
-          this.errorIdMessage = false;
-        }
-  
-        if (this.categoryNo < 1 || this.categoryNo === "") {
-          this.errorCategoryNo = true;
-        }
-        else {
-          this.errorCategoryNo = false;
-        }
-  
-        if (this.questionNo < 1 || this.questionNo === "") {
-          this.errorQuestionNo = true;
-        }
-        else {
-          this.errorQuestionNo = false;
-        }
+      goToPlayerTurn() {
+        this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`)
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }
     }
   }
@@ -134,6 +99,10 @@
   ol {
     text-align: left;
     display: inline-block;
+  }
+
+  .button-container {
+    margin-top: 20px;
   }
   
   main {

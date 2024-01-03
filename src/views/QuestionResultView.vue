@@ -6,8 +6,8 @@
         </div>
   
         <header>
-          <h1> QUESTION RESULT VIEW </h1> 
-          <h2> The correct answer was: </h2>
+          <h1> {{ uiLabels.questionResult }} </h1> 
+          <h2> {{ uiLabels.correctAnswerWas }} </h2>
           <h3>{{ correctAnswer }}</h3>
         </header>
 
@@ -24,7 +24,7 @@
   
     <script>
     import io from 'socket.io-client';
-    const socket = io("localhost:3000");
+    const socket = io(sessionStorage.getItem("ipAdressSocket"));
     
     export default {
       name: 'QuestionResultView',
@@ -81,7 +81,8 @@
           const countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
-        } else {
+        } 
+        else {
           clearInterval(countdownInterval);
           socket.emit('allParticipantsGoToBoard', this.pollId);
           this.$router.push('/PlayerTurnView/' + this.pollId);
@@ -89,7 +90,7 @@
       }, 1000); // Update every 1000ms (1 second)
     },
         exitCreatorMode() {
-          this.$router.push('/jStartView');
+          this.$router.push('/');
         }
       }
     }

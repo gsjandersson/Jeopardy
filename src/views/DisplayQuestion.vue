@@ -6,15 +6,18 @@
         </div>
   
         <header>
+          {{ uiLabels.questionIs }}
           <h1> {{ question }} </h1> 
-          <span :style="{ fontSize: countdownSize + 'em' }">{{ countdown }}</span>
+
+          <h3> {{ uiLabels.youHave }} {{ countdown }} {{ uiLabels.secondsLeft }} </h3>
+          
         </header>
     </body>
   </template>
   
     <script>
     import io from 'socket.io-client';
-    const socket = io("localhost:3000");
+    const socket = io(sessionStorage.getItem("ipAdressSocket"));
     
     export default {
       name: 'DisplayQuestion',
@@ -26,8 +29,7 @@
           row: "",
           col: "",
           question: "",
-          countdown: 10,
-          countdownSize: 3, // Initial font size
+          countdown: 20,
         }
       },
       created: function () {
@@ -54,8 +56,12 @@
         socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
 
         socket.on('hasAllAnswered', () => {
-          console.log("all have answered")
+          setTimeout(() => {
+            console.log("all jas answered registered")
+          socket.emit('allParticipantsGoToAnswerResult', this.pollId);
+          this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
           // returns true if all have answered
+        }, 1000);
         });
 
         this.startCountdown();
@@ -88,11 +94,11 @@
         }
       }, 1000); // Update every 1000ms (1 second)
     },
-    exitCreatorMode() {
-      this.$router.push('/jStartView');
+        exitCreatorMode() {
+          this.$router.push('/');
+        }
+      }
     }
-  }
-}
   </script>
 
   <style>

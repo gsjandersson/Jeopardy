@@ -58,7 +58,7 @@
 
 <script>
 import io from 'socket.io-client';
-const socket = io("localhost:3000");
+const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   data: function () {
@@ -132,7 +132,7 @@ export default {
       }
     },
     exitCreatorMode() {
-      this.$router.push('/jStartView');
+      this.$router.push('/');
     },
     howToHost() {
       this.$router.push('/HowToHostView/'+ this.pollId);

@@ -6,16 +6,8 @@
       Jeopardy Id: {{ pollId }}
     </header>
 
-    <h2> {{ uiLabels.YouAre }} {{ participantName }}</h2>
-    <h2> {{ uiLabels.PartTurn }} {{ participantTurn }}</h2>
-    <h2> {{ uiLabels.Parts }} </h2>
-    <ul style="list-style-type: none;">
-      <li v-for="(participant, index) in participants" :key="index"
-        style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
-        {{ participant }}
-      </li>
-    </ul>
-    <h3> You have: {{ cashTotal }}$ </h3>
+    <h2> {{ uiLabels.YouAre }} {{ participantName }} </h2>
+    <h3> {{ uiLabels.moneyInBank }}: {{ cashTotal }}$ </h3>
 
     <main>
       <div class="jeopardy-board">
@@ -62,7 +54,7 @@
 <script>
 // Import required modules
 import io from 'socket.io-client';
-const socket = io("localhost:3000");
+const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components
@@ -90,6 +82,8 @@ export default {
     this.pollId = this.$route.params.pollId
     this.participantName = this.$route.params.participantName
 
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
+
     socket.on("pollLang", (lang) =>
       this.lang = lang
     );
@@ -111,6 +105,7 @@ export default {
     });
 
     socket.on('goToQuestion', (d) => {
+      console.log("go to question j poll view")
       this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}/${d.row}/${d.col}`);
     });
 
@@ -123,8 +118,6 @@ export default {
     );
 
     // socket.emit("getPollLang", this.pollId);
-
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
 
     socket.emit("retrieveQuestions", (this.pollId));
 
@@ -148,7 +141,7 @@ export default {
       }
     },
     exit() {
-      this.$router.push('/jStartView');
+      this.$router.push('/');
     }
   }
 }

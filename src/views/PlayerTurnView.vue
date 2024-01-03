@@ -11,7 +11,7 @@
           <h1> {{ uiLabels.PlayerTurnTitle }} </h1>
         </header>
          <div>
-            <h2> {{ uiLabels.Participant }} {{ participantTurn }} will pick question. </h2>
+            <h2> {{ uiLabels.Participant }} {{ participantTurn }} {{ uiLabels.willPickQuestion }} </h2>
         </div> 
     </body>
   </template>
@@ -20,7 +20,7 @@
   // Importing components and libraries
   import ResponsiveNav from '@/components/ResponsiveNav.vue';
   import io from 'socket.io-client';
-  const socket = io("localhost:3000");
+  const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     // Component name and imported components
@@ -84,7 +84,7 @@
         socket.emit("switchLanguage", this.lang)
       },
       exitCreatorMode() {
-        this.$router.push('/jStartView');
+        this.$router.push('/');
       }, 
     }
   }
