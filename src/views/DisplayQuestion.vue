@@ -7,7 +7,7 @@
   
         <header>
           <h1> {{ question }} </h1> 
-          {{ countdown }}
+          <span :style="{ fontSize: countdownSize + 'em' }">{{ countdown }}</span>
         </header>
     </body>
   </template>
@@ -27,6 +27,7 @@
           col: "",
           question: "",
           countdown: 10,
+          countdownSize: 3, // Initial font size
         }
       },
       created: function () {
@@ -61,11 +62,25 @@
         
       },
 
+      computed: {
+    countdownClass() {
+      // Define classes for different countdown values
+      if (this.countdown >= 8) {
+        return 'countdown-large';
+      } else if (this.countdown >= 5) {
+        return 'countdown-medium';
+      } else {
+        return 'countdown-small';
+      }
+    }
+  },
+
       methods: {
-        startCountdown() {
-          const countdownInterval = setInterval(() => {
+    startCountdown() {
+      const countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
+          this.countdownSize -= 0.1; // Adjust the rate of size decrease as per your preference
         } else {
           clearInterval(countdownInterval);
           socket.emit('allParticipantsGoToAnswerResult', this.pollId);
@@ -73,9 +88,27 @@
         }
       }, 1000); // Update every 1000ms (1 second)
     },
-        exitCreatorMode() {
-          this.$router.push('/jStartView');
-        }
-      }
+    exitCreatorMode() {
+      this.$router.push('/jStartView');
     }
+  }
+}
   </script>
+
+  <style>
+
+.countdown-large {
+  font-size: 3em; /* Change the font size as per your requirement */
+  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
+}
+
+.countdown-medium {
+  font-size: 2em; /* Change the font size as per your requirement */
+  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
+}
+
+.countdown-small {
+  font-size: 1em; /* Change the font size as per your requirement */
+  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
+}
+</style>
