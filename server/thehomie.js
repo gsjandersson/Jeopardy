@@ -4,6 +4,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, numberOfQuestion
 
     let numberOfCategories = 5;
     let numberOfQuestions = 5;
+    let topic = "Project Pat";
   
     poll.questions = Array.from({ length: numberOfQuestions }, () => Array.from({ length: numberOfCategories }, () => ({
       question: '',
@@ -20,6 +21,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, numberOfQuestion
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
+
   
     // Define the JSON structure''
   
@@ -41,7 +43,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, numberOfQuestion
     const jsonString = JSON.stringify(jsonStructure);
   
     // Define the prompt with the JSON structure
-    const prompt = `Fill this with questions, answers and categories: ${jsonString}`;
+    const prompt = `Fill this with questions, answers and categories on the topic "${topic}": ${jsonString}`;
   
     // Generate quiz questions and answers
     try {
