@@ -398,20 +398,23 @@ Data.prototype.isActive = function (pollId) {
 Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
   let poll = {};
   poll.lang = lang;
-  poll.currentQuestion = 0;
   let questionNo = 5;
   let categoryNo = 5;
 
   poll.questions = Array.from({ length: questionNo }, () => Array.from({ length: categoryNo }, () => ({
     question: '',
     answer: '',
-    completed: false
+    completed: false,
+    numberAnswers: 0
   })));
 
   poll.categories = Array.from({ length: categoryNo }, () => "");
+  poll.isJoinable = false;
+  poll.isActive = false;
+  this.polls[pollId] = poll;
 
   const openai = new OpenAI({
-    apiKey: process.env.API_KEY,
+    apiKey: process.env.OPENAI_API_KEY,
   });
 
   // Define the JSON structure''
@@ -471,7 +474,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
       messages: [
         {
           role: "system",
-          content: "You are a helpful assistant designed to output JSON. The answers to the questions should be short and simple to answer",
+          content: "You are a helpful assistant designed to output JSON.  The answers to the questions should be short and simple to answer",
         },
         { role: "user", content: prompt },
       ],
@@ -512,14 +515,14 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
   }
 
   let participantData = {};
-    participantData.cashTotal = {};
-    participantData.allParticipants = [];
-    participantData.turnIndex = 0;
-    participantData.turn = "";
-    this.participants[pollId] = participantData;
+  participantData.cashTotal = {};
+  participantData.allParticipants = [];
+  participantData.turnIndex = 0;
+  participantData.turn = "";
+  this.participants[pollId] = participantData;
 
-    console.log("poll created", pollId, poll);
-  
+  console.log("poll created", pollId, poll);
+
   return this.polls[pollId];
 }
 

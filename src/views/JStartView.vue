@@ -42,8 +42,8 @@
 // Importing components and libraries
 import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
-sessionStorage.setItem("ipAdressSocket", "192.168.1.155:3000");
-sessionStorage.setItem("ipAdress", "192.168.1.155");
+sessionStorage.setItem("ipAdressSocket", "192.168.2.43:3000");
+sessionStorage.setItem("ipAdress", "192.168.2.43");
 // sessionStorage.setItem("ipAdressSocket", "localhost:3000");
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
