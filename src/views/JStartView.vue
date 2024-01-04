@@ -44,7 +44,7 @@ import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
 
 // här är min IP 192.168.1.155
-const ipAdress = "192.168.2.182";
+const ipAdress = "192.168.2.43";
 sessionStorage.setItem("ipAdress", ipAdress);
 sessionStorage.setItem("ipAdressSocket", ipAdress + ":3000");
 
