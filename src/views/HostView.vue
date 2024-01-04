@@ -38,7 +38,6 @@
   
 <script>
 // Importing components and libraries
-import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
 import QRCode from 'qrcode';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
@@ -46,9 +45,6 @@ const socket = io(sessionStorage.getItem("ipAdressSocket"));
 export default {
   // Component name and imported components
   name: 'JCreateInfo',
-  components: {
-    ResponsiveNav
-  },
 
   // Initial data properties
   data: function () {
@@ -91,7 +87,9 @@ export default {
 
   },
   mounted: function () {
-    this.$refs.audioElement.play();
+    ////////////// IBLAND FUNKAR IBLAND INTE, KRAV FRÅN //////////////
+    ////////////// HEMSIDAN ATT KLIENTEN MÅSTE INTERAGERA MED DEN //////////////
+    //this.$refs.audioElement.play();
   },
   // Methods for language switching and toggling the navigation menu
   methods: {

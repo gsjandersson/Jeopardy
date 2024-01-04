@@ -55,28 +55,21 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    socket.on('correctAnswer', (correctAnswer) => {
-      this.correctAnswer = correctAnswer;
-      this.hiddenAnswer = correctAnswer.replace(/[^ ]/g, '_');
-    });
-
-    // Emit an event to the server when the page is loaded
-    socket.emit("pageLoaded", this.lang);
-
-    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
-
-    // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
     });
 
+    socket.emit("pageLoaded", this.lang);
+
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
-    socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
-
-    socket.on('questionChosen', (question) => {
-      this.question = question;
+    socket.on("questionViewData", (d) => {
+      this.question = d.question;
+      this.correctAnswer = d.correctAnswer;
+      this.hiddenAnswer = d.correctAnswer.replace(/[^ ]/g, '_');
     });
+
+    socket.emit("getQuestionViewData", { pollId: this.pollId, row: this.row, col: this.col });
 
     socket.on('goToAnswerResult', () => {
       if (!this.answerSubmitted) {

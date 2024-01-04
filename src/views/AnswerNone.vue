@@ -28,6 +28,7 @@
         socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
     
         socket.emit("pageLoaded", this.lang);
+
         socket.on("init", (labels) => {
           this.uiLabels = labels;
         });
@@ -40,11 +41,6 @@
           this.$router.push(`/WinnerView/${this.pollId}`);
         });
 
-      },
-      methods: {
-        exitCreatorMode() {
-          this.$router.push('/');
-        }
       }
     }
   </script>

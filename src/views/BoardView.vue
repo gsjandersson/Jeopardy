@@ -76,22 +76,19 @@ export default {
     // Emitting an event when the page is loaded and listening for initialization data
     this.pollId = this.$route.params.pollId
     socket.emit("pageLoaded", this.lang);
+
     socket.on("init", (labels) => {
       this.uiLabels = labels
     });
-    socket.emit("retrieveQuestions", (this.pollId));
+    socket.emit("getAllQuestions", (this.pollId));
 
-    socket.emit("retrieveCategories", (this.pollId));
+    socket.emit("getAllCategories", (this.pollId));
 
-    socket.on("pollCreated", (data) =>
-      this.data = data
-    );
-
-    socket.on("questionsRetrieved", (questions) =>
+    socket.on("allQuestions", (questions) =>
       this.questions = questions
     );
 
-    socket.on("categoriesRetrieved", (categories) =>
+    socket.on("allCategories", (categories) =>
       this.categories = categories
     );
   },
@@ -113,7 +110,7 @@ export default {
       if (newQuestion !== "" && newAnswer !== "") {
         socket.emit("editQuestion", {
           pollId: this.pollId, row: rowNo, col: colNo,
-          q: newQuestion, a: newAnswer
+          question: newQuestion, answer: newAnswer
         });
       }
     },
@@ -128,7 +125,7 @@ export default {
         categoryName = prompt('Skriv kategorinamnet:');
       }
       if (categoryName !== "") {
-        socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: categoryName })
+        socket.emit("editCategory", { pollId: this.pollId, col: colNo, category: categoryName })
       }
     },
     exitCreatorMode() {
@@ -136,9 +133,6 @@ export default {
     },
     howToHost() {
       this.$router.push('/HowToHostView/'+ this.pollId);
-    },
-    runQuestion: function () {
-      socket.emit("runQuestion", { pollId: this.pollId, questionNumber: this.questionNumber })
     },
     switchLanguageEnglish: function () {
       if (this.lang === "sv") {

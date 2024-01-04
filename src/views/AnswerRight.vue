@@ -24,8 +24,6 @@ export default {
     this.pollId = this.$route.params.pollId
     this.participant = this.$route.params.participantName
     this.row = this.$route.params.row
-    
-    console.log("row number", this.row)
 
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
@@ -35,20 +33,12 @@ export default {
     });
 
     socket.on('goToBoard', () => {
-      this.goToBoard();
+      this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
     });
 
     socket.on("goToWinnerView", () => {
       this.$router.push(`/WinnerView/${this.pollId}`);
     });
-  },
-  methods: {
-    goToBoard() {
-      this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
-    },
-    exitCreatorMode() {
-      this.$router.push('/');
-    }
   }
 }
 </script>

@@ -35,19 +35,7 @@ export default {
   // Lifecycle hook - component creation
   created: function () {
     socket.on('goToAnswerResult', () => {
-      console.log("go to answer result")
-
-      setTimeout(() => {
-        console.log("check correct answer")
-        this.checkCorrectAnswer();
-
-        setTimeout(() => {
-          console.log("answer view")
-          this.answerView();
-        }, 200);
-
-      }, 200);
-
+      this.answerView();
     });
 
     this.pollId = this.$route.params.pollId
@@ -55,31 +43,27 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    // Emit an event to the server when the page is loaded
-    socket.emit("pageLoaded", this.lang);
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
-    socket.on("correctAnswer", (correctAnswer) => {
-      this.correctAnswer = correctAnswer;
-      this.correctAnswerEdited = correctAnswer.toLowerCase();
-      this.correctAnswerEdited = this.correctAnswerEdited.replace(/\s/g, '');
-    });
-
-    socket.on("participantAnswer", (submittedAnswer) => {
-      this.submittedAnswer = submittedAnswer;
-      this.submittedAnswerEdited = submittedAnswer.toLowerCase();
-      this.submittedAnswerEdited = this.submittedAnswerEdited.replace(/\s/g, '');
-    });
-
-    // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
     });
 
-    socket.emit("getCorrectAnswer", { pollId: this.pollId, row: this.row, col: this.col })
+    // Emit an event to the server when the page is loaded
+    socket.emit("pageLoaded", this.lang);
 
-    socket.emit("getParticipantAnswer", { pollId: this.pollId, participantName: this.participant })
+    socket.on("submitViewData", (d) => {
+      this.submittedAnswer = d.submittedAnswer;
+      this.submittedAnswerEdited = d.submittedAnswer.toLowerCase();
+      this.submittedAnswerEdited = this.submittedAnswerEdited.replace(/\s/g, '');
+      this.correctAnswer = d.correctAnswer;
+      this.correctAnswerEdited = d.correctAnswer.toLowerCase();
+      this.correctAnswerEdited = this.correctAnswerEdited.replace(/\s/g, '');
 
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
+      this.checkCorrectAnswer();
+    });
+
+    socket.emit("getSubmitViewData", { pollId: this.pollId, row: this.row, col: this.col, participantName: this.participant });
 
     socket.emit("participantAnswerRegistered", { pollId: this.pollId, row: this.row, col: this.col })
 
@@ -87,26 +71,20 @@ export default {
   // Methods for language switching and toggling the navigation menu
   methods: {
     checkCorrectAnswer() {
-      if (!this.hasCheckedCorrect) {
-        console.log("correct answer: " + this.correctAnswer);
-        console.log("submitted answer: " + this.submittedAnswer);
+      console.log("correct answer: " + this.correctAnswer);
+      console.log("submitted answer: " + this.submittedAnswer);
 
-        console.log("correct answer edited: " + this.correctAnswerEdited);
-        console.log("submitted answer edited: " + this.submittedAnswerEdited);
+      console.log("correct answer edited: " + this.correctAnswerEdited);
+      console.log("submitted answer edited: " + this.submittedAnswerEdited);
 
-        if (this.correctAnswerEdites === this.submittedAnswerEdited) {
-          console.log("correct answer registered")
-          socket.emit('updateCashTotal', { pollId: this.pollId, partName: this.participant, row: this.row, col: this.col });
-          this.redirectRoute = 'AnswerRight';
-        }
-        else if (this.submittedAnswer === "") {
-          console.log("no answer registered")
-          this.redirectRoute = "AnswerNone";
-        }
-        else {
-          console.log("wrong answer registered")
-          this.redirectRoute = "AnswerWrong";
-        }
+      if (this.correctAnswerEdited === this.submittedAnswerEdited) {
+        console.log("correct answer registered")
+        socket.emit('updateCashTotal', { pollId: this.pollId, participantName: this.participant, row: this.row, col: this.col });
+        this.redirectRoute = 'AnswerRight';
+      }
+      else {
+        console.log("wrong answer registered")
+        this.redirectRoute = "AnswerWrong";
       }
       this.hasCheckedCorrect = true;
     },
