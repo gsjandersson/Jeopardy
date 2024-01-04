@@ -75,15 +75,29 @@ export default {
       }, 100);
     });
 
-    this.startCountdown();
+        this.startCountdown();
+        
+      },
 
+      computed: {
+    countdownClass() {
+      // Define classes for different countdown values
+      if (this.countdown >= 8) {
+        return 'countdown-large';
+      } else if (this.countdown >= 5) {
+        return 'countdown-medium';
+      } else {
+        return 'countdown-small';
+      }
+    }
   },
 
-  methods: {
+      methods: {
     startCountdown() {
-      this.countdownInterval = setInterval(() => {
+      const countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
+          this.countdownSize -= 0.1; // Adjust the rate of size decrease as per your preference
         } else {
           clearInterval(this.countdownInterval);
           socket.emit('allParticipantsGoToAnswerResult', this.pollId);

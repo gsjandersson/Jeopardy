@@ -10,7 +10,6 @@
     <h1>{{ uiLabels.boardViewTitle }}</h1>
     <p class="pollDisplay"> Jeopardy Id: {{ pollId }}</p>
 
-
     <main>
       <div class="jeopardy-board">
         <!-- Display column titles -->
@@ -18,6 +17,13 @@
           <div v-for="(category, index) in categories" :key="index"
             :style="{ width: `calc(90vw / ${categories.length})` }" class="jeopardy-square"
             @click="handleCategoryClick(index)">
+            <custom-prompt
+      v-if="showCustomPrompt"
+      :promptTitle="lang === 'en' ? 'Enter the Question' : 'Skriv frågan'"
+      :showPrompt="showCustomPrompt"
+      :lang="lang"
+      @submitted="handleCustomPromptSubmission"
+    ></custom-prompt>
             <div v-if="!category">
               <p> {{ uiLabels.boardViewCategoryBox }} </p>
             </div>
