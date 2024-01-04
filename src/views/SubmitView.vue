@@ -26,6 +26,8 @@ export default {
       submittedAnswer: "",
       correctAnswer: "",
       redirectRoute: "",
+      correctAnswerEdited: "",
+      submittedAnswerEdited: "",
       hasCheckedCorrect: false
     }
   },
@@ -58,10 +60,14 @@ export default {
 
     socket.on("correctAnswer", (correctAnswer) => {
       this.correctAnswer = correctAnswer;
+      this.correctAnswerEdited = correctAnswer.toLowerCase();
+      this.correctAnswerEdited = this.correctAnswerEdited.replace(/\s/g, '');
     });
 
     socket.on("participantAnswer", (submittedAnswer) => {
       this.submittedAnswer = submittedAnswer;
+      this.submittedAnswerEdited = submittedAnswer.toLowerCase();
+      this.submittedAnswerEdited = this.submittedAnswerEdited.replace(/\s/g, '');
     });
 
     // Listen for initialization data from the server
@@ -85,7 +91,10 @@ export default {
         console.log("correct answer: " + this.correctAnswer);
         console.log("submitted answer: " + this.submittedAnswer);
 
-        if (this.correctAnswer === this.submittedAnswer) {
+        console.log("correct answer edited: " + this.correctAnswerEdited);
+        console.log("submitted answer edited: " + this.submittedAnswerEdited);
+
+        if (this.correctAnswerEdites === this.submittedAnswerEdited) {
           console.log("correct answer registered")
           socket.emit('updateCashTotal', { pollId: this.pollId, partName: this.participant, row: this.row, col: this.col });
           this.redirectRoute = 'AnswerRight';
