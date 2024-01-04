@@ -9,6 +9,7 @@
 
       <div>
         <p> {{ uiLabels.answer }} </p>
+        <p> {{ hiddenAnswer }} </p>
         <input type="text" v-model="answer" v-on:keydown.enter="submitAnswer">
       </div>
 
@@ -16,8 +17,6 @@
         <!-- <button @click="submitAnswer"> Submit Answer </button> -->
         <button ref="submitButton" @click="submitAnswer">{{ uiLabels.submitAnswer }}</button>
       </div>
-
-
 
     </main>
   </body>
@@ -28,6 +27,7 @@
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
+
 export default {
   // Component name and imported components
   name: 'QuestionView',
@@ -37,13 +37,14 @@ export default {
       uiLabels: {}, // Object for storing UI labels
       pollId: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting
-      answer: "",
       participant: "",
+      answerSubmitted: false,
+      answer: "",
       question: "",
       row: "",
       col: "",
       correctAnswer: "",
-      answerSubmitted: false,
+      hiddenAnswer: ""
     }
   },
 
@@ -54,15 +55,10 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    /* socket.emit('getPollLang', (this.pollId))
-
-    socket.on('pollLang', (lang) =>
-      this.lang = lang
-    ); */
-
     socket.on('correctAnswer', (correctAnswer) => {
-        this.correctAnswer = correctAnswer
-      });
+      this.correctAnswer = correctAnswer;
+      this.hiddenAnswer = correctAnswer.replace(/[^ ]/g, '_');
+    });
 
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
@@ -82,58 +78,40 @@ export default {
       this.question = question;
     });
 
-    socket.on('correctAnswer', (correctAnswer) => {
-      this.correctAnswer = correctAnswer;
-    });
-
     socket.on('goToAnswerResult', () => {
-      console.log("got ot answer relsut");
-      this.closeQuestionView();
+      if (!this.answerSubmitted) {
+        socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: this.answer });
+        this.$router.push(`/AnswerNone/${this.pollId}/${this.participant}/${this.row}`);
+      }
+      
     });
-
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
     exitCreatorMode() {
       this.$router.push('/');
     },
-
     submitAnswer: function () {
-      if (!this.answerSubmitted) {
-        socket.emit("participantAnswerRegistered", {pollId: this.pollId, row: this.row, col: this.col})
-        if (this.correctAnswer === this.answer) {
-          socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
-        }
-      this.answerSubmitted = true;
-      }
+      console.log("answer submitted by " + this.participant);
+      console.log("answer " + this.answer);
 
-    },
-    
-    closeQuestionView() {
-      if (!this.answerSubmitted) {
-      // If the answer was not submitted, handle it as a wrong answer
-        this.showAnswerStatus("not submitted");
-      } 
-      else {
-      // If the answer was submitted, check if it's correct
-        const isCorrect = this.answer === this.correctAnswer;
-        this.showAnswerStatus(isCorrect);
-      }
-    },
+      if (!this.answerSubmitted && this.answer !== "") {
+        console.log("answer submitted");
+        this.answerSubmitted = true;
 
-    showAnswerStatus(isCorrect) {
-      let redirectRoute;
-      if (isCorrect === true || isCorrect === false) {
-        redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
+        console.log("pollId " + this.pollId);
+        console.log("participantName " + this.participant);
+        console.log("answer " + this.answer);
+        console.log("row " + this.row);
+        console.log("col " + this.col);
+
+        socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: this.answer });
+
+        this.$router.push(`/SubmitView/${this.pollId}/${this.participant}/${this.row}/${this.col}`);
       }
-      else {
-        redirectRoute = 'AnswerNone';
-      }
-      // Redirect to the appropriate answer status component
-      this.$router.push(`/${redirectRoute}/${this.pollId}/${this.participant}/${this.row}`);
     }
-    }
-    }
+  }
+}
 </script>
 
 <style scoped>

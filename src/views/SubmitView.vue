@@ -1,19 +1,9 @@
 <template>
-  <body>
+  <header>
+    <h1> You have submitted your answer. </h1>
+    <h2> Waiting for the other participants to answer. </h2>
 
-    <header>
-      <h1> You have submitted your answer. </h1>
-      <h2> Waiting for the other participants to answer. </h2>
-
-    </header>
-
-    <main>
-
-
-
-
-    </main>
-  </body>
+  </header>
 </template>
 
 <script>
@@ -23,119 +13,104 @@ const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components
-  name: 'QuestionView',
+  name: 'SubmitView',
   // Initial data properties
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
       pollId: "", // Input for poll ID
       lang: localStorage.getItem("lang") || "en", // Language setting
-      answer: "",
       participant: "",
-      question: "",
       row: "",
       col: "",
+      submittedAnswer: "",
       correctAnswer: "",
-      answerSubmitted: false,
+      redirectRoute: "",
+      hasCheckedCorrect: false
     }
   },
 
   // Lifecycle hook - component creation
   created: function () {
+    socket.on('goToAnswerResult', () => {
+      console.log("go to answer result")
+
+      setTimeout(() => {
+        console.log("check correct answer")
+        this.checkCorrectAnswer();
+
+        setTimeout(() => {
+          console.log("answer view")
+          this.answerView();
+        }, 200);
+
+      }, 200);
+
+    });
+
     this.pollId = this.$route.params.pollId
     this.participant = this.$route.params.participantName
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    /* socket.emit('getPollLang', (this.pollId))
-
-    socket.on('pollLang', (lang) =>
-      this.lang = lang
-    ); */
-
-    socket.on('correctAnswer', (correctAnswer) => {
-        this.correctAnswer = correctAnswer
-      });
-
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
 
-    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
+    socket.on("correctAnswer", (correctAnswer) => {
+      this.correctAnswer = correctAnswer;
+    });
+
+    socket.on("participantAnswer", (submittedAnswer) => {
+      this.submittedAnswer = submittedAnswer;
+    });
 
     // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
     });
 
+    socket.emit("getCorrectAnswer", { pollId: this.pollId, row: this.row, col: this.col })
+
+    socket.emit("getParticipantAnswer", { pollId: this.pollId, participantName: this.participant })
+
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
-    socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
-
-    socket.on('questionChosen', (question) => {
-      this.question = question;
-    });
-
-    socket.on('correctAnswer', (correctAnswer) => {
-      this.correctAnswer = correctAnswer;
-    });
-
-    socket.on('goToAnswerResult', () => {
-      console.log("got ot answer relsut");
-      this.closeQuestionView();
-    });
+    socket.emit("participantAnswerRegistered", { pollId: this.pollId, row: this.row, col: this.col })
 
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
-    exitCreatorMode() {
-      this.$router.push('/');
-    },
+    checkCorrectAnswer() {
+      if (!this.hasCheckedCorrect) {
+        console.log("correct answer: " + this.correctAnswer);
+        console.log("submitted answer: " + this.submittedAnswer);
 
-    submitAnswer: function () {
-      if (!this.answerSubmitted) {
-        socket.emit("participantAnswerRegistered", {pollId: this.pollId, row: this.row, col: this.col})
-        if (this.correctAnswer === this.answer) {
-          socket.emit('updateCashTotal', {pollId: this.pollId, partName: this.participant, row: this.row, col: this.col});
+        if (this.correctAnswer === this.submittedAnswer) {
+          console.log("correct answer registered")
+          socket.emit('updateCashTotal', { pollId: this.pollId, partName: this.participant, row: this.row, col: this.col });
+          this.redirectRoute = 'AnswerRight';
         }
-      this.answerSubmitted = true;
+        else if (this.submittedAnswer === "") {
+          console.log("no answer registered")
+          this.redirectRoute = "AnswerNone";
+        }
+        else {
+          console.log("wrong answer registered")
+          this.redirectRoute = "AnswerWrong";
+        }
       }
-
+      this.hasCheckedCorrect = true;
     },
-    
-    closeQuestionView() {
-      if (!this.answerSubmitted) {
-      // If the answer was not submitted, handle it as a wrong answer
-        this.showAnswerStatus("not submitted");
-      } 
-      else {
-      // If the answer was submitted, check if it's correct
-        const isCorrect = this.answer === this.correctAnswer;
-        this.showAnswerStatus(isCorrect);
-      }
-    },
-
-    showAnswerStatus(isCorrect) {
-      let redirectRoute;
-      if (isCorrect === true || isCorrect === false) {
-        redirectRoute = isCorrect ? 'AnswerRight' : 'AnswerWrong';
-      }
-      else {
-        redirectRoute = 'AnswerNone';
-      }
-      // Redirect to the appropriate answer status component
-      this.$router.push(`/${redirectRoute}/${this.pollId}/${this.participant}/${this.row}`);
+    answerView() {
+      console.log(this.redirectRoute)
+      this.$router.push(`/${this.redirectRoute}/${this.pollId}/${this.participant}/${this.row}`);
     }
-    }
-    }
+  }
+}
 </script>
 
 <style scoped>
 /* Scoped styles for the component */
-
-ol {
-  text-align: left;
-  display: inline-block;
-}
 
 main {
   overflow: scroll;

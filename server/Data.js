@@ -37,7 +37,9 @@ Data.prototype.getUILabels = function (lang = "en") {
 }
 
 Data.prototype.createTestQuiz = function () {
-  console.log("create test quiz")
+  console.log(typeof this.polls["testquiz"])
+  if (typeof this.polls["testquiz"] === "undefined") {
+  console.log("data create test quiz")
   let poll = {};
     poll.lang = "en";
     poll.questions = [
@@ -87,8 +89,10 @@ Data.prototype.createTestQuiz = function () {
     participantData.allParticipants = [];
     participantData.turnIndex = 0;
     participantData.turn = "";
+    participantData.answers = {};
     this.participants["testquiz"] = participantData;
   }
+}
 
 
 // Method to create a new poll
@@ -113,11 +117,30 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.allParticipants = [];
     participantData.turnIndex = 0;
     participantData.turn = "";
+    participantData.answers = {};
     this.participants[pollId] = participantData;
 
-    console.log("poll created", pollId, poll);
+    console.log("poll created", pollId);
   }
   return this.polls[pollId];
+}
+
+Data.prototype.allQuestionsCompleted = function (pollId) {
+  const poll = this.polls[pollId];
+  console.log(poll.questions)
+  if (typeof poll !== 'undefined') {
+    for (let i = 0; i < poll.questions.length; i++) {
+      console.log(poll.questions[i])
+      for (let j = 0; j < poll.questions[i].length; j++) {
+        console.log(poll.questions[i][j])
+        if (poll.questions[i][j].completed === false && poll.questions[i][j].question !== '') {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  return false;
 }
 
 // Method to add a question to an existing poll
@@ -158,34 +181,19 @@ Data.prototype.getQuestion = function (pollId, questionRow, questionCol) {
 }
 
 // Method to submit an answer to the current question in a poll
-Data.prototype.submitAnswer = function (pollId, answer) {
-  const poll = this.polls[pollId];
-  console.log("answer submitted for ", pollId, answer);
-  if (typeof poll !== 'undefined') {
-    let answers = poll.answers[poll.currentQuestion];
-    if (typeof answers !== 'object') {
-      answers = {};
-      answers[answer] = 1;
-      poll.answers.push(answers);
-    }
-    else if (typeof answers[answer] === 'undefined') {
-      answers[answer] = 1;
-    }
-    else {
-      answers[answer] += 1;
-    }
-    console.log("answers looks like ", answers, typeof answers);
+Data.prototype.submitAnswer = function (pollId, participantName, answer) {
+  const part = this.participants[pollId];
+  console.log("data submit answer", participantName, answer)
+  if (typeof part !== 'undefined') {
+    part.answers[participantName] = answer;
   }
 }
 
 // Method to get answers for the current question in a poll
-Data.prototype.getAnswers = function (pollId) {
-  const poll = this.polls[pollId];
-  if (typeof poll !== 'undefined') {
-    const answers = poll.answers[poll.currentQuestion];
-    if (typeof poll.questions[poll.currentQuestion] !== 'undefined') {
-      return { q: poll.questions[poll.currentQuestion].q, a: answers };
-    }
+Data.prototype.getParticipantAnswer = function (pollId, participantName) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    return part.answers[participantName];
   }
   return {};
 }
@@ -259,8 +267,8 @@ Data.prototype.getCorrectAnswer = function (pollId, row, col) {
 Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
-    console.log(100 * (row + 1))
-    console.log(row)
+    console.log("money added", (100 * (1 + parseInt(row, 10))))
+    console.log("row number" + row)
     part.cashTotal[partName] += (100 * (1 + parseInt(row, 10)));
   }
 }
@@ -268,6 +276,7 @@ Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
 Data.prototype.getCashTotal = function (pollId, partName) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
+    console.log("data get cash total" + part.cashTotal[partName])
     return part.cashTotal[partName];
   }
 }
@@ -359,21 +368,25 @@ Data.prototype.resetAnswerCount = function (pollId) {
 
 Data.prototype.updateJoinable = function (pollId, makeJoinable) {
   const poll = this.polls[pollId];
+  console.log("update joinable " + pollId + " " + makeJoinable)
   if (typeof poll !== 'undefined') {
-    if (makeJoinable) {
+    if (makeJoinable === true) {
       poll.isJoinable = true;
     }
     else {
       poll.isJoinable = false;
     }
   }
+  console.log("is joinable " + poll.isJoinable);
 }
 
 Data.prototype.isJoinable = function (pollId) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
+    console.log("is joinable " + poll.isJoinable);
     return poll.isJoinable;
   }
+  return false;
 }
 
 Data.prototype.updateActive = function (pollId, makeActive) {
@@ -398,7 +411,6 @@ Data.prototype.isActive = function (pollId) {
 Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
   let poll = {};
   poll.lang = lang;
-  poll.currentQuestion = 0;
   let questionNo = 5;
   let categoryNo = 5;
 
@@ -411,49 +423,84 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
   poll.categories = Array.from({ length: categoryNo }, () => "");
 
   const openai = new OpenAI({
-    apiKey: process.env.API_KEY,
+    apiKey: process.env.OPENAI_API_KEY,
   });
 
   // Define the JSON structure''
-
+[
+  [
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false }
+  ],
+  [
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false }
+  ],
+  [
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false }
+  ],
+  [
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false }
+  ],
+  [
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false },
+    { "question": "", "answer": "", "completed": false }
+  ]
+]
   const jsonStructure = {
     "questions": [
       [
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" }
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false }
       ],
       [
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" }
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false }
       ],
       [
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" }
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false }
       ],
       [
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" }
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false }
       ],
       [
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" },
-        { "question": "", "answer": "" }
-      ],
-
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false },
+        { "question": "", "answer": "", "completed": false }
+      ]
     ],
     "categories": ["", "", "", "", ""]
   };

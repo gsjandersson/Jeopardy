@@ -19,13 +19,13 @@
       {{ uiLabels.participatePoll }}
     </button>
     <p v-if="errorIdNotExist == true" style="color: red">
-        {{ uiLabels.errorIdNotExist }}
+      {{ uiLabels.errorIdNotExist }}
     </p>
     <p v-if="errorIdNotJoinable == true" style="color: red">
-        {{ uiLabels.errorIdNotJoinable }}
+      {{ uiLabels.errorIdNotJoinable }}
     </p>
     <p v-if="errorIdEmpty == true" style="color: red">
-        {{ uiLabels.errorIdEmpty }}
+      {{ uiLabels.errorIdEmpty }}
     </p>
 
   </div>
@@ -99,39 +99,37 @@ export default {
         this.isNotEmpty = true;
       }
 
-    setTimeout(() => {
-      if (!this.isNotEmpty) {
-        this.errorIdEmpty = true;
-        this.errorIdNotExist = false;
-        this.errorIdNotJoinable = false;
-      }
-      else {
-        this.errorIdEmpty = false;
-
-        if (!this.isExisting) {
-        this.errorIdNotExist = true;
+      setTimeout(() => {
+        if (!this.isNotEmpty) {
+          this.errorIdEmpty = true;
+          this.errorIdNotExist = false;
+          this.errorIdNotJoinable = false;
         }
         else {
-          this.errorIdNotExist = false;
+          this.errorIdEmpty = false;
 
-          if (!this.isJoinable) {
-            this.errorIdNotJoinable = true;
+          if (!this.isExisting) {
+            this.errorIdNotExist = true;
           }
           else {
-            this.errorIdNotJoinable = false;
+            this.errorIdNotExist = false;
+
+            if (!this.isJoinable) {
+              this.errorIdNotJoinable = true;
+            }
+            else {
+              this.errorIdNotJoinable = false;
+            }
           }
         }
+        if (this.isExisting && this.isJoinable && this.isNotEmpty) {
+          this.errorIdNotExist = false;
+          this.errorIdNotJoinable = false;
+          this.errorIdEmpty = false;
+          this.$router.push('/EnterNameView/' + this.pollId);
+        }
+      }, 100);
 
-      }
-
-      if (this.isExisting && this.isJoinable && this.isNotEmpty) {
-        this.errorIdNotExist = false;
-        this.errorIdNotJoinable = false;
-        this.errorIdEmpty = false;
-        this.$router.push('/EnterNameView/' + this.pollId);
-      }
-    }, 100);
-      
     },
     exitCreatorMode() {
       this.$router.push('/');

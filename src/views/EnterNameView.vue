@@ -12,7 +12,7 @@
   </header>
 
   <p> {{ uiLabels.enterNameDescription }} </p>
-  <input type="text" v-model="participantName" v-on:keydown.enter="joinPoll"/>
+  <input type="text" v-model="participantName" v-on:keydown.enter="joinPoll" />
 
   <div>
     <button id="playButton" v-on:click="joinPoll">
@@ -23,6 +23,9 @@
     </p>
     <p v-if="errorNameExistsMessage == true" style="color: red">
       {{ uiLabels.errorNameExistsMessage }}
+    </p>
+    <p v-if="waitingMessage == true" style="color: red">
+      {{ uiLabels.waitingMessage }}
     </p>
   </div>
 </template>
@@ -47,7 +50,8 @@ export default {
       errorNameExistsMessage: false,
       participants: "",
       pollId: "",
-      isActive: false
+      isActive: false,
+      waitingMessage: false
     }
   },
 
@@ -92,40 +96,37 @@ export default {
       socket.emit("checkActive", this.pollId)
       socket.emit("getParticipants", this.pollId)
 
-      console.log(this.errorNameEmptyMessage, this.errorNameExistsMessage)
-      console.log([this.participants], this.participantName)
-
       setTimeout(() => {
         this.errorNameExistsMessage = false;
 
-        console.log([this.participants])
-
         for (let i = 0; i < this.participants.length; i++) {
           if (this.participants[i] === this.participantName) {
-          this.errorNameExistsMessage = true;
-          break;
+            this.errorNameExistsMessage = true;
+            break;
           }
         }
 
         if (this.participantName === "") {
-          console.log("empty name")
           this.errorNameEmptyMessage = true;
         }
         else {
           this.errorNameEmptyMessage = false;
         }
 
-        console.log(this.errorNameEmptyMessage, this.errorNameExistsMessage)
-
         if (!this.errorNameEmptyMessage && !this.errorNameExistsMessage) {
-          console.log("send off!")
-          socket.emit('joinPoll', {pollId: this.pollId, participantName: this.participantName })
           this.errorNameEmptyMessage = false;
 
           if (this.isActive) {
-            this.$router.push(`/JPollView/${this.pollId}/${this.participantName}`)
+            this.waitingMessage = true;
+            socket.on('goToBoard', () => {
+              this.waitingMessage = false;
+              socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName });
+              this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`);
+            });
           }
           else {
+            this.waitingMessage = false;
+            socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
             this.$router.push(`/WaitingRoom/${this.pollId}/${this.participantName}`);
           }
         }

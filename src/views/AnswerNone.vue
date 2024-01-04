@@ -33,14 +33,15 @@
         });
 
         socket.on('goToBoard', () => {
-        this.goToBoard();
+          this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
+        });
+
+        socket.on("goToWinnerView", () => {
+          this.$router.push(`/WinnerView/${this.pollId}`);
         });
 
       },
       methods: {
-        goToBoard() {
-          this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
-        },
         exitCreatorMode() {
           this.$router.push('/');
         }

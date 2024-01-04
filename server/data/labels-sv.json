@@ -50,7 +50,7 @@
 	"hostViewTitle": "Vilket quiz vill du vara värd för?",
 	"editViewTitle": "Vilket quiz vill du redigera?",
 	"editThePoll": "Redigera",
-	"players": "Spelare:",
+	"players": "Spelare",
 	"yourAnswer": "Ditt svar:",
 	"noCategoryTitle": "Ingen kategori titel",
 	"noQuestion": "Ingen fråga",
@@ -82,6 +82,9 @@
 	"questionResult": "FRÅGERESULTAT",
 	"correctAnswerWas": "Rätt svar var",
 	"waitingPlayersJoin": "VÄNTAR FÖR SPELARE ATT GÅ MED",
-	"moneyInBank": "Pengar på bankkontot"
+	"moneyInBank": "Pengar på bankkontot",
+	"scanToJoin": "Skanna QR-koden för att gå med",
+	"pausePlayMusic": "Pausa/Spela musik",
+	"waitingMessage": "Host har redan börjat spel, vänta tills spelarna har avslutat frågerundan"
 }
 	
