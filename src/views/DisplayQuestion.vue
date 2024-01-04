@@ -1,68 +1,79 @@
 <template>
-    <body>
+  <body>
+
+    <div>
+      <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
+    </div>
+
+    <header>
+      {{ uiLabels.questionIs }}
+      <h1> {{ question }} </h1>
+      <h2> {{ hiddenAnswer }}</h2>
+
+      <h3> {{ uiLabels.youHave }} {{ countdown }} {{ uiLabels.secondsLeft }} </h3>
+
+    </header>
+  </body>
+</template>
   
-        <div>
-          <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-        </div>
-  
-        <header>
-          {{ uiLabels.questionIs }}
-          <h1> {{ question }} </h1> 
+<script>
+import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
-          <h3> {{ uiLabels.youHave }} {{ countdown }} {{ uiLabels.secondsLeft }} </h3>
-          
-        </header>
-    </body>
-  </template>
-  
-    <script>
-    import io from 'socket.io-client';
-    const socket = io(sessionStorage.getItem("ipAdressSocket"));
-    
-    export default {
-      name: 'DisplayQuestion',
-      data: function () {
-        return {
-          uiLabels: {},
-          pollId: "",
-          lang: localStorage.getItem("lang") || "en",
-          row: "",
-          col: "",
-          question: "",
-          countdown: 20,
-        }
-      },
-      created: function () {
-        this.pollId = this.$route.params.pollId
-        this.row = this.$route.params.row
-        this.col = this.$route.params.col
+export default {
+  name: 'DisplayQuestion',
+  data: function () {
+    return {
+      uiLabels: {},
+      pollId: "",
+      lang: localStorage.getItem("lang") || "en",
+      row: "",
+      col: "",
+      question: "",
+      correctAnswer: "",
+      hiddenAnswer: "",
+      countdown: 20,
+      countdownInterval: null
+    }
+  },
+  created: function () {
+    this.pollId = this.$route.params.pollId
+    this.row = this.$route.params.row
+    this.col = this.$route.params.col
 
-        socket.emit("resetAnswerCount", this.pollId);
+    socket.on('correctAnswer', (correctAnswer) => {
+      this.correctAnswer = correctAnswer;
+      this.hiddenAnswer = correctAnswer.replace(/[^ ]/g, '_')
+    });
 
-        socket.emit("pageLoaded", this.lang);
-        socket.on("init", (labels) => {
-          this.uiLabels = labels;
-        });
+    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
 
-        socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
+    // socket.emit("resetAnswerCount", this.pollId);
 
-        socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
+    socket.emit("pageLoaded", this.lang);
+    socket.on("init", (labels) => {
+      this.uiLabels = labels;
+    });
 
-        socket.on('questionChosen', (question) => {
-          console.log("question chosen", question)
-          this.question = question;
-        });
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
-        socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
+    socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
 
-        socket.on('hasAllAnswered', () => {
-          setTimeout(() => {
-            console.log("all jas answered registered")
-          socket.emit('allParticipantsGoToAnswerResult', this.pollId);
-          this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
-          // returns true if all have answered
-        }, 1000);
-        });
+    socket.on('questionChosen', (question) => {
+      console.log("question chosen", question)
+      this.question = question;
+    });
+
+    socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
+
+    socket.on('hasAllAnswered', () => {
+      clearInterval(this.countdownInterval);
+      setTimeout(() => {
+        console.log("all answered registered")
+        socket.emit('allParticipantsGoToAnswerResult', this.pollId);
+        this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
+      }, 100);
+    });
 
         this.startCountdown();
         
@@ -88,33 +99,16 @@
           this.countdown--;
           this.countdownSize -= 0.1; // Adjust the rate of size decrease as per your preference
         } else {
-          clearInterval(countdownInterval);
+          clearInterval(this.countdownInterval);
           socket.emit('allParticipantsGoToAnswerResult', this.pollId);
           this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
         }
       }, 1000); // Update every 1000ms (1 second)
     },
-        exitCreatorMode() {
-          this.$router.push('/');
-        }
-      }
+    exitCreatorMode() {
+      socket.emit("updateJoinable", { pollId: this.pollId, makeJoinable: false });
+      this.$router.push('/');
     }
-  </script>
-
-  <style>
-
-.countdown-large {
-  font-size: 3em; /* Change the font size as per your requirement */
-  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
+  }
 }
-
-.countdown-medium {
-  font-size: 2em; /* Change the font size as per your requirement */
-  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
-}
-
-.countdown-small {
-  font-size: 1em; /* Change the font size as per your requirement */
-  transition: font-size 0.5s ease-in-out; /* Add a smooth transition effect */
-}
-</style>
+</script>

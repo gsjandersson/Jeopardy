@@ -141,3 +141,11 @@ button:hover {
   justify-content: center;
   margin: 5px;
 }
+
+#musicButton {
+  position: absolute;
+  top: 15px; /* Position at the top of the viewport */
+  left: 135px; /* Position at the right of the viewport */
+  width: 110px; /* Adjust the width as needed */
+  height: 50px; /* Maintain the aspect ratio of the image */
+}

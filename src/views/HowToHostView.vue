@@ -49,12 +49,7 @@
       return {
         uiLabels: {}, // Object for storing UI labels
         pollId: "", // Input for poll ID
-        lang: localStorage.getItem("lang") || "en", // Language setting
-        errorIdMessage: false,
-        errorCategoryNo: false,
-        errorQuestionNo: false,
-        categoryNo: 5,
-        questionNo: 5
+        lang: localStorage.getItem("lang") || "en" // Language setting
       }
     },
   
@@ -70,14 +65,6 @@
         this.uiLabels = labels
       })
   
-      // Listen for data updates from the server
-      socket.on("dataUpdate", (data) =>
-        this.data = data
-      )
-  
-      // Listen for the event when a poll is created
-      socket.on("pollCreated", (data) =>
-        this.data = data)
     },
     // Methods for language switching and toggling the navigation menu
     methods: {

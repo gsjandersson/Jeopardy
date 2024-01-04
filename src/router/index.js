@@ -91,7 +91,7 @@ const router = createRouter({
       name: 'DisplayQuestion',
       component: () => import('../views/DisplayQuestion.vue')
     },
-    { 
+    {
       path: '/QuestionResultView/:pollId/:row/:col',
       name: 'QuestionResultView',
       component: () => import('../views/QuestionResultView.vue')
@@ -100,6 +100,16 @@ const router = createRouter({
       path: '/WaitingRoom/:pollId/:participantName',
       name: 'WaitingRoom',
       component: () => import('../views/WaitingRoom.vue')
+    },
+    { 
+      path: '/SubmitView/:pollId/:participantName/:row/:col',
+      name: 'SubmitView',
+      component: () => import('../views/SubmitView.vue')
+    },
+    { 
+      path: '/WinnerView/:pollId',
+      name: 'WinnerView',
+      component: () => import('../views/WinnerView.vue')
     }
   ]
 });

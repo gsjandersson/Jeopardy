@@ -42,24 +42,24 @@
 // Importing components and libraries
 import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
-sessionStorage.setItem("ipAdressSocket", "192.168.2.43:3000");
-sessionStorage.setItem("ipAdress", "192.168.2.43");
+
+// här är min IP 192.168.1.155
+const ipAdress = "192.168.2.182";
+sessionStorage.setItem("ipAdress", ipAdress);
+sessionStorage.setItem("ipAdressSocket", ipAdress + ":3000");
+
 // sessionStorage.setItem("ipAdressSocket", "localhost:3000");
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components
   name: 'JStartView',
-  components: {
-    ResponsiveNav
-  },
 
   // Initial data properties
   data: function () {
     return {
       uiLabels: {}, // Object for storing UI labels
-      lang: localStorage.getItem("lang") || "en", // Language setting
-      hideNav: true // Flag for hiding the navigation menu
+      lang: localStorage.getItem("lang") || "en" // Language setting
     }
   },
 

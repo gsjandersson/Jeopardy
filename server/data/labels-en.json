@@ -49,7 +49,7 @@
 	"hostViewTitle": "Which quiz are you hosting?",
 	"editViewTitle": "Which quiz are you editing?",
 	"editThePoll": "Edit",
-	"players": "Players:",
+	"players": "Players",
 	"yourAnswer": "Your answer:",
 	"noCategoryTitle": "No category name",
 	"noQuestion": "No question",
@@ -82,5 +82,8 @@
 	"questionResult": "QUESTION RESULT",
 	"correctAnswerWas": "The correct answer was",
 	"waitingPlayersJoin": "WAITING FOR PLAYERS TO JOIN",
-	"moneyInBank": "Money in the bank"
+	"moneyInBank": "Money in the bank",
+	"scanToJoin": "Scan the QR code to join",
+	"pausePlayMusic": "Pause/Play Music",
+	"waitingMessage": "Host has already started the game, please wait until the players have finished the question round"
 }

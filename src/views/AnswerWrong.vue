@@ -1,7 +1,7 @@
 <template>
   <div id="answer-box-wrong">
     <h1>{{ uiLabels.wrong }}</h1>
-    <p>{{ uiLabels.noMoneyForYou }}: ${{100*(1+parseInt(row))}}</p>
+    <p>{{ uiLabels.noMoneyForYou }}: ${{ (100 * (1 + parseInt(row, 10))) }}</p>
   </div>  
 </template>
 
@@ -34,6 +34,10 @@
 
         socket.on('goToBoard', () => {
         this.goToBoard();
+        });
+
+        socket.on("goToWinnerView", () => {
+          this.$router.push(`/WinnerView/${this.pollId}`);
         });
     },
     methods: {
