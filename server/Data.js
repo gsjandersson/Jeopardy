@@ -31,7 +31,6 @@ Data.prototype.getUILabels = function (lang = "en") {
 }
 
 Data.prototype.createTestQuiz = function () {
-  console.log(typeof this.polls["testquiz"])
   if (typeof this.polls["testquiz"] === "undefined") {
   console.log("data create test quiz")
   let poll = {};
@@ -121,7 +120,6 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
 
 Data.prototype.allQuestionsCompleted = function (pollId) {
   const poll = this.polls[pollId];
-  console.log(poll.questions)
   if (typeof poll !== 'undefined') {
     for (let i = 0; i < poll.questions.length; i++) {
       for (let j = 0; j < poll.questions[i].length; j++) {
@@ -172,6 +170,28 @@ Data.prototype.submitAnswer = function (pollId, participantName, answer) {
   }
 }
 
+Data.prototype.checkParticipantAnswerCorrect = function (pollId, participantName, row, col) {
+  const part = this.participants[pollId];
+  const poll = this.polls[pollId];
+
+  let submittedAnswer = part.answers[participantName];
+  let correctAnswer = poll.questions[row][col].answer;
+
+  submittedAnswer = submittedAnswer.toLowerCase();
+  const submittedAnswerEdited = submittedAnswer.replace(/\s/g, '');
+
+  correctAnswer = correctAnswer.toLowerCase();
+  const correctAnswerEdited = correctAnswer.replace(/\s/g, '');
+
+  if (correctAnswerEdited === submittedAnswerEdited) {
+    this.updateCashTotal(pollId, participantName, row, col);
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 // Method to get answers for the current question in a poll
 Data.prototype.getParticipantAnswer = function (pollId, participantName) {
   const part = this.participants[pollId];
@@ -212,7 +232,6 @@ Data.prototype.getParticipants = function (pollId) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     const allParticipants = part.allParticipants;
-    console.log("data getparticipants", allParticipants)
     return allParticipants;
   }
 }
@@ -245,7 +264,7 @@ Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     console.log("money added", (100 * (1 + parseInt(row, 10))))
-    console.log("row number" + row)
+    console.log("row number " + row)
     part.cashTotal[partName] += (100 * (1 + parseInt(row, 10)));
   }
 }

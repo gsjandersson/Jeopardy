@@ -73,7 +73,7 @@ export default {
 
     socket.on('goToAnswerResult', () => {
       if (!this.answerSubmitted) {
-        socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: this.answer });
+        socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: "" });
         this.$router.push(`/AnswerNone/${this.pollId}/${this.participant}/${this.row}`);
       }
       
@@ -92,14 +92,7 @@ export default {
         console.log("answer submitted");
         this.answerSubmitted = true;
 
-        console.log("pollId " + this.pollId);
-        console.log("participantName " + this.participant);
-        console.log("answer " + this.answer);
-        console.log("row " + this.row);
-        console.log("col " + this.col);
-
         socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: this.answer });
-
         this.$router.push(`/SubmitView/${this.pollId}/${this.participant}/${this.row}/${this.col}`);
       }
     }

@@ -57,6 +57,12 @@ function sockets(io, socket, data) {
   });
 
   ////////////////// UPDATERADE (SMÅ EMITS) ///////////////////////
+  socket.on("checkParticipantAnswerCorrect", function (d) {
+    const isCorrect = data.checkParticipantAnswerCorrect(d.pollId, d.participantName, d.row, d.col);
+    socket.emit("isParticipantAnswerCorrect", isCorrect);
+  });
+
+
   socket.on('editQuestion', function (d) {
     data.editQuestion(d.pollId, d.row, d.col, d.question, d.answer);
     socket.emit('allQuestions', data.retrieveQuestions(d.pollId));
@@ -67,7 +73,6 @@ function sockets(io, socket, data) {
     socket.emit('allQuestions', data.retrieveCategories(d.pollId));
   });
 
-  ////////////////// ANNAT VIKTIGT ///////////////////////
   socket.on('createPoll', function (d) {
     socket.emit('pollCreated', data.createPoll(d.pollId, d.lang, d.questionNo, d.categoryNo));
   });
@@ -85,7 +90,6 @@ function sockets(io, socket, data) {
   });
 
   socket.on('submitAnswer', function (d) {
-    console.log("socket submit answer", d.participantName, d.answer)
     data.submitAnswer(d.pollId, d.participantName, d.answer);
   });
 
