@@ -189,8 +189,11 @@ export default {
     // Autogenerera quiz
     autoGenerateQuiz() {
       this.autoGenerateButtonText = this.uiLabels.quizIsBeingGenerated;
+      const topic = this.quizTopic;
+
       socket.emit("autoGenerateQuiz", {
-        pollId: this.autoPollId, lang: this.lang
+        pollId: this.autoPollId, lang: this.lang, topic: topic, questionNo: this.questionNo,
+        categoryNo: this.categoryNo
       });
     },
   }

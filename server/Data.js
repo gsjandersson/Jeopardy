@@ -8,6 +8,7 @@ import { writeFileSync } from 'fs';
 import { promises } from 'fs';
 import OpenAI from 'openai';
 import { config } from 'dotenv';
+import e from 'express';
 config();
 
 // Data class constructor
@@ -39,8 +40,8 @@ Data.prototype.getUILabels = function (lang = "en") {
 Data.prototype.createTestQuiz = function () {
   console.log(typeof this.polls["testquiz"])
   if (typeof this.polls["testquiz"] === "undefined") {
-  console.log("data create test quiz")
-  let poll = {};
+    console.log("data create test quiz")
+    let poll = {};
     poll.lang = "en";
     poll.questions = [
       [
@@ -107,7 +108,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
       numberAnswers: 0
     }))),
       // ha koll på completed
-    poll.categories = Array.from({ length: categoryNo }, () => "");
+      poll.categories = Array.from({ length: categoryNo }, () => "");
     poll.isJoinable = false;
     poll.isActive = false;
     this.polls[pollId] = poll;
@@ -120,7 +121,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.answers = {};
     this.participants[pollId] = participantData;
 
-    console.log("poll created", pollId);
+    console.log("poll created", pollId, poll);
   }
   return this.polls[pollId];
 }
@@ -335,7 +336,7 @@ Data.prototype.updateAutoPollId = function () {
   if (!this.usedNumbers) {
     this.usedNumbers = new Set();
   }
-  
+
   let newNumber;
   do {
     newNumber = Math.floor(Math.random() * 100000) + 1;
@@ -355,7 +356,7 @@ Data.prototype.participantAnswerRegistered = function (pollId, row, col) {
     poll.questions[row][col].numberAnswers += 1
     const numberAnswers = poll.questions[row][col].numberAnswers
     if (numberAnswers == part.allParticipants.length) {
-      return(true);
+      return (true);
     }
   }
   return (false);
@@ -408,11 +409,15 @@ Data.prototype.isActive = function (pollId) {
   }
 }
 
-Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
+Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionNo, categoryNo) {
+  console.log("topic:", topic)
   let poll = {};
   poll.lang = lang;
-  let questionNo = 2;
-  let categoryNo = 2;
+  console.log("lang:", lang)
+  let prompt;
+  let systemMessage;
+  let questions;
+  let categories;
 
   poll.isJoinable = false;
   poll.isActive = false;
@@ -422,41 +427,70 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  const jsonStructure = Array.from({ length: categoryNo }, () => ({
-    category: "",
-    questions: Array.from({ length: questionNo }, () => ({
-      question: "",
-      answer: ""
+  const jsonStructure = {
+    categories: Array.from({ length: categoryNo }, () => ({
+      category: "",
+      questions: Array.from({ length: questionNo }, () => ({
+        question: "",
+        answer: "",
+        completed: false
+      }))
     }))
-  }));
+  };
+
+  console.log('jsonStructure: ', jsonStructure)
 
 
   // Convert the JSON structure to a string
   const jsonString = JSON.stringify(jsonStructure);
 
-  // Define the prompt with the JSON structure
-  const prompt = `FIll this with categories and questions and answers related to the respective category. The answers to the questions should be short and simple to answer: ${jsonString}`;
+  if (lang === "en") {
+
+    prompt = `FIll this with categories, questions and answers related to the respective category based on this topic: ${topic}. 
+    The answers to the questions should be very short and simple to answer in text format: ${jsonString}. 
+    Do not change "completed": false to "completed": true. Do not add more than ${questionNo} questions per category. 
+    Do not add more than ${categoryNo} categories. Do not change the string "categories" or "questions" or "category".`;
+
+    systemMessage = "You output JSON.";
+
+  } else if (lang === "sv") {
+    prompt = `Fyll detta med kategorier, frågor och svar relaterade till respektive kategori 
+    baserat på detta ämne: ${topic}. Svaren på frågorna bör vara mycket korta och enkla 
+    att svara på i textformat: ${jsonString}. 
+    Ändra inte "completed": false till "completed": true. Lägg inte till mer än ${questionNo} frågor per kategori. 
+    Lägg inte till mer än ${categoryNo} kategorier. Ändra inte strängen "categories" eller "questions" eller "category".`; ''
+
+    systemMessage = "Du matar ut JSON.";
+  }
 
   // Generate quiz questions and answers
   try {
     console.log("1");
-    const response = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You output JSON.",
-        },
-        { role: "user", content: prompt },
-      ],
-      model: "gpt-4-1106-preview",
-      response_format: { type: "json_object" },
-    });
+    console.time("timer");
+
+    const response = await Promise.race([
+      openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: systemMessage,
+          },
+          { role: "user", content: prompt },
+        ],
+        model: "gpt-4-1106-preview",
+        response_format: { type: "json_object" },
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out')), 90000)
+      )
+    ]);
+
+    console.timeEnd("timer");
     console.log("2");
 
     // Extract the assistant's response from the API response
     const assistantResponse = response.choices[0].message.content;
 
-    // Log assistantResponse to the console
     console.log('assistantResponse:', assistantResponse);
 
     // Parse the assistant's response as JSON
@@ -465,9 +499,35 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
     // Now you can use assistantData as needed
     console.log('assistantData: ', assistantData);
 
+    if (assistantData.categories) {
+      // Extract categories from assistantData.data
+      categories = assistantData.categories.map(category => category.category);
+      questions = assistantData.categories.map(category => category.questions);
+
+      console.log('questions: ', questions);
+      console.log('categories: ', categories);
+
+      let restructuredQuestions = [];
+
+      questions[0].forEach((_, i) => {
+        restructuredQuestions[i] = questions.map(question => question[i]);
+      });
+
+      questions = restructuredQuestions;
+
+      console.log("restructured questions: ", poll.questions);
+    } else {
+      console.log('Error: assistantData.categories is undefined');
+    }
+
   } catch (error) {
     console.error('Error: AI querying unsuccessful', error);
   }
+
+  poll.questions = questions;
+  poll.categories = categories;
+
+  console.log("poll.questions: ", poll.questions);  // Array of questions
 
   let participantData = {};
   participantData.cashTotal = {};
