@@ -42,7 +42,7 @@ export default {
     this.pollId = this.$route.params.pollId
     this.participantName = this.$route.params.participantName
 
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
 
     socket.on('participantUpdate', (participants) => {
       this.participants = participants;

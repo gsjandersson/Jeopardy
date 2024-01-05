@@ -19,7 +19,7 @@
     "openai": "^4.23.0",
     "qrcode": "^1.5.3",
     "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2",
+    "socket.io-client": "^4.7.3",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },

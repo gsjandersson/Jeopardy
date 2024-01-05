@@ -48,14 +48,14 @@
     created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
     socket.emit("pageLoaded", this.lang);
+
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     });
-    socket.on('existingPoll', (isExisting) => {
-        this.isExisting = isExisting
-        console.log(isExisting, this.isExisting)
-        }
-      )
+
+    socket.on('isExisting', (isExisting) => {
+        this.isExisting = isExisting;
+    });
 
   },
   

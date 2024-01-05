@@ -85,6 +85,7 @@
 	"moneyInBank": "Money in the bank",
 	"scanToJoin": "Scan the QR code to join",
 	"pausePlayMusic": "Pause/Play Music",
+	"quizTopic": "Quiz topic for autogeneration",
 	"waitingMessage": "Host has already started the game, please wait until the players have finished the question round",
 	"closeButton": "Save and Close"
 }

@@ -22,16 +22,12 @@
   
 <script>
 // Importing components and libraries
-import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components
-  name: 'JCreateInfo',
-  components: {
-    ResponsiveNav
-  },
+  name: 'WinnerView',
 
   // Initial data properties
   data: function () {
@@ -60,63 +56,12 @@ export default {
 
     socket.emit('getParticipantsAndCashTotal', (this.pollId))
 
-    socket.emit('getParticipantTurn', (this.pollId))
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
     exitCreatorMode() {
       this.$router.push('/');
-    },
-    switchLanguageEnglish: function () {
-      if (this.lang === "sv") {
-        this.lang = "en"
-      }
-      localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
-    },
-    switchLanguageSwedish: function () {
-      if (this.lang === "en") {
-        this.lang = "sv"
-      }
-      localStorage.setItem("lang", this.lang);
-      socket.emit("switchLanguage", this.lang)
-    },
-
-    createPoll: function () {
-      if (this.pollId !== "" && this.categoryNo > 0 && this.questionNo > 0) {
-        this.errorIdMessage = false;
-        this.errorCategoryNo = false;
-        this.errorQuestionNo = false;
-        socket.emit("createPoll", {
-          pollId: this.pollId, lang: this.lang,
-          questionNo: this.questionNo, categoryNo: this.categoryNo
-        });
-        this.$router.push('/BoardViewSteph/' + this.pollId);
-      }
-      if (this.pollId === "") {
-        this.errorIdMessage = true;
-      }
-      else {
-        this.errorIdMessage = false;
-      }
-
-      if (this.categoryNo < 1 || this.categoryNo === "") {
-        this.errorCategoryNo = true;
-      }
-      else {
-        this.errorCategoryNo = false;
-      }
-
-      if (this.questionNo < 1 || this.questionNo === "") {
-        this.errorQuestionNo = true;
-      }
-      else {
-        this.errorQuestionNo = false;
-      }
-    },
-    exitCreatorMode() {
-      this.$router.push('/');
-    },
+    }
   }
 }
 </script>

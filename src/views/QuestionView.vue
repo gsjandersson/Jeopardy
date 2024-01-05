@@ -55,32 +55,25 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    socket.on('correctAnswer', (correctAnswer) => {
-      this.correctAnswer = correctAnswer;
-      this.hiddenAnswer = correctAnswer.replace(/[^ ]/g, '_');
-    });
-
-    // Emit an event to the server when the page is loaded
-    socket.emit("pageLoaded", this.lang);
-
-    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
-
-    // Listen for initialization data from the server
     socket.on("init", (labels) => {
       this.uiLabels = labels
     });
 
+    socket.emit("pageLoaded", this.lang);
+
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
-    socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
-
-    socket.on('questionChosen', (question) => {
-      this.question = question;
+    socket.on("questionViewData", (d) => {
+      this.question = d.question;
+      this.correctAnswer = d.correctAnswer;
+      this.hiddenAnswer = d.correctAnswer.replace(/[^ ]/g, '_');
     });
+
+    socket.emit("getQuestionViewData", { pollId: this.pollId, row: this.row, col: this.col });
 
     socket.on('goToAnswerResult', () => {
       if (!this.answerSubmitted) {
-        socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: this.answer });
+        socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: "" });
         this.$router.push(`/AnswerNone/${this.pollId}/${this.participant}/${this.row}`);
       }
       
@@ -99,14 +92,7 @@ export default {
         console.log("answer submitted");
         this.answerSubmitted = true;
 
-        console.log("pollId " + this.pollId);
-        console.log("participantName " + this.participant);
-        console.log("answer " + this.answer);
-        console.log("row " + this.row);
-        console.log("col " + this.col);
-
         socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: this.answer });
-
         this.$router.push(`/SubmitView/${this.pollId}/${this.participant}/${this.row}/${this.col}`);
       }
     }

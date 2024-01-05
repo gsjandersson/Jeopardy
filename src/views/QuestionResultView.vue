@@ -22,11 +22,13 @@
 </template>
   
 <script>
+import { set } from 'express/lib/application';
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   name: 'QuestionResultView',
+  
   data: function () {
     return {
       uiLabels: {},
@@ -38,7 +40,8 @@ export default {
       correctAnswer: "",
       countdown: 10,
       participantsAndCashTotal: [],
-      hasQuestionsCompleted: false
+      hasQuestionsCompleted: false,
+      countdownInterval: null
     }
   },
   created: function () {
@@ -46,39 +49,35 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
+    console.log("---------question result view:---------")
+    console.log("pollId: " + this.pollId)
+    console.log("row: " + this.row)
+    console.log("col: " + this.col)
+    console.log("-------question result view end-------")
 
-    socket.emit("pageLoaded", this.lang);
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     });
 
-    socket.on("questionsCompleted", (hasQuestionsCompleted) => {
+    socket.emit("pageLoaded", this.lang);
+
+    socket.on("questionResultViewData", (data) => {
+      this.question = data.question;
+      this.correctAnswer = data.correctAnswer;
+      this.participantsAndCashTotal = data.participantsAndCashTotal
+    });
+
+    socket.emit("getQuestionResultViewData", { pollId: this.pollId, row: this.row, col: this.col });
+
+    //// here we see if we should continue the game or go to the next players turn ////
+    socket.on("hasAllQuestionsCompleted", (hasQuestionsCompleted) => {
       this.hasQuestionsCompleted = hasQuestionsCompleted;
     });
 
-    socket.on('correctAnswer', (correctAnswer) => {
-      console.log("correct answer", correctAnswer);
-      this.correctAnswer = correctAnswer;
-    });
-
-    socket.on('participantsAndCashTotal', (participantsAndCashTotal) => {
-      this.participantsAndCashTotal = participantsAndCashTotal
-    });
-
-    socket.emit('getParticipantsAndCashTotal', (this.pollId))
-
-    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
-
-    socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
-
-    socket.on('questionChosen', (question) => {
-      console.log("question chosen", question)
-      this.question = question;
-    });
-
-    socket.emit("allQuestionsCompleted", this.pollId)
+    socket.emit("checkHasAllQuestionsCompleted", this.pollId)
+    ///////////////////////////////
 
     this.startCountdown();
 
@@ -86,12 +85,12 @@ export default {
 
   methods: {
     startCountdown() {
-      const countdownInterval = setInterval(() => {
+      this.countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
         }
         else {
-          clearInterval(countdownInterval);
+          clearInterval(this.countdownInterval);
 
           if (this.hasQuestionsCompleted) {
             socket.emit('allParticipantsGoToWinnerView', this.pollId);
