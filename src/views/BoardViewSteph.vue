@@ -16,20 +16,17 @@
         <div class="jeopardy-row">
           <div v-for="(category, index) in categories" :key="index"
             :style="{ width: `calc(90vw / ${categories.length})` }" class="jeopardy-square"
-            @click="handleCategoryClick(index)">
-            <custom-prompt
-      v-if="showCustomPrompt"
-      :promptTitle="lang === 'en' ? 'Enter the Question' : 'Skriv frågan'"
-      :showPrompt="showCustomPrompt"
-      :lang="lang"
-      @submitted="handleCustomPromptSubmission"
-    ></custom-prompt>
+            @click="showCategoryModal(index)">
+
             <div v-if="!category">
               <p> {{ uiLabels.boardViewCategoryBox }} </p>
             </div>
             <div v-else>
               <div>{{ category }}</div>
             </div>
+            <categoryModal v-show="isCategoryModalVisible" :isCategoryModalVisible="isCategoryModalVisible" />
+              
+               <!-- @close="closeModal"  ska denna med?-->
           </div>
         </div>
 
@@ -40,7 +37,9 @@
         <!-- Display Jeopardy board content, gör istället en komponent mha questionskompent, vi ska göra en egen component med all styling etc, klickhantering och layout i kompknent-->
         <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
-            :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleQuestionClick(indexRow, indexCol)">
+            :style="{ width: `calc(90vw / ${categories.length})` }" 
+            @click="showQuestionModal(indexRow, indexCol)">
+            <!-- @click="handleQuestionClick(indexRow, indexCol)"> -->
             <div v-if="!col.question">
               <p>{{ uiLabels.boardViewQuestionBox }}</p>
             </div>
@@ -48,19 +47,30 @@
               <div>Q: {{ col.question }}</div>
               <div>A: {{ col.answer }}</div>
             </div>
+            <questionModal
+                v-show="isQuestionModalVisible"
+              />
           </div>
         </div>
       </div>
-    </main>
-
+    </main> 
   </body>
 </template>
+
 
 <script>
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
+import categoryModal from '../components/CategoryModal.vue'; // agnes ny
+import questionModal from '../components/QuestionsModal.vue'; // agnes ny
+
 
 export default {
+  components: {
+      categoryModal,
+      questionModal,
+    },
+
   data: function () {
     return {
       // Initial data properties
@@ -69,7 +79,10 @@ export default {
       pollId: "",
       questionNumber: { questionRow: 0, questionColumn: 0 },
       questions: [],
-      categories: []
+      categories: [],
+      isCategoryModalVisible: false,
+      isQuestionModalVisible: false
+
     };
   },
   created: function () {
@@ -97,6 +110,18 @@ export default {
   },
 
   methods: {
+
+    showCategoryModal(colNo) { 
+      this.isCategoryModalVisible = true;
+      },
+      showQuestionModal(indexRow, indexCol) {
+        this.isQuestionModalVisible = true;
+        this.newQuestion = '';
+        this.newAnswer = '';
+      },
+
+/* 
+
     handleQuestionClick(rowNo, colNo) {
       let newQuestion;
       let newAnswer;
@@ -130,7 +155,7 @@ export default {
       if (categoryName !== "") {
         socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: categoryName })
       }
-    },
+    }, */
     exitCreatorMode() {
       this.$router.push('/');
     },

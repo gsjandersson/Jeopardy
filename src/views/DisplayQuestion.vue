@@ -94,7 +94,7 @@ export default {
 
       methods: {
     startCountdown() {
-      const countdownInterval = setInterval(() => {
+      this.countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
           this.countdownSize -= 0.1; // Adjust the rate of size decrease as per your preference
