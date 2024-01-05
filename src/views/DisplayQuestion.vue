@@ -41,27 +41,20 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    socket.on('correctAnswer', (correctAnswer) => {
-      this.correctAnswer = correctAnswer;
-      this.hiddenAnswer = correctAnswer.replace(/[^ ]/g, '_')
-    });
-
-    socket.emit('getCorrectAnswer', { pollId: this.pollId, row: this.row, col: this.col })
-
-    // socket.emit("resetAnswerCount", this.pollId);
-
-    socket.emit("pageLoaded", this.lang);
-    socket.on("init", (labels) => {
-      this.uiLabels = labels;
-    });
-
     socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
-    socket.emit("chosenQuestion", { pollId: this.pollId, questionRow: this.row, questionCol: this.col });
+    socket.emit("getDisplayQuestionData", { pollId: this.pollId, row: this.row, col: this.col });
 
-    socket.on('questionChosen', (question) => {
-      console.log("question chosen", question)
-      this.question = question;
+    socket.on("displayQuestionData", (data) => {
+      this.question = data.question;
+      this.correctAnswer = data.correctAnswer;
+      this.hiddenAnswer = data.correctAnswer.replace(/[^ ]/g, '_');
+    });
+
+    socket.emit("pageLoaded", this.lang);
+
+    socket.on("init", (labels) => {
+      this.uiLabels = labels;
     });
 
     socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
@@ -72,14 +65,14 @@ export default {
         console.log("all answered registered")
         socket.emit('allParticipantsGoToAnswerResult', this.pollId);
         this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
-      }, 100);
+      }, 1000);
     });
 
-        this.startCountdown();
-        
-      },
+    this.startCountdown();
 
-      computed: {
+  },
+
+  computed: {
     countdownClass() {
       // Define classes for different countdown values
       if (this.countdown >= 8) {
@@ -92,9 +85,9 @@ export default {
     }
   },
 
-      methods: {
+  methods: {
     startCountdown() {
-      const countdownInterval = setInterval(() => {
+      this.countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
           this.countdownSize -= 0.1; // Adjust the rate of size decrease as per your preference

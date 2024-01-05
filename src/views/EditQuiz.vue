@@ -26,6 +26,7 @@
     </p>
 
   </template>
+  
   <script>
   import io from 'socket.io-client';
   const socket = io(sessionStorage.getItem("ipAdressSocket"));
@@ -46,7 +47,7 @@
       socket.on("init", (labels) => {
         this.uiLabels = labels;
       });
-      socket.on('existingPoll', (isExisting) => {
+      socket.on('isExisting', (isExisting) => {
         this.isExisting = isExisting;
       });
     },
@@ -71,7 +72,7 @@
         setTimeout(() => {
           if (this.isExisting) {
             this.errorIdMessage = false;
-            this.$router.push('/BoardViewSteph/' + this.pollId);
+            this.$router.push('/BoardView/' + this.pollId);
           } else {
             this.errorIdMessage = true;
           }

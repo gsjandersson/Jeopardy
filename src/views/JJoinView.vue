@@ -59,16 +59,17 @@ export default {
   created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
     socket.emit("pageLoaded", this.lang);
+
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     });
-    socket.on('existingPoll', (isExisting) => {
-      this.isExisting = isExisting
-    }
-    )
-    socket.on('joinablePoll', (isJoinable) => {
+    socket.on('isExisting', (isExisting) => {
+      this.isExisting = isExisting;
+    });
+
+    socket.on('isJoinable', (isJoinable) => {
       this.isJoinable = isJoinable
-    })
+    });
 
   },
 
@@ -100,6 +101,7 @@ export default {
       }
 
       setTimeout(() => {
+
         if (!this.isNotEmpty) {
           this.errorIdEmpty = true;
           this.errorIdNotExist = false;
@@ -128,7 +130,7 @@ export default {
           this.errorIdEmpty = false;
           this.$router.push('/EnterNameView/' + this.pollId);
         }
-      }, 100);
+      }, 200);
 
     },
     exitCreatorMode() {

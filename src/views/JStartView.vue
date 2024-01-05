@@ -40,7 +40,6 @@
 
 <script>
 // Importing components and libraries
-import ResponsiveNav from '@/components/ResponsiveNav.vue';
 import io from 'socket.io-client';
 
 // här är min IP 192.168.1.155

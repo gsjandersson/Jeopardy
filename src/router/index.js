@@ -27,9 +27,9 @@ const router = createRouter({
       component: () => import('../views/EnterNameView.vue')
     },
     { 
-      path: '/BoardViewSteph/:pollId',
-      name: 'BoardViewSteph',
-      component: () => import('../views/BoardViewSteph.vue')
+      path: '/BoardView/:pollId',
+      name: 'BoardView',
+      component: () => import('../views/BoardView.vue')
     },
     { 
       path: '/jJoinView',

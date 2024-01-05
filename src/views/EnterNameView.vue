@@ -66,13 +66,23 @@ export default {
       this.uiLabels = labels;
     });
 
-    socket.on("activePoll", (isActive) => {
+    socket.on("isActive", (isActive) => {
       this.isActive = isActive;
     });
 
     socket.on("participants", (participants) => {
       this.participants = participants;
     });
+
+    ///////////////// DETTA MÅSTE KOLLAS GENOM ///////////////////////
+    //////////////////////////////////////////////////////////////////
+    socket.on('goToBoard', () => {
+      this.waitingMessage = false;
+      socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName });
+      this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`);
+    });
+    //////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////
 
   },
 
@@ -118,11 +128,6 @@ export default {
 
           if (this.isActive) {
             this.waitingMessage = true;
-            socket.on('goToBoard', () => {
-              this.waitingMessage = false;
-              socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName });
-              this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`);
-            });
           }
           else {
             this.waitingMessage = false;

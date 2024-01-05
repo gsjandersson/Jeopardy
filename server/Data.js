@@ -25,12 +25,6 @@ prototype of the Data object/class
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 ***********************************************/
 
-// Method to retrieve questions from a JSON file
-Data.prototype.getQuestions = function () {
-  const questions = readFileSync("./server/data/preparedquestions.json");
-  return JSON.parse(questions);
-}
-
 // Method to retrieve UI labels based on the specified language
 Data.prototype.getUILabels = function (lang = "en") {
   const labels = readFileSync("./server/data/labels-" + lang + ".json");
@@ -38,7 +32,6 @@ Data.prototype.getUILabels = function (lang = "en") {
 }
 
 Data.prototype.createTestQuiz = function () {
-  console.log(typeof this.polls["testquiz"])
   if (typeof this.polls["testquiz"] === "undefined") {
     console.log("data create test quiz")
     let poll = {};
@@ -128,12 +121,9 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
 
 Data.prototype.allQuestionsCompleted = function (pollId) {
   const poll = this.polls[pollId];
-  console.log(poll.questions)
   if (typeof poll !== 'undefined') {
     for (let i = 0; i < poll.questions.length; i++) {
-      console.log(poll.questions[i])
       for (let j = 0; j < poll.questions[i].length; j++) {
-        console.log(poll.questions[i][j])
         if (poll.questions[i][j].completed === false && poll.questions[i][j].question !== '') {
           return false;
         }
@@ -144,21 +134,12 @@ Data.prototype.allQuestionsCompleted = function (pollId) {
   return false;
 }
 
-// Method to add a question to an existing poll
-Data.prototype.addQuestion = function (pollId, q) {
-  const poll = this.polls[pollId];
-  console.log("question added to", pollId, q);
-  if (typeof poll !== 'undefined') {
-    poll.questions.push(q);
-  }
-}
-
 // Method to edit a question in an existing poll
-Data.prototype.editQuestion = function (pollId, row, col, newQuestion) {
+Data.prototype.editQuestion = function (pollId, row, col, question, answer) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
-    poll.questions[row][col].question = newQuestion.q;
-    poll.questions[row][col].answer = newQuestion.a;
+    poll.questions[row][col].question = question;
+    poll.questions[row][col].answer = answer;
   }
 }
 
@@ -190,6 +171,28 @@ Data.prototype.submitAnswer = function (pollId, participantName, answer) {
   }
 }
 
+Data.prototype.checkParticipantAnswerCorrect = function (pollId, participantName, row, col) {
+  const part = this.participants[pollId];
+  const poll = this.polls[pollId];
+
+  let submittedAnswer = part.answers[participantName];
+  let correctAnswer = poll.questions[row][col].answer;
+
+  submittedAnswer = submittedAnswer.toLowerCase();
+  const submittedAnswerEdited = submittedAnswer.replace(/\s/g, '');
+
+  correctAnswer = correctAnswer.toLowerCase();
+  const correctAnswerEdited = correctAnswer.replace(/\s/g, '');
+
+  if (correctAnswerEdited === submittedAnswerEdited) {
+    this.updateCashTotal(pollId, participantName, row, col);
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 // Method to get answers for the current question in a poll
 Data.prototype.getParticipantAnswer = function (pollId, participantName) {
   const part = this.participants[pollId];
@@ -199,7 +202,7 @@ Data.prototype.getParticipantAnswer = function (pollId, participantName) {
   return {};
 }
 
-Data.prototype.retrieveQuestions = function (pollId) {
+Data.prototype.getAllQuestions = function (pollId) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
     const questions = poll.questions;
@@ -208,7 +211,7 @@ Data.prototype.retrieveQuestions = function (pollId) {
   return {};
 }
 
-Data.prototype.retrieveCategories = function (pollId) {
+Data.prototype.getAllCategories = function (pollId) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
     const categories = poll.categories;
@@ -230,7 +233,6 @@ Data.prototype.getParticipants = function (pollId) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     const allParticipants = part.allParticipants;
-    console.log("data getparticipants", allParticipants)
     return allParticipants;
   }
 }
@@ -250,12 +252,6 @@ Data.prototype.checkExisting = function (pollId) {
   return false;
 }
 
-Data.prototype.addParticipantAnswer = function (pollId, participant, answerParticipant) {
-  const part = this.participants[pollId];
-  if (typeof part !== 'undefined') {
-    part.answers[participant] = answerParticipant;
-  }
-}
 
 Data.prototype.getCorrectAnswer = function (pollId, row, col) {
   const poll = this.polls[pollId];
@@ -269,12 +265,12 @@ Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     console.log("money added", (100 * (1 + parseInt(row, 10))))
-    console.log("row number" + row)
+    console.log("row number " + row)
     part.cashTotal[partName] += (100 * (1 + parseInt(row, 10)));
   }
 }
 
-Data.prototype.getCashTotal = function (pollId, partName) {
+Data.prototype.getParticipantCashTotal = function (pollId, partName) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     console.log("data get cash total" + part.cashTotal[partName])
@@ -282,7 +278,7 @@ Data.prototype.getCashTotal = function (pollId, partName) {
   }
 }
 
-Data.prototype.participantTurnOrder = function (pollId) {
+Data.prototype.getParticipantTurn = function (pollId) {
   const part = this.participants[pollId];
   if (part.turnIndex === 0) {
     part.turn = part.allParticipants[0];
@@ -540,6 +536,32 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
 
   return this.polls[pollId];
 }
+
+
+/////////////// TROR INTE DETTA ANVÄNDS ///////////////////////
+/*
+Data.prototype.getQuestions = function () {
+  const questions = readFileSync("./server/data/preparedquestions.json");
+  return JSON.parse(questions);
+}
+
+Data.prototype.addQuestion = function (pollId, q) {
+  const poll = this.polls[pollId];
+  console.log("question added to", pollId, q);
+  if (typeof poll !== 'undefined') {
+    poll.questions.push(q);
+  }
+}
+
+Data.prototype.addParticipantAnswer = function (pollId, participant, answerParticipant) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    part.answers[participant] = answerParticipant;
+  }
+}
+
+
+*/
 
 // Export the Data class for use in other modules
 export { Data };

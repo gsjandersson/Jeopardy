@@ -2,55 +2,43 @@
   <div id="answer-box-wrong">
     <h1>{{ uiLabels.wrong }}</h1>
     <p>{{ uiLabels.noMoneyForYou }}: ${{ (100 * (1 + parseInt(row, 10))) }}</p>
-  </div>  
+  </div>
 </template>
 
-  <script>
-  import io from 'socket.io-client';
-  const socket = io(sessionStorage.getItem("ipAdressSocket"));
-  
-  export default {
-    name: 'AnswerWrong',
-    data: function () {
-        return {
-          uiLabels: {},
-          pollId: "",
-          lang: localStorage.getItem("lang") || "en",
-          row: "",
-          participant: ""
-        }
-      },
-      created: function () {
-        this.pollId = this.$route.params.pollId
-        this.participant = this.$route.params.participantName
-        this.row = this.$route.params.row
+<script>
+import io from 'socket.io-client';
+const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
-        socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
-    
-        socket.emit("pageLoaded", this.lang);
-        socket.on("init", (labels) => {
-          this.uiLabels = labels;
-        });
-
-        socket.on('goToBoard', () => {
-        this.goToBoard();
-        });
-
-        socket.on("goToWinnerView", () => {
-          this.$router.push(`/WinnerView/${this.pollId}`);
-        });
-    },
-    methods: {
-      // Wait for 5 seconds before redirecting to jpollview
-      /*setTimeout(() => {
-        this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
-      }, 3000);*/
-      goToBoard() {
-        this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
-        },
-      exitCreatorMode() {
-        this.$router.push('/');
-      }
+export default {
+  name: 'AnswerWrong',
+  data: function () {
+    return {
+      uiLabels: {},
+      pollId: "",
+      lang: localStorage.getItem("lang") || "en",
+      row: "",
+      participant: ""
     }
+  },
+  created: function () {
+    this.pollId = this.$route.params.pollId
+    this.participant = this.$route.params.participantName
+    this.row = this.$route.params.row
+
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
+
+    socket.emit("pageLoaded", this.lang);
+    socket.on("init", (labels) => {
+      this.uiLabels = labels;
+    });
+
+    socket.on('goToBoard', () => {
+      this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
+    });
+
+    socket.on("goToWinnerView", () => {
+      this.$router.push(`/WinnerView/${this.pollId}`);
+    });
   }
+}
 </script>
