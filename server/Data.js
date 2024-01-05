@@ -411,17 +411,9 @@ Data.prototype.isActive = function (pollId) {
 Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
   let poll = {};
   poll.lang = lang;
-  let questionNo = 5;
-  let categoryNo = 5;
+  let questionNo = 2;
+  let categoryNo = 2;
 
-  poll.questions = Array.from({ length: questionNo }, () => Array.from({ length: categoryNo }, () => ({
-    question: '',
-    answer: '',
-    completed: false,
-    numberAnswers: 0
-  })));
-
-  poll.categories = Array.from({ length: categoryNo }, () => "");
   poll.isJoinable = false;
   poll.isActive = false;
   this.polls[pollId] = poll;
@@ -430,52 +422,20 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  const jsonStructure = {
-    "questions": [
-      [
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false }
-      ],
-      [
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false }
-      ],
-      [
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false }
-      ],
-      [
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false }
-      ],
-      [
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false },
-        { "question": "", "answer": "", "completed": false }
-      ]
-    ],
-    "categories": ["", "", "", "", ""]
-  };
+  const jsonStructure = Array.from({ length: categoryNo }, () => ({
+    category: "",
+    questions: Array.from({ length: questionNo }, () => ({
+      question: "",
+      answer: ""
+    }))
+  }));
+
 
   // Convert the JSON structure to a string
   const jsonString = JSON.stringify(jsonStructure);
 
   // Define the prompt with the JSON structure
-  const prompt = `Fill this with questions, answers and categories: ${jsonString}`;
+  const prompt = `FIll this with categories and questions and answers related to the respective category. The answers to the questions should be short and simple to answer: ${jsonString}`;
 
   // Generate quiz questions and answers
   try {
@@ -484,11 +444,11 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
       messages: [
         {
           role: "system",
-          content: "You are a helpful assistant designed to output JSON.  The answers to the questions should be short and simple to answer",
+          content: "You output JSON.",
         },
         { role: "user", content: prompt },
       ],
-      model: "gpt-3.5-turbo-1106",
+      model: "gpt-4-1106-preview",
       response_format: { type: "json_object" },
     });
     console.log("2");
@@ -503,23 +463,8 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang) {
     const assistantData = JSON.parse(assistantResponse);
 
     // Now you can use assistantData as needed
-    console.log(assistantData);
+    console.log('assistantData: ', assistantData);
 
-    if ('questions' in assistantData) {
-      poll.questions = assistantData.questions;
-
-      // Iterate over the outer array
-      for (const innerArray of poll.questions) {
-        // Iterate over the inner array
-        for (const questionObject of innerArray) {
-          console.log(`Question: ${questionObject.question}`);
-          console.log(`Answer: ${questionObject.answer}`);
-        }
-      }
-    }
-    if ('categories' in assistantData) {
-      poll.categories = assistantData.categories;
-    }
   } catch (error) {
     console.error('Error: AI querying unsuccessful', error);
   }
