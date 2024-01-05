@@ -137,6 +137,7 @@ Data.prototype.allQuestionsCompleted = function (pollId) {
 // Method to edit a question in an existing poll
 Data.prototype.editQuestion = function (pollId, row, col, question, answer) {
   const poll = this.polls[pollId];
+  console.log(question, answer)
   if (typeof poll !== 'undefined') {
     poll.questions[row][col].question = question;
     poll.questions[row][col].answer = answer;
@@ -204,6 +205,7 @@ Data.prototype.getParticipantAnswer = function (pollId, participantName) {
 
 Data.prototype.getAllQuestions = function (pollId) {
   const poll = this.polls[pollId];
+  console.log(poll.questions)
   if (typeof poll !== 'undefined') {
     const questions = poll.questions;
     return questions;
@@ -540,6 +542,29 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
   console.log("poll created", pollId, poll);
 
   return this.polls[pollId];
+}
+
+
+/////////////// TROR INTE DETTA ANVÄNDS ///////////////////////
+/*
+Data.prototype.getQuestions = function () {
+  const questions = readFileSync("./server/data/preparedquestions.json");
+  return JSON.parse(questions);
+}
+
+Data.prototype.addQuestion = function (pollId, q) {
+  const poll = this.polls[pollId];
+  console.log("question added to", pollId, q);
+  if (typeof poll !== 'undefined') {
+    poll.questions.push(q);
+  }
+}
+
+Data.prototype.addParticipantAnswer = function (pollId, participant, answerParticipant) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    part.answers[participant] = answerParticipant;
+  }
 }
 
 

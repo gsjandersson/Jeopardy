@@ -58,7 +58,8 @@ export default {
         console.log("row: " + this.row);
         console.log("col: " + this.col);
         console.log("------ end all answers ------");
-        this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
+        console.log(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`)
+        this.$router.push({ name: "QuestionResultView", params:{ pollId: this.pollId, row: this.row, col: this.col }});
       }, 100);
     });
 
@@ -104,7 +105,7 @@ export default {
 
           console.log(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`)
 
-          this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
+          this.$router.push({ name: "QuestionResultView", params:{ pollId: this.pollId, row: this.row, col: this.col }});
         }
       }, 1000); // Update every 1000ms (1 second)
     },

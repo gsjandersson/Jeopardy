@@ -65,12 +65,12 @@ function sockets(io, socket, data) {
 
   socket.on('editQuestion', function (d) {
     data.editQuestion(d.pollId, d.row, d.col, d.question, d.answer);
-    socket.emit('allQuestions', data.retrieveQuestions(d.pollId));
+    socket.emit('allQuestions', data.getAllQuestions(d.pollId));
   });
 
   socket.on('editCategory', function (d) {
     data.editCategory(d.pollId, d.col, d.category);
-    socket.emit('allQuestions', data.retrieveCategories(d.pollId));
+    socket.emit('allCategories', data.getAllCategories(d.pollId));
   });
 
   socket.on('createPoll', function (d) {
