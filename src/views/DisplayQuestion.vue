@@ -22,6 +22,7 @@ const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   name: 'DisplayQuestion',
+
   data: function () {
     return {
       uiLabels: {},
@@ -41,6 +42,36 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
+    socket.emit("pageLoaded", this.lang);
+
+    socket.on("init", (labels) => {
+      this.uiLabels = labels;
+    });
+
+    socket.on('hasAllAnswered', () => {
+      console.log("------ has all answered detected ------")
+      clearInterval(this.countdownInterval);
+      setTimeout(() => {
+        socket.emit('allParticipantsGoToAnswerResult', this.pollId);
+        console.log("------ all answers ------");
+        console.log("pollId: " + this.pollId);
+        console.log("row: " + this.row);
+        console.log("col: " + this.col);
+        console.log("------ end all answers ------");
+        this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
+      }, 100);
+    });
+
+    console.log("----------------------------------")
+    console.log("---------- NEW QUESTION ----------")
+    console.log("----------------------------------")
+
+    console.log("------ display question ------")
+    console.log("pollId: " + this.pollId)
+    console.log("row: " + this.row)
+    console.log("col: " + this.col)
+    console.log("------ end display question ------")
+
     socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
     socket.emit("getDisplayQuestionData", { pollId: this.pollId, row: this.row, col: this.col });
@@ -51,38 +82,10 @@ export default {
       this.hiddenAnswer = data.correctAnswer.replace(/[^ ]/g, '_');
     });
 
-    socket.emit("pageLoaded", this.lang);
-
-    socket.on("init", (labels) => {
-      this.uiLabels = labels;
-    });
-
     socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
-
-    socket.on('hasAllAnswered', () => {
-      clearInterval(this.countdownInterval);
-      setTimeout(() => {
-        console.log("all answered registered")
-        socket.emit('allParticipantsGoToAnswerResult', this.pollId);
-        this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
-      }, 1000);
-    });
 
     this.startCountdown();
 
-  },
-
-  computed: {
-    countdownClass() {
-      // Define classes for different countdown values
-      if (this.countdown >= 8) {
-        return 'countdown-large';
-      } else if (this.countdown >= 5) {
-        return 'countdown-medium';
-      } else {
-        return 'countdown-small';
-      }
-    }
   },
 
   methods: {
@@ -90,10 +93,17 @@ export default {
       this.countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
-          this.countdownSize -= 0.1; // Adjust the rate of size decrease as per your preference
         } else {
           clearInterval(this.countdownInterval);
           socket.emit('allParticipantsGoToAnswerResult', this.pollId);
+          console.log("------ countdown over ------")
+          console.log("pollId: " + this.pollId)
+          console.log("row: " + this.row)
+          console.log("col: " + this.col)
+          console.log("------ end countdown over ------")
+
+          console.log(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`)
+
           this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
         }
       }, 1000); // Update every 1000ms (1 second)

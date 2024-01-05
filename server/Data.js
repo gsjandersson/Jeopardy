@@ -254,8 +254,15 @@ Data.prototype.checkExisting = function (pollId) {
 
 Data.prototype.getCorrectAnswer = function (pollId, row, col) {
   const poll = this.polls[pollId];
+
+  console.log("------- data get correct answer-------")
+  console.log("pollId", pollId)
+  console.log("row", row)
+  console.log("col", col)
+  console.log("data correct answer", poll.questions[row][col].answer)
+  console.log("-----------------end------------------")
+
   if (typeof poll !== 'undefined') {
-    console.log("data get correct answer", poll.questions[row][col].answer)
     return poll.questions[row][col].answer;
   }
 }
@@ -263,8 +270,6 @@ Data.prototype.getCorrectAnswer = function (pollId, row, col) {
 Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
-    console.log("money added", (100 * (1 + parseInt(row, 10))))
-    console.log("row number " + row)
     part.cashTotal[partName] += (100 * (1 + parseInt(row, 10)));
   }
 }

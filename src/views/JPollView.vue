@@ -90,11 +90,10 @@ export default {
     socket.on("jPollViewData", (d) => {
       console.log("------- j poll view data-------")
       console.log("categories: " + d.categories)
-      console.log("questions: " + d.questions)
       console.log("cashTotal: " + d.cashTotal)
       console.log("participantTurn: " + d.participantTurn)
       console.log("------- j poll view data-------")
-      
+
       this.categories = d.categories;
       this.questions = d.questions;
       this.cashTotal = d.cashTotal;

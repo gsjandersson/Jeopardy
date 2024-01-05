@@ -30,6 +30,12 @@ function sockets(io, socket, data) {
   });
 
   socket.on("getQuestionResultViewData", function (d) {
+    console.log("--------- socket getQuestionResultViewData ---------")
+    console.log("pollId", d.pollId)
+    console.log("row", d.row)
+    console.log("col", d.col)
+    console.log("--------- end socket ---------")
+
     const question = data.getQuestion(d.pollId, d.row, d.col);
     const correctAnswer = data.getCorrectAnswer(d.pollId, d.row, d.col);
     const participantsAndCashTotal = data.getParticipantsAndCashTotal(d.pollId);
@@ -48,12 +54,6 @@ function sockets(io, socket, data) {
     const question = data.getQuestion(d.pollId, d.row, d.col);
     const correctAnswer = data.getCorrectAnswer(d.pollId, d.row, d.col);
     socket.emit("questionViewData", { question: question, correctAnswer: correctAnswer });
-  });
-
-  socket.on("getSubmitViewData", function (d) {
-    const submittedAnswer = data.getParticipantAnswer(d.pollId, d.participantName);
-    const correctAnswer = data.getCorrectAnswer(d.pollId, d.row, d.col);
-    socket.emit("submitViewData", { submittedAnswer: submittedAnswer, correctAnswer: correctAnswer });
   });
 
   ////////////////// UPDATERADE (SMÅ EMITS) ///////////////////////

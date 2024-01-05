@@ -22,6 +22,7 @@
 </template>
   
 <script>
+import { set } from 'express/lib/application';
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
@@ -39,7 +40,8 @@ export default {
       correctAnswer: "",
       countdown: 10,
       participantsAndCashTotal: [],
-      hasQuestionsCompleted: false
+      hasQuestionsCompleted: false,
+      countdownInterval: null
     }
   },
   created: function () {
@@ -47,13 +49,19 @@ export default {
     this.row = this.$route.params.row
     this.col = this.$route.params.col
 
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
+    console.log("---------question result view:---------")
+    console.log("pollId: " + this.pollId)
+    console.log("row: " + this.row)
+    console.log("col: " + this.col)
+    console.log("-------question result view end-------")
 
-    socket.emit("pageLoaded", this.lang);
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     });
+
+    socket.emit("pageLoaded", this.lang);
 
     socket.on("questionResultViewData", (data) => {
       this.question = data.question;
@@ -77,12 +85,12 @@ export default {
 
   methods: {
     startCountdown() {
-      const countdownInterval = setInterval(() => {
+      this.countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
         }
         else {
-          clearInterval(countdownInterval);
+          clearInterval(this.countdownInterval);
 
           if (this.hasQuestionsCompleted) {
             socket.emit('allParticipantsGoToWinnerView', this.pollId);
