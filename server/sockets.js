@@ -30,16 +30,12 @@ function sockets(io, socket, data) {
   });
 
   socket.on("getQuestionResultViewData", function (d) {
-    console.log("--------- socket getQuestionResultViewData ---------")
-    console.log("pollId", d.pollId)
-    console.log("row", d.row)
-    console.log("col", d.col)
-    console.log("--------- end socket ---------")
-
     const question = data.getQuestion(d.pollId, d.row, d.col);
     const correctAnswer = data.getCorrectAnswer(d.pollId, d.row, d.col);
     const participantsAndCashTotal = data.getParticipantsAndCashTotal(d.pollId);
-    socket.emit("questionResultViewData", { question: question, correctAnswer: correctAnswer, participantsAndCashTotal: participantsAndCashTotal });
+    const allQuestionsCompleted = data.allQuestionsCompleted(d.pollId);
+    socket.emit("questionResultViewData", { question: question, correctAnswer: correctAnswer, 
+      participantsAndCashTotal: participantsAndCashTotal, allQuestionsCompleted: allQuestionsCompleted });
   });
 
   socket.on("getJPollViewData", function (d) {
@@ -167,7 +163,7 @@ function sockets(io, socket, data) {
   });
 
   socket.on("checkHasAllQuestionsCompleted", function (pollId) {
-    socket.emit("HasAllQuestionsCompleted", data.allQuestionsCompleted(pollId))
+    socket.emit("hasAllQuestionsCompleted", data.allQuestionsCompleted(pollId))
   });
 
   socket.on("allParticipantsGoToWinnerView", function (pollId) {

@@ -22,7 +22,6 @@
 </template>
   
 <script>
-import { set } from 'express/lib/application';
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
@@ -40,7 +39,7 @@ export default {
       correctAnswer: "",
       countdown: 10,
       participantsAndCashTotal: [],
-      hasQuestionsCompleted: false,
+      allQuestionsCompleted: false,
       countdownInterval: null
     }
   },
@@ -64,20 +63,17 @@ export default {
     socket.emit("pageLoaded", this.lang);
 
     socket.on("questionResultViewData", (data) => {
+      console.log("------- question result view data-------")
+      console.log("all questions completed: " + data.allQuestionsCompleted)
+      console.log("participantsAndCashTotal: " + data.participantsAndCashTotal)
+      console.log("----------------------------------------")
       this.question = data.question;
       this.correctAnswer = data.correctAnswer;
-      this.participantsAndCashTotal = data.participantsAndCashTotal
+      this.participantsAndCashTotal = data.participantsAndCashTotal;
+      this.allQuestionsCompleted = data.allQuestionsCompleted;
     });
 
     socket.emit("getQuestionResultViewData", { pollId: this.pollId, row: this.row, col: this.col });
-
-    //// here we see if we should continue the game or go to the next players turn ////
-    socket.on("hasAllQuestionsCompleted", (hasQuestionsCompleted) => {
-      this.hasQuestionsCompleted = hasQuestionsCompleted;
-    });
-
-    socket.emit("checkHasAllQuestionsCompleted", this.pollId)
-    ///////////////////////////////
 
     this.startCountdown();
 
@@ -92,7 +88,7 @@ export default {
         else {
           clearInterval(this.countdownInterval);
 
-          if (this.hasQuestionsCompleted) {
+          if (this.allQuestionsCompleted) {
             socket.emit('allParticipantsGoToWinnerView', this.pollId);
             this.$router.push('/WinnerView/' + this.pollId);
           }
