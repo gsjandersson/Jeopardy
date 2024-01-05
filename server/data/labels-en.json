@@ -64,7 +64,7 @@
 	"letsplay": "Let's Play!",
 	"PlayerTurnTitle": "It's time to pick a question",
 	"Leaderboard": "Leaderboard",
-	"autoGenerateQuiz": "Auto-generate quiz",
+	"autoGenerateQuiz": "AUTO-GENERATE QUIZ",
 	"quizIsBeingGenerated": "Autogenerating...",
 	"YouAre": "You are: ",
 	"letsplayjeopardy": "Let's play Jeopardy!",
@@ -86,5 +86,7 @@
 	"scanToJoin": "Scan the QR code to join",
 	"pausePlayMusic": "Pause/Play Music",
 	"quizTopic": "Quiz topic for autogeneration",
+	"quizGenerationError": "Something went wrong with the quiz generation, please try again",
+	"quizGenerationInfoText": "This autogeneration uses the GPT-4 to generate a quiz based on the topic you choose. The quiz will be generated with a maximum of 5 categories and 5 questions per category. The quiz will be generated in the background and it can take up to a minute for a 5x5 to generate. You will be able to modify the board after creation. Thank you for your patience.",
 	"waitingMessage": "Host has already started the game, please wait until the players have finished the question round"
 }
