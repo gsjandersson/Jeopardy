@@ -422,6 +422,14 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
   let questions;
   let categories;
 
+  if(questionNo>5){
+    questionNo = 5;
+  }
+  if(categoryNo>5){
+    categoryNo = 5;
+  }
+  
+
   poll.isJoinable = false;
   poll.isActive = false;
   this.polls[pollId] = poll;
@@ -484,7 +492,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
         response_format: { type: "json_object" },
       }),
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timed out')), 90000)
+        setTimeout(() => reject(new Error('Request timed out')), 75000)
       )
     ]);
 
@@ -525,8 +533,9 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
 
   } catch (error) {
     console.error('Error: AI querying unsuccessful', error);
+    return error; 
   }
-
+ 
   poll.questions = questions;
   poll.categories = categories;
 
@@ -537,6 +546,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
   participantData.allParticipants = [];
   participantData.turnIndex = 0;
   participantData.turn = "";
+  participantData.answers = {};
   this.participants[pollId] = participantData;
 
   console.log("poll created", pollId, poll);

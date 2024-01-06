@@ -66,7 +66,7 @@
 	"PlayerTurnTitle": "Det är dags att välja en fråga",
 	"Leaderboard": "Topplista",
 	"YouAre": "Du är",
-	"autoGenerateQuiz": "Auto-generera quiz",
+	"autoGenerateQuiz": "AUTOGENERERA QUIZ",
 	"quizIsBeingGenerated": "Autogenererar...",
 	"letsplayjeopardy": "Nu spelar vi Jeopardy!",
 	"PartTurn": "Deltagares tur: ",
@@ -85,7 +85,10 @@
 	"moneyInBank": "Pengar på bankkontot",
 	"scanToJoin": "Skanna QR-koden för att gå med",
 	"pausePlayMusic": "Pausa/Spela musik",
-	"quizTopic": "Quizämne för autogenerering",
-	"waitingMessage": "Host har redan börjat spel, vänta tills spelarna har avslutat frågerundan"
+	"quizGenerationError": "Något gick fel, försök igen eller testa senare",
+	"quizGenerationInfoText": "Denna autogenerering använder GPT-4 för att skapa en frågesport baserad på det ämne du väljer. Quizen kommer att genereras med högst 5 kategorier och 5 frågor per kategori. Quizen kommer att genereras i bakgrunden och det kan ta upp till en minut för att skapa en 5x5. Det går att ändra brädan efter att det har skapats. Tack för ditt tålamod!",
+	"waitingMessage": "Host har redan börjat spel, vänta tills spelarna har avslutat frågerundan",
+	"closeButton": "Spara och stäng",
+	"quizTopic": "Quizämne för autogenerering"
 }
 	
