@@ -60,11 +60,13 @@ function sockets(io, socket, data) {
 
 
   socket.on('editQuestion', function (d) {
+    console.log("---------question info socket", d)
     data.editQuestion(d.pollId, d.row, d.col, d.question, d.answer);
     socket.emit('allQuestions', data.getAllQuestions(d.pollId));
   });
 
   socket.on('editCategory', function (d) {
+    console.log("---------category info socket", d)
     data.editCategory(d.pollId, d.col, d.category);
     socket.emit('allCategories', data.getAllCategories(d.pollId));
   });

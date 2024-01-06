@@ -16,10 +16,13 @@
     </template>
 
 
+
+
 <script>
 
 export default {
   name: 'categoryModal',
+  props: ['isCategoryModalVisible'],
   emits: ["saveCategory", "closeCategoryModal"],
   data: function () {
     return {
@@ -32,6 +35,8 @@ export default {
     saveCategory() {
       console.log(this.categoryName);
       this.$emit("saveCategory", this.categoryName)
+      this.categoryName = "";
+      this.$emit('closeCategoryModal');
   
     },
     closeCategoryModal() {

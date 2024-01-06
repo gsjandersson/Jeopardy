@@ -20,12 +20,9 @@
   </template>
 <script>
 
-
 export default {
   name: 'questionModal',
-  props: {
-  isQuestionModalVisible: Boolean,
-},
+  props: ['isQuestionModalVisible'],
   emits: ["saveQuestion", "closeQuestionModal"],
   data: function () {
     return {
@@ -39,7 +36,12 @@ export default {
     saveQuestion() {
       console.log(this.newQuestion);
       console.log(this.newAnswer);
-      this.$emit("saveQuestion", this.newQuestion, this.newAnswer)
+      this.$emit("saveQuestion", {question: this.newQuestion, answer: this.newAnswer});
+      this.newAnswer = "";
+      this.newQuestion = "";
+      this.$emit('closeQuestionModal');
+
+      // skicka tillbaks till boardview
 
         /* if (this. isQuestionModalVisible && this.newQuestion !== "" && this.newAnswer !== "") {
         socket.emit("editQuestion", {
