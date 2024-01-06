@@ -18,16 +18,12 @@
   
   <script>
   // Importing components and libraries
-  import ResponsiveNav from '@/components/ResponsiveNav.vue';
   import io from 'socket.io-client';
   const socket = io(sessionStorage.getItem("ipAdressSocket"));
   
   export default {
     // Component name and imported components
-    name: 'JCreateInfo',
-    components: {
-      ResponsiveNav
-    },
+    name: 'PlayerTurnView',
   
     // Initial data properties
     data: function () {

@@ -7,7 +7,7 @@
     </header>
 
     <h2> {{ uiLabels.YouAre }} {{ participantName }} </h2>
-    <h3> {{ uiLabels.moneyInBank }}: {{ cashTotal }}$ </h3>
+    <h3> {{ uiLabels.moneyInBank }}: ${{ cashTotal }} </h3>
 
     <main>
       <div class="jeopardy-board">
@@ -65,15 +65,12 @@ export default {
     return {
       uiLabels: {},
       pollId: "",
-      participantAnswer: "",
       lang: localStorage.getItem("lang") || "en",
       categories: [],
       questions: [],
       participantName: "",
-      participants: [],
       cashTotal: 0,
       participantTurn: "",
-      questionChosen: ""
     }
   },
 
@@ -84,50 +81,31 @@ export default {
 
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName })
 
-    socket.on("pollLang", (lang) =>
-      this.lang = lang
-    );
-
-    socket.on("questionsRetrieved", (questions) =>
-      this.questions = questions
-    );
-
     socket.on("init", (labels) => {
       this.uiLabels = labels;
-    })
-
-    socket.on("categoriesRetrieved", (categories) =>
-      this.categories = categories
-    );
-
-    socket.on('participantUpdate', (participants) => {
-      this.participants = participants;
     });
+
+    socket.emit("pageLoaded", this.lang);
+
+    socket.on("jPollViewData", (d) => {
+      console.log("------- j poll view data-------")
+      console.log("categories: " + d.categories)
+      console.log("cashTotal: " + d.cashTotal)
+      console.log("participantTurn: " + d.participantTurn)
+      console.log("------- j poll view data-------")
+
+      this.categories = d.categories;
+      this.questions = d.questions;
+      this.cashTotal = d.cashTotal;
+      this.participantTurn = d.participantTurn;
+    });
+
+    socket.emit("getJPollViewData", {pollId: this.pollId, participantName: this.participantName});
 
     socket.on('goToQuestion', (d) => {
       console.log("go to question j poll view")
       this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}/${d.row}/${d.col}`);
     });
-
-    socket.on('cashTotal', (cashTotal) => {
-      this.cashTotal = cashTotal
-    });
-
-    socket.on('participantTurn', (participant) =>
-      this.participantTurn = participant
-    );
-
-    // socket.emit("getPollLang", this.pollId);
-
-    socket.emit("retrieveQuestions", (this.pollId));
-
-    socket.emit("retrieveCategories", (this.pollId));
-
-    socket.emit('getCashTotal', { pollId: this.pollId, partName: this.participantName })
-
-    socket.emit('getParticipantTurn', (this.pollId))
-
-    socket.emit("pageLoaded", this.lang);
     
   },
 

@@ -86,7 +86,7 @@
         this.$router.push('/');
       },
       backToBoard () {
-        this.$router.push('/BoardViewSteph/' + this.pollId);
+        this.$router.push('/BoardView/' + this.pollId);
       },
       goToHostView () {
         socket.emit("updateJoinable", {pollId: this.pollId, makeJoinable: true});

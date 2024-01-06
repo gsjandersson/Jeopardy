@@ -16,20 +16,17 @@
         <div class="jeopardy-row">
           <div v-for="(category, index) in categories" :key="index"
             :style="{ width: `calc(90vw / ${categories.length})` }" class="jeopardy-square"
-            @click="handleCategoryClick(index)">
-            <custom-prompt
-      v-if="showCustomPrompt"
-      :promptTitle="lang === 'en' ? 'Enter the Question' : 'Skriv frågan'"
-      :showPrompt="showCustomPrompt"
-      :lang="lang"
-      @submitted="handleCustomPromptSubmission"
-    ></custom-prompt>
+            @click="showCategoryModal(index)">
+
             <div v-if="!category">
               <p> {{ uiLabels.boardViewCategoryBox }} </p>
             </div>
             <div v-else>
               <div>{{ category }}</div>
             </div>
+            <categoryModal v-show="isCategoryModalVisible" :isCategoryModalVisible="isCategoryModalVisible" />
+              
+               <!-- @close="closeModal"  ska denna med?-->
           </div>
         </div>
 
@@ -40,7 +37,9 @@
         <!-- Display Jeopardy board content, gör istället en komponent mha questionskompent, vi ska göra en egen component med all styling etc, klickhantering och layout i kompknent-->
         <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
-            :style="{ width: `calc(90vw / ${categories.length})` }" @click="handleQuestionClick(indexRow, indexCol)">
+            :style="{ width: `calc(90vw / ${categories.length})` }" 
+            @click="showQuestionModal(indexRow, indexCol)">
+            <!-- @click="handleQuestionClick(indexRow, indexCol)"> -->
             <div v-if="!col.question">
               <p>{{ uiLabels.boardViewQuestionBox }}</p>
             </div>
@@ -48,19 +47,30 @@
               <div>Q: {{ col.question }}</div>
               <div>A: {{ col.answer }}</div>
             </div>
+            <questionModal
+                v-show="isQuestionModalVisible"
+              />
           </div>
         </div>
       </div>
-    </main>
-
+    </main> 
   </body>
 </template>
+
 
 <script>
 import io from 'socket.io-client';
 const socket = io(sessionStorage.getItem("ipAdressSocket"));
+import categoryModal from '../components/CategoryModal.vue'; // agnes ny
+import questionModal from '../components/QuestionsModal.vue'; // agnes ny
+
 
 export default {
+  components: {
+      categoryModal,
+      questionModal,
+    },
+
   data: function () {
     return {
       // Initial data properties
@@ -69,34 +79,46 @@ export default {
       pollId: "",
       questionNumber: { questionRow: 0, questionColumn: 0 },
       questions: [],
-      categories: []
+      categories: [],
+      isCategoryModalVisible: false,
+      isQuestionModalVisible: false
+
     };
   },
   created: function () {
     // Emitting an event when the page is loaded and listening for initialization data
     this.pollId = this.$route.params.pollId
     socket.emit("pageLoaded", this.lang);
+
     socket.on("init", (labels) => {
       this.uiLabels = labels
     });
-    socket.emit("retrieveQuestions", (this.pollId));
+    socket.emit("getAllQuestions", (this.pollId));
 
-    socket.emit("retrieveCategories", (this.pollId));
+    socket.emit("getAllCategories", (this.pollId));
 
-    socket.on("pollCreated", (data) =>
-      this.data = data
-    );
-
-    socket.on("questionsRetrieved", (questions) =>
+    socket.on("allQuestions", (questions) =>
       this.questions = questions
     );
 
-    socket.on("categoriesRetrieved", (categories) =>
+    socket.on("allCategories", (categories) =>
       this.categories = categories
     );
   },
 
   methods: {
+
+    showCategoryModal(colNo) { 
+      this.isCategoryModalVisible = true;
+      },
+      showQuestionModal(indexRow, indexCol) {
+        this.isQuestionModalVisible = true;
+        this.newQuestion = '';
+        this.newAnswer = '';
+      },
+
+/* 
+
     handleQuestionClick(rowNo, colNo) {
       let newQuestion;
       let newAnswer;
@@ -113,7 +135,7 @@ export default {
       if (newQuestion !== "" && newAnswer !== "") {
         socket.emit("editQuestion", {
           pollId: this.pollId, row: rowNo, col: colNo,
-          q: newQuestion, a: newAnswer
+          question: newQuestion, answer: newAnswer
         });
       }
     },
@@ -128,17 +150,14 @@ export default {
         categoryName = prompt('Skriv kategorinamnet:');
       }
       if (categoryName !== "") {
-        socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: categoryName })
+        socket.emit("editCategory", { pollId: this.pollId, col: colNo, category: categoryName })
       }
-    },
+    }, */
     exitCreatorMode() {
       this.$router.push('/');
     },
     howToHost() {
       this.$router.push('/HowToHostView/'+ this.pollId);
-    },
-    runQuestion: function () {
-      socket.emit("runQuestion", { pollId: this.pollId, questionNumber: this.questionNumber })
     },
     switchLanguageEnglish: function () {
       if (this.lang === "sv") {
