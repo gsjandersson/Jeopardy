@@ -43,7 +43,9 @@
 import io from 'socket.io-client';
 
 // här är min IP 192.168.1.155
-const ipAdress = "192.168.2.142";
+// Gustav: 192.168.50.152
+const ipAdress = "192.168.50.152";
+const ipAdress = "192.168.2.247";
 sessionStorage.setItem("ipAdress", ipAdress);
 sessionStorage.setItem("ipAdressSocket", ipAdress + ":3000");
 
