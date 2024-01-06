@@ -43,6 +43,8 @@ export default {
   created: function () {
     this.pollId = this.$route.params.pollId
 
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
+
     socket.emit("pageLoaded", this.lang);
 
     // Listen for initialization data from the server
