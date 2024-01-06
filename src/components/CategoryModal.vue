@@ -1,15 +1,15 @@
 <!-- agnes ny categorymodal-->
 <template>
-  <div class="modal-backdrop" v-show="isCategoryModalVisible">
+  <div class="modal-backdrop" >
       <div class="modal">
         <div class="modal-body">
           <!-- <p> {{ uiLabels.categoryInputLabel }} </p> -->
           <p> Write a category: </p>
-              <input type="text" v-model="categoryName" v-on:keydown.enter="saveCategory(colNo)">
+              <input type="text" v-model="categoryName" v-on:keydown.enter="saveCategory">
         </div>
             <footer class="modal-footer">
-              <button type="button" v-on:click="saveCategory(colNo)"> Save </button>
-              <button type="button" v-on:click="closeModal"> Close </button>
+              <button type="button" v-on:click="saveCategory"> Save </button>
+              <button type="button" v-on:click="closeCategoryModal"> Close </button>
             </footer>        
         </div>
       </div>
@@ -17,14 +17,10 @@
 
 
 <script>
-import io from 'socket.io-client';
-const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   name: 'categoryModal',
-  props: {
-    isCategoryModalVisible: Boolean, 
-  },
+  emits: ["saveCategory", "closeCategoryModal"],
   data: function () {
     return {
       // Initial data properties
@@ -33,15 +29,13 @@ export default {
     };
   },
   methods: {
-    saveCategory(colNo) {
+    saveCategory() {
       console.log(this.categoryName);
-      console.log(this.isCategoryModalVisible);
-      if (this.isCategoryModalVisible && this.categoryName !== "") {
-        socket.emit("editCategory", { pollId: this.pollId, col: colNo, cat: this.categoryName })
-      }
+      this.$emit("saveCategory", this.categoryName)
+  
     },
-    closeModal() {
-      this.$emit('close'); // Emit the 'close' event to notify the parent component
+    closeCategoryModal() {
+      this.$emit('closeCategoryModal'); // Emit the 'close' event to notify the parent component
     },
   },
 };

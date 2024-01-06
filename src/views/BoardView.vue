@@ -24,12 +24,13 @@
             <div v-else>
               <div>{{ category }}</div>
             </div>
-            <categoryModal v-show="isCategoryModalVisible" :isCategoryModalVisible="isCategoryModalVisible" />
+            
               
-               <!-- @close="closeModal"  ska denna med?-->
           </div>
         </div>
-
+        <categoryModal v-show="isCategoryModalVisible"
+            @closeCategoryModal="hideCategoryModal"
+            @saveCategory="saveCategory($event, index)"/>
         <div>
           <hr>
         </div>
@@ -39,7 +40,6 @@
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
             :style="{ width: `calc(90vw / ${categories.length})` }" 
             @click="showQuestionModal(indexRow, indexCol)">
-            <!-- @click="handleQuestionClick(indexRow, indexCol)"> -->
             <div v-if="!col.question">
               <p>{{ uiLabels.boardViewQuestionBox }}</p>
             </div>
@@ -47,11 +47,13 @@
               <div>Q: {{ col.question }}</div>
               <div>A: {{ col.answer }}</div>
             </div>
-            <questionModal
-                v-show="isQuestionModalVisible"
-              />
+          
           </div>
         </div>
+              <questionModal v-show="isQuestionModalVisible"
+            @closeQuestionModal="hideQuestionModal"
+            @saveQuestion="saveQuestion($event, indexRow, indexCol, newQuestion, newAnswer )"
+            />
       </div>
     </main> 
   </body>
@@ -77,7 +79,7 @@ export default {
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      questionNumber: { questionRow: 0, questionColumn: 0 },
+      questionNumber: { questionRow: 0, questionColumn: 0 }, //behöver vi denna
       questions: [],
       categories: [],
       isCategoryModalVisible: false,
@@ -91,7 +93,7 @@ export default {
     socket.emit("pageLoaded", this.lang);
 
     socket.on("init", (labels) => {
-      this.uiLabels = labels
+      this.uiLabels = labels;
     });
     socket.emit("getAllQuestions", (this.pollId));
 
@@ -111,11 +113,33 @@ export default {
     showCategoryModal(colNo) { 
       this.isCategoryModalVisible = true;
       },
+      hideCategoryModal() { 
+      this.isCategoryModalVisible = false;
+      console.log("hideCategoryModal")
+      },
+      saveCategory(cat, index) {
+        socket.emit("editCategory", { pollId: this.pollId, col: index, cat: cat })
+        console.log("saveCategory", cat, index)
+      },
+
+      showQuestionModal(rowNo, colNo) { 
+      this.isQuestionModalVisible = true;
+      },
+      hideQuestionModal() { 
+      this.isQuestionModalVisible = false;
+      console.log("hideQuestionModal")
+      },
+      saveQuestion(indexRow, indexCol, newQuestion, newAnswer) {
+        socket.emit("editQuestion", { pollId: this.pollId, row: indexRow, col: indexCol, question: this.newQuestion, answer: this.newAnswer })
+        console.log("saveQuestion", this.newQuestion, this.newAnswer, indexRow, indexCol);
+      },
+
+      /* 
       showQuestionModal(indexRow, indexCol) {
         this.isQuestionModalVisible = true;
         this.newQuestion = '';
         this.newAnswer = '';
-      },
+      }, */
 
 /* 
 
