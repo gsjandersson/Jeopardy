@@ -24,12 +24,13 @@
             <div v-else>
               <div>{{ category }}</div>
             </div>
-            <categoryModal v-show="isCategoryModalVisible" :isCategoryModalVisible="isCategoryModalVisible" />
-              
-               <!-- @close="closeModal"  ska denna med?-->
+
+
           </div>
         </div>
-
+        <categoryModal v-show="isCategoryModalVisible" 
+          @closeCategoryModal="hideCategoryModal"
+          @saveCategory="saveCategory($event, colNo)" />
         <div>
           <hr>
         </div>
@@ -37,9 +38,7 @@
         <!-- Display Jeopardy board content, gör istället en komponent mha questionskompent, vi ska göra en egen component med all styling etc, klickhantering och layout i kompknent-->
         <div v-for="(row, indexRow) in questions" :key="indexRow" class="jeopardy-row">
           <div v-for="(col, indexCol) in row" :key="indexCol" class="jeopardy-square"
-            :style="{ width: `calc(90vw / ${categories.length})` }" 
-            @click="showQuestionModal(indexRow, indexCol)">
-            <!-- @click="handleQuestionClick(indexRow, indexCol)"> -->
+            :style="{ width: `calc(90vw / ${categories.length})` }" @click="showQuestionModal(indexRow, indexCol)">
             <div v-if="!col.question">
               <p>{{ uiLabels.boardViewQuestionBox }}</p>
             </div>
@@ -47,13 +46,14 @@
               <div>Q: {{ col.question }}</div>
               <div>A: {{ col.answer }}</div>
             </div>
-            <questionModal
-                v-show="isQuestionModalVisible"
-              />
+
           </div>
         </div>
+        <questionModal v-show="isQuestionModalVisible" 
+          @closeQuestionModal="hideQuestionModal"
+          @saveQuestion="saveQuestion($event, newQuestion, newAnswer)" />
       </div>
-    </main> 
+    </main>
   </body>
 </template>
 
@@ -67,9 +67,9 @@ import questionModal from '../components/QuestionsModal.vue'; // agnes ny
 
 export default {
   components: {
-      categoryModal,
-      questionModal,
-    },
+    categoryModal,
+    questionModal,
+  },
 
   data: function () {
     return {
@@ -77,11 +77,14 @@ export default {
       uiLabels: {},
       lang: localStorage.getItem("lang") || "en",
       pollId: "",
-      questionNumber: { questionRow: 0, questionColumn: 0 },
+      questionNumber: { questionRow: 0, questionColumn: 0 }, //behöver vi denna
       questions: [],
       categories: [],
       isCategoryModalVisible: false,
-      isQuestionModalVisible: false
+      isQuestionModalVisible: false,
+      chosenQuestionRow: "",
+      chosenQuestionCol: "",
+      chosenCategoryCol: ""
 
     };
   },
@@ -91,7 +94,7 @@ export default {
     socket.emit("pageLoaded", this.lang);
 
     socket.on("init", (labels) => {
-      this.uiLabels = labels
+      this.uiLabels = labels;
     });
     socket.emit("getAllQuestions", (this.pollId));
 
@@ -107,57 +110,80 @@ export default {
   },
 
   methods: {
-
-    showCategoryModal(colNo) { 
+    showCategoryModal(colNo) {
+      this.chosenCategoryCol = colNo;
       this.isCategoryModalVisible = true;
-      },
-      showQuestionModal(indexRow, indexCol) {
-        this.isQuestionModalVisible = true;
-        this.newQuestion = '';
-        this.newAnswer = '';
-      },
-
-/* 
-
-    handleQuestionClick(rowNo, colNo) {
-      let newQuestion;
-      let newAnswer;
-
-      if (this.lang == 'en') {
-        newQuestion = prompt('Enter the question:');
-        newAnswer = prompt('Enter the correct answer:');
-      }
-      if (this.lang == 'sv') {
-        newQuestion = prompt('Skriv frågan:');
-        newAnswer = prompt('Skriv de korrekta svaret:');
-      }
-
-      if (newQuestion !== "" && newAnswer !== "") {
-        socket.emit("editQuestion", {
-          pollId: this.pollId, row: rowNo, col: colNo,
-          question: newQuestion, answer: newAnswer
-        });
-      }
+    },
+    hideCategoryModal() {
+      this.isCategoryModalVisible = false;
+      console.log("hideCategoryModal")
+    },
+    saveCategory(categoryName) {
+      socket.emit("editCategory", { pollId: this.pollId, col: this.chosenCategoryCol, category: categoryName })
     },
 
-    handleCategoryClick(colNo) {
-      let categoryName;
+    showQuestionModal(rowNo, colNo) {
+      this.chosenQuestionRow = rowNo;
+      this.chosenQuestionCol = colNo;
+      this.isQuestionModalVisible = true;
+    },
+    hideQuestionModal() {
+      this.isQuestionModalVisible = false;
+      console.log("hideQuestionModal")
+    },
+    saveQuestion(d) {
+      console.log(d.question, d.answer)
+      socket.emit("editQuestion", { pollId: this.pollId, row: this.chosenQuestionRow, col: this.chosenQuestionCol, question: d.question, answer: d.answer })
+    },
 
-      if (this.lang == 'en') {
-        categoryName = prompt('Enter the category name:');
-      }
-      if (this.lang == 'sv') {
-        categoryName = prompt('Skriv kategorinamnet:');
-      }
-      if (categoryName !== "") {
-        socket.emit("editCategory", { pollId: this.pollId, col: colNo, category: categoryName })
-      }
+    /* 
+    showQuestionModal(indexRow, indexCol) {
+      this.isQuestionModalVisible = true;
+      this.newQuestion = '';
+      this.newAnswer = '';
     }, */
+
+    /* 
+    
+        handleQuestionClick(rowNo, colNo) {
+          let newQuestion;
+          let newAnswer;
+    
+          if (this.lang == 'en') {
+            newQuestion = prompt('Enter the question:');
+            newAnswer = prompt('Enter the correct answer:');
+          }
+          if (this.lang == 'sv') {
+            newQuestion = prompt('Skriv frågan:');
+            newAnswer = prompt('Skriv de korrekta svaret:');
+          }
+    
+          if (newQuestion !== "" && newAnswer !== "") {
+            socket.emit("editQuestion", {
+              pollId: this.pollId, row: rowNo, col: colNo,
+              question: newQuestion, answer: newAnswer
+            });
+          }
+        },
+    
+        handleCategoryClick(colNo) {
+          let categoryName;
+    
+          if (this.lang == 'en') {
+            categoryName = prompt('Enter the category name:');
+          }
+          if (this.lang == 'sv') {
+            categoryName = prompt('Skriv kategorinamnet:');
+          }
+          if (categoryName !== "") {
+            socket.emit("editCategory", { pollId: this.pollId, col: colNo, category: categoryName })
+          }
+        }, */
     exitCreatorMode() {
       this.$router.push('/');
     },
     howToHost() {
-      this.$router.push('/HowToHostView/'+ this.pollId);
+      this.$router.push('/HowToHostView/' + this.pollId);
     },
     switchLanguageEnglish: function () {
       if (this.lang === "sv") {
@@ -223,10 +249,14 @@ hr {
 
 #finishQuizButton {
   position: absolute;
-  top: 15px; /* Position at the top of the viewport */
-  left: 150px; /* Position at the right of the viewport */
-  width: 110px; /* Adjust the width as needed */
-  height: 50px; /* Maintain the aspect ratio of the image */
+  top: 15px;
+  /* Position at the top of the viewport */
+  left: 150px;
+  /* Position at the right of the viewport */
+  width: 110px;
+  /* Adjust the width as needed */
+  height: 50px;
+  /* Maintain the aspect ratio of the image */
   color: #ffff00;
   font-size: 1em;
   margin: 1em;

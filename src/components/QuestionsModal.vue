@@ -12,22 +12,18 @@
             <!-- <button id="closequizButton" v-on:click="closeQuestion">{{ uiLabels.closeButton }}</button> -->
 
             <footer class="modal-footer">
-              <button type="button" v-on:click="closeCategory(colNo)"> Save </button>
-              <button type="button" v-on:click="closeModal"> Close </button>
+              <button type="button" v-on:click="saveQuestion"> Save </button>
+              <button type="button" v-on:click="closeQuestionModal"> Close </button>
             </footer>    
       </div>
     </div>
   </template>
-
 <script>
-import io from 'socket.io-client';
-const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   name: 'questionModal',
-  props: {
-    isQuestionModalVisible: Boolean, // Define isModalVisible as a prop
-  },
+  props: ['isQuestionModalVisible'],
+  emits: ["saveQuestion", "closeQuestionModal"],
   data: function () {
     return {
       // Initial data properties
@@ -37,16 +33,25 @@ export default {
     };
   },
   methods: {
-    saveQuestion(rowNo, colNo) {
-        if (this. isQuestionModalVisible && this.newQuestion !== "" && this.newAnswer !== "") {
+    saveQuestion() {
+      console.log(this.newQuestion);
+      console.log(this.newAnswer);
+      this.$emit("saveQuestion", {question: this.newQuestion, answer: this.newAnswer});
+      this.newAnswer = "";
+      this.newQuestion = "";
+      this.$emit('closeQuestionModal');
+
+      // skicka tillbaks till boardview
+
+        /* if (this. isQuestionModalVisible && this.newQuestion !== "" && this.newAnswer !== "") {
         socket.emit("editQuestion", {
           pollId: this.pollId, row: rowNo, col: colNo,
           q: this.newQuestion, a: this.newAnswer
         });
-      }
+      } */
     },
-    closeModal() {
-      this.$emit('close'); // Emit the 'close' event to notify the parent component
+    closeQuestionModal() {
+      this.$emit('closeQuestionModal'); // Emit the 'close' event to notify the parent component
     },
   },
 };

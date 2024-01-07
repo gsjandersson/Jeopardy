@@ -205,7 +205,6 @@ Data.prototype.getParticipantAnswer = function (pollId, participantName) {
 
 Data.prototype.getAllQuestions = function (pollId) {
   const poll = this.polls[pollId];
-  console.log(poll.questions)
   if (typeof poll !== 'undefined') {
     const questions = poll.questions;
     return questions;
