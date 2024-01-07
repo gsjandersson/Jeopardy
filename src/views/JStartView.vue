@@ -41,11 +41,11 @@
 <script>
 // Importing components and libraries
 import io from 'socket.io-client';
+import ResponsiveNav from '@/components/ResponsiveNav.vue';
 
 // här är min IP 192.168.1.155
 // Gustav: 192.168.50.152
-const ipAdress = "192.168.50.152";
-const ipAdress = "192.168.2.247";
+const ipAdress = "192.168.1.211";
 sessionStorage.setItem("ipAdress", ipAdress);
 sessionStorage.setItem("ipAdressSocket", ipAdress + ":3000");
 
