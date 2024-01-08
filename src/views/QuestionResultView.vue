@@ -46,12 +46,6 @@ export default {
   created: function () {
     this.pollId = this.$route.params.pollId
 
-    console.log("---------question result view:---------")
-    console.log("pollId: " + this.pollId)
-    console.log("row: " + this.row)
-    console.log("col: " + this.col)
-    console.log("-------question result view end-------")
-
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     });
@@ -61,10 +55,6 @@ export default {
     socket.emit("pageLoaded", this.lang);
 
     socket.on("questionResultViewData", (data) => {
-      console.log("------- question result view data-------")
-      console.log("all questions completed: " + data.allQuestionsCompleted)
-      console.log("participantsAndCashTotal: " + data.participantsAndCashTotal)
-      console.log("----------------------------------------")
       this.question = data.question;
       this.correctAnswer = data.correctAnswer;
       this.participantsAndCashTotal = data.participantsAndCashTotal;

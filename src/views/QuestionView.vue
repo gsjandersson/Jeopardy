@@ -52,8 +52,6 @@ export default {
   created: function () {
     this.pollId = this.$route.params.pollId
     this.participant = this.$route.params.participantName
-    this.row = this.$route.params.row
-    this.col = this.$route.params.col
 
     socket.on("init", (labels) => {
       this.uiLabels = labels
@@ -63,18 +61,20 @@ export default {
 
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
-    socket.on("questionViewData", (d) => {
-      this.question = d.question;
-      this.correctAnswer = d.correctAnswer;
-      this.hiddenAnswer = d.correctAnswer.replace(/[^ ]/g, '_');
+    socket.on("questionViewData", (data) => {
+      this.question = data.question;
+      this.correctAnswer = data.correctAnswer;
+      this.hiddenAnswer = data.correctAnswer.replace(/[^ ]/g, '_');
+      this.row = data.currentQuestion.row;
+      this.col = data.currentQuestion.col;
     });
 
-    socket.emit("getQuestionViewData", { pollId: this.pollId, row: this.row, col: this.col });
+    socket.emit("getQuestionViewData", this.pollId);
 
     socket.on('goToAnswerResult', () => {
       if (!this.answerSubmitted) {
         socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: "" });
-        this.$router.push(`/AnswerNone/${this.pollId}/${this.participant}/${this.row}`);
+        this.$router.push(`/AnswerNone/${this.pollId}/${this.participant}`);
       }
       
     });
@@ -93,7 +93,7 @@ export default {
         this.answerSubmitted = true;
 
         socket.emit('submitAnswer', { pollId: this.pollId, participantName: this.participant, answer: this.answer });
-        this.$router.push(`/SubmitView/${this.pollId}/${this.participant}/${this.row}/${this.col}`);
+        this.$router.push(`/SubmitView/${this.pollId}/${this.participant}`);
       }
     }
   }

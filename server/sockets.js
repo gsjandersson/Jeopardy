@@ -23,23 +23,24 @@ function sockets(io, socket, data) {
   });
 
   ////////////////// UPDATERADE (STORA EMITS OCH DATASAMLINGAR) ///////////////////////
-  socket.on("getDisplayQuestionData", function (d) {
-    const question = data.getQuestion(d.pollId, d.row, d.col);
-    const correctAnswer = data.getCorrectAnswer(d.pollId, d.row, d.col);
-    socket.emit("displayQuestionData", { question: question, correctAnswer: correctAnswer });
+  socket.on("getDisplayQuestionData", function (pollId) {
+    const currentQuestion = data.getCurrentQuestionNumber(pollId);
+    const question = data.getQuestion(pollId);
+    const correctAnswer = data.getCorrectAnswer(pollId);
+    socket.emit("displayQuestionData", { question: question, correctAnswer: correctAnswer, currentQuestion: currentQuestion });
   });
 
   socket.on("getQuestionResultViewData", function (pollId) {
-    const currentQuestion = data.getCurrentQuestion(pollId);
-    const row = currentQuestion.row;
-    const col = currentQuestion.col;
-    const question = data.getQuestion(pollId, row, col);
-    const correctAnswer = data.getCorrectAnswer(pollId, row, col);
+    const currentQuestion = data.getCurrentQuestionNumber(pollId);
+    const question = data.getQuestion(pollId);
+    const correctAnswer = data.getCorrectAnswer(pollId);
     const participantsAndCashTotal = data.getParticipantsAndCashTotal(pollId);
     const allQuestionsCompleted = data.allQuestionsCompleted(pollId);
-    socket.emit("questionResultViewData", { question: question, correctAnswer: correctAnswer, 
-      participantsAndCashTotal: participantsAndCashTotal, allQuestionsCompleted: allQuestionsCompleted, 
-      currentQuestion: currentQuestion });
+    socket.emit("questionResultViewData", {
+      question: question, correctAnswer: correctAnswer,
+      participantsAndCashTotal: participantsAndCashTotal, allQuestionsCompleted: allQuestionsCompleted,
+      currentQuestion: currentQuestion
+    });
   });
 
   socket.on("getJPollViewData", function (d) {
@@ -50,15 +51,16 @@ function sockets(io, socket, data) {
     socket.emit("jPollViewData", { questions: questions, categories: categories, cashTotal: cashTotal, participantTurn: participantTurn });
   });
 
-  socket.on("getQuestionViewData", function (d) {
-    const question = data.getQuestion(d.pollId, d.row, d.col);
-    const correctAnswer = data.getCorrectAnswer(d.pollId, d.row, d.col);
-    socket.emit("questionViewData", { question: question, correctAnswer: correctAnswer });
+  socket.on("getQuestionViewData", function (pollId) {
+    const currentQuestion = data.getCurrentQuestionNumber(pollId);
+    const question = data.getQuestion(pollId);
+    const correctAnswer = data.getCorrectAnswer(pollId);
+    socket.emit("questionViewData", { question: question, correctAnswer: correctAnswer, currentQuestion: currentQuestion });
   });
 
   ////////////////// UPDATERADE (SMÅ EMITS) ///////////////////////
   socket.on("checkParticipantAnswerCorrect", function (d) {
-    const isCorrect = data.checkParticipantAnswerCorrect(d.pollId, d.participantName, d.row, d.col);
+    const isCorrect = data.checkParticipantAnswerCorrect(d.pollId, d.participantName);
     socket.emit("isParticipantAnswerCorrect", isCorrect);
   });
 
@@ -67,9 +69,8 @@ function sockets(io, socket, data) {
   });
 
   socket.on("getCurrentQuestion", function (pollId) {
-    socket.emit("currentQuestion", data.getCurrentQuestion(pollId));
+    socket.emit("currentQuestion", data.getCurrentQuestionNumber(pollId));
   });
-
 
   socket.on('editQuestion', function (d) {
     console.log("---------question info socket", d)
@@ -111,12 +112,12 @@ function sockets(io, socket, data) {
     socket.emit('allCategories', data.getAllCategories(pollId))
   });
 
-  socket.on('questionCompleted', function (d) {
-    data.completeQuestion(d.pollId, d.row, d.col);
+  socket.on('questionCompleted', function (pollId) {
+    data.completeQuestion(pollId);
   });
 
-  socket.on('allParticipantsGoToQuestion', function (d) {
-    io.to(d.pollId).emit("goToQuestion", (d));
+  socket.on('allParticipantsGoToQuestion', function (pollId) {
+    io.to(pollId).emit("goToQuestion");
   });
 
   socket.on('allParticipantsGoToBoard', function (pollId) {
@@ -129,10 +130,6 @@ function sockets(io, socket, data) {
 
   socket.on('checkExisting', function (pollId) {
     socket.emit('isExisting', data.checkExisting(pollId));
-  });
-
-  socket.on('updateCashTotal', function (d) {
-    data.updateCashTotal(d.pollId, d.participantName, d.row, d.col)
   });
 
   socket.on('updateTurnOrder', function (pollId) {
@@ -151,12 +148,12 @@ function sockets(io, socket, data) {
     socket.emit('autoPollIdUpdated', data.updateAutoPollId())
   });
 
-  socket.on("participantAnswerRegistered", function (d) {
-    const hasAllAnswered = data.participantAnswerRegistered(d.pollId, d.row, d.col)
-    console.log("socket answer logged")
-    if (hasAllAnswered) {
+  socket.on("participantAnswerRegistered", function (pollId, participantName) {
+    const hasAllAnswered = data.participantAnswerRegistered(pollId, participantName)
+    console.log("socket answer logged, has all answered?", hasAllAnswered)
+    if (hasAllAnswered === true) {
       console.log("socket all answered")
-      io.to(d.pollId).emit("hasAllAnswered")
+      io.to(pollId).emit("hasAllAnswered")
     }
   });
 

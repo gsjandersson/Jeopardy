@@ -89,6 +89,8 @@
 	"quizGenerationInfoText": "Denna autogenerering använder GPT-4 för att skapa en frågesport baserad på det ämne du väljer. Quizen kommer att genereras med högst 5 kategorier och 5 frågor per kategori. Quizen kommer att genereras i bakgrunden och det kan ta upp till en minut för att skapa en 5x5. Det går att ändra brädan efter att det har skapats. Tack för ditt tålamod!",
 	"waitingMessage": "Host har redan börjat spel, vänta tills spelarna har avslutat frågerundan",
 	"closeButton": "Spara och stäng",
-	"quizTopic": "Quizämne för autogenerering"
+	"quizTopic": "Quizämne för autogenerering",
+	"youHaveSubmittedAnswer": "Du har skickat in ditt svar",
+	"waitingForOtherPlayersAnswer": "Väntar för andra spelares svar"
 }
 	

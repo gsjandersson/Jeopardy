@@ -102,11 +102,10 @@ export default {
 
     socket.emit("getJPollViewData", {pollId: this.pollId, participantName: this.participantName});
 
-    socket.on('goToQuestion', (d) => {
+    socket.on('goToQuestion', () => {
       console.log("go to question j poll view")
-      this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}/${d.row}/${d.col}`);
+      this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}`);
     });
-    
   },
 
   // Methods to interact with the server
@@ -116,7 +115,7 @@ export default {
       if (question.completed === false && question.question !== "" && this.participantName == this.participantTurn) {
         socket.emit("updateCurrentQuestion", { pollId: this.pollId, row: rowNo, col: colNo })
         socket.emit('updateTurnOrder', (this.pollId))
-        socket.emit('allParticipantsGoToQuestion', { pollId: this.pollId, row: rowNo, col: colNo })
+        socket.emit('allParticipantsGoToQuestion', this.pollId)
       }
     },
     exit() {

@@ -23,14 +23,20 @@ export default {
   created: function () {
     this.pollId = this.$route.params.pollId
     this.participant = this.$route.params.participantName
-    this.row = this.$route.params.row
 
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
     socket.emit("pageLoaded", this.lang);
+    
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     });
+
+    socket.on("currentQuestion", (data) => {
+          this.row = data.row;
+        });
+
+        socket.emit("getCurrentQuestion", this.pollId);
 
     socket.on('goToBoard', () => {
       this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);

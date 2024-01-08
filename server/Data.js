@@ -83,6 +83,7 @@ Data.prototype.createTestQuiz = function () {
     participantData.cashTotal = {};
     participantData.allParticipants = [];
     participantData.turnIndex = 0;
+    participantData.checkedParticipantAnswers = [];
     participantData.turn = "";
     participantData.answers = {};
     this.participants["testquiz"] = participantData;
@@ -100,7 +101,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
       answer: '',
       completed: false,
       numberAnswers: 0
-    }))),
+    })));
     poll.currentQuestion = { row: null, col: null };
     poll.categories = Array.from({ length: categoryNo }, () => "");
     poll.isJoinable = false;
@@ -113,6 +114,7 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
     participantData.turnIndex = 0;
     participantData.turn = "";
     participantData.answers = {};
+    participantData.checkedParticipantAnswers = [];
     this.participants[pollId] = participantData;
 
     console.log("poll created", pollId, poll);
@@ -153,13 +155,12 @@ Data.prototype.editCategory = function (pollId, col, newCategory) {
 }
 
 // Method to get the current question in a poll
-Data.prototype.getQuestion = function (pollId, questionRow, questionCol) {
+Data.prototype.getQuestion = function (pollId) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
-    if (questionRow !== null && questionCol !== null) {
-      return poll.questions[questionRow][questionCol].question;
-
-    }
+    const row = poll.currentQuestion.row;
+    const col = poll.currentQuestion.col;
+    return poll.questions[row][col].question;
   }
   return [];
 }
@@ -173,26 +174,37 @@ Data.prototype.submitAnswer = function (pollId, participantName, answer) {
   }
 }
 
-Data.prototype.checkParticipantAnswerCorrect = function (pollId, participantName, row, col) {
+Data.prototype.checkParticipantAnswerCorrect = function (pollId, participantName) {
   const part = this.participants[pollId];
   const poll = this.polls[pollId];
 
-  let submittedAnswer = part.answers[participantName];
-  let correctAnswer = poll.questions[row][col].answer;
+  if (typeof part !== 'undefined' && typeof poll !== 'undefined') {
+    const row = poll.currentQuestion.row;
+    const col = poll.currentQuestion.col;
 
-  submittedAnswer = submittedAnswer.toLowerCase();
-  const submittedAnswerEdited = submittedAnswer.replace(/\s/g, '');
+    let submittedAnswer = part.answers[participantName];
+    let correctAnswer = poll.questions[row][col].answer;
 
-  correctAnswer = correctAnswer.toLowerCase();
-  const correctAnswerEdited = correctAnswer.replace(/\s/g, '');
+    submittedAnswer = submittedAnswer.toLowerCase();
+    const submittedAnswerEdited = submittedAnswer.replace(/\s/g, '');
 
-  if (correctAnswerEdited === submittedAnswerEdited) {
-    this.updateCashTotal(pollId, participantName, row, col);
-    return true;
+    correctAnswer = correctAnswer.toLowerCase();
+    const correctAnswerEdited = correctAnswer.replace(/\s/g, '');
+
+    if (correctAnswerEdited === submittedAnswerEdited && !part.checkedParticipantAnswers.includes(participantName)) {
+      part.checkedParticipantAnswers.push(participantName);
+      this.updateCashTotal(pollId, participantName);
+      return true;
+    }
+    else if (correctAnswerEdited === submittedAnswerEdited && part.checkedParticipantAnswers.includes(participantName)) {
+      return true;
+    }
+    else {
+      part.checkedParticipantAnswers.push(participantName);
+      return false;
+    }
   }
-  else {
-    return false;
-  }
+  return console.log("Could not check participant answer correct: poll or participant object is undefined");
 }
 
 // Method to get answers for the current question in a poll
@@ -201,7 +213,7 @@ Data.prototype.getParticipantAnswer = function (pollId, participantName) {
   if (typeof part !== 'undefined') {
     return part.answers[participantName];
   }
-  return {};
+  console.log("Could not get participant answer: participants for the poll is undefined");
 }
 
 Data.prototype.getAllQuestions = function (pollId) {
@@ -239,10 +251,15 @@ Data.prototype.getParticipants = function (pollId) {
   }
 }
 
-Data.prototype.completeQuestion = function (pollId, row, col) {
+Data.prototype.completeQuestion = function (pollId) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
+    const row = poll.currentQuestion.row;
+    const col = poll.currentQuestion.col;
     poll.questions[row][col].completed = true;
+  }
+  else {
+    console.log("Could not complete question: poll is undefined");
   }
 }
 
@@ -255,24 +272,28 @@ Data.prototype.checkExisting = function (pollId) {
 }
 
 
-Data.prototype.getCorrectAnswer = function (pollId, row, col) {
+Data.prototype.getCorrectAnswer = function (pollId) {
   const poll = this.polls[pollId];
 
-  console.log("------- data get correct answer-------")
-  console.log("pollId", pollId)
-  console.log("row", row)
-  console.log("col", col)
-  console.log("data correct answer", poll.questions[row][col].answer)
-  console.log("-----------------end------------------")
-
   if (typeof poll !== 'undefined') {
+    const row = poll.currentQuestion.row;
+    const col = poll.currentQuestion.col;
     return poll.questions[row][col].answer;
+  }
+  else {
+    return "Could not get correct answer: poll is undefined";
   }
 }
 
-Data.prototype.updateCashTotal = function (pollId, partName, row, col) {
+Data.prototype.updateCashTotal = function (pollId, partName) {
   const part = this.participants[pollId];
-  if (typeof part !== 'undefined') {
+  const poll = this.polls[pollId];
+  if (typeof part !== 'undefined' && typeof poll !== 'undefined') {
+    const row = poll.currentQuestion.row;
+
+    console.log("data current row: " + poll.currentQuestion.row)
+    console.log("money added:", (100 * (1 + parseInt(row, 10))), "for", partName)
+    
     part.cashTotal[partName] += (100 * (1 + parseInt(row, 10)));
   }
 }
@@ -350,35 +371,57 @@ Data.prototype.updateAutoPollId = function () {
   return this.autoPollId;
 }
 
-Data.prototype.participantAnswerRegistered = function (pollId, row, col) {
+Data.prototype.participantAnswerRegistered = function (pollId, Name) {
+  console.log("participant answer registered for", Name)
   const part = this.participants[pollId];
   const poll = this.polls[pollId];
 
   if (typeof part !== 'undefined') {
-    console.log("data participant answer registered")
+    const row = poll.currentQuestion.row;
+    const col = poll.currentQuestion.col;
+
+    console.log("data participant answer registered current question", poll.currentQuestion)
+
+    console.log("data participant answer registered, answers before:", poll.questions[row])
     poll.questions[row][col].numberAnswers += 1
+    console.log("data participant answer registered, answers after:", poll.questions[row])
+
     const numberAnswers = poll.questions[row][col].numberAnswers
-    if (numberAnswers == part.allParticipants.length) {
+    console.log("data number answers", numberAnswers)
+    console.log("data all participants", part.allParticipants.length)
+    if (numberAnswers === part.allParticipants.length) {
+      console.log("data all answered returning true")
       return true;
     }
+    else {
+      console.log("data all answered returning false")
+      return false;
+    }
   }
-  return false;
+  console.log("Could not check if all participants answered: poll or participant object is undefined");
 }
 
 Data.prototype.updateCurrentQuestion = function (pollId, row, col) {
+  const part = this.participants[pollId];
   const poll = this.polls[pollId];
-  if (typeof poll !== 'undefined') {
+  if (typeof poll !== 'undefined' && typeof part !== 'undefined') {
+    console.log("-----updatecurrentquestion before", poll.currentQuestion)
     poll.currentQuestion.row = row;
     poll.currentQuestion.col = col;
+    console.log("-----updatecurrentquestion after", poll.currentQuestion)
+    part.checkedParticipantAnswers = [];
   }
 }
 
-Data.prototype.getCurrentQuestion = function (pollId) {
+Data.prototype.getCurrentQuestionNumber = function (pollId) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {
+    console.log("data current question", poll.currentQuestion)
     return poll.currentQuestion;
   }
-  return null;
+  else {
+    console.log("Could not get current question number: poll is undefined");
+  };
 }
 
 Data.prototype.resetAnswerCount = function (pollId) {
@@ -438,13 +481,13 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
   let questions;
   let categories;
 
-  if(questionNo>5){
+  if (questionNo > 5) {
     questionNo = 5;
   }
-  if(categoryNo>5){
+  if (categoryNo > 5) {
     categoryNo = 5;
   }
-  
+
   poll.currentQuestion = { row: null, col: null };
   poll.isJoinable = false;
   poll.isActive = false;
@@ -549,9 +592,9 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
 
   } catch (error) {
     console.error('Error: AI querying unsuccessful', error);
-    return error; 
+    return error;
   }
- 
+
   poll.questions = questions;
   poll.categories = categories;
 
@@ -562,6 +605,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
   participantData.allParticipants = [];
   participantData.turnIndex = 0;
   participantData.turn = "";
+  participantData.checkedParticipantAnswers = [];
   participantData.answers = {};
   this.participants[pollId] = participantData;
 
@@ -577,7 +621,7 @@ Data.prototype.getQuestions = function () {
   const questions = readFileSync("./server/data/preparedquestions.json");
   return JSON.parse(questions);
 }
-
+ 
 Data.prototype.addQuestion = function (pollId, q) {
   const poll = this.polls[pollId];
   console.log("question added to", pollId, q);
@@ -585,22 +629,22 @@ Data.prototype.addQuestion = function (pollId, q) {
     poll.questions.push(q);
   }
 }
-
+ 
 Data.prototype.addParticipantAnswer = function (pollId, participant, answerParticipant) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     part.answers[participant] = answerParticipant;
   }
 }
-
-
+ 
+ 
 /////////////// TROR INTE DETTA ANVÄNDS ///////////////////////
 /*
 Data.prototype.getQuestions = function () {
   const questions = readFileSync("./server/data/preparedquestions.json");
   return JSON.parse(questions);
 }
-
+ 
 Data.prototype.addQuestion = function (pollId, q) {
   const poll = this.polls[pollId];
   console.log("question added to", pollId, q);
@@ -608,15 +652,15 @@ Data.prototype.addQuestion = function (pollId, q) {
     poll.questions.push(q);
   }
 }
-
+ 
 Data.prototype.addParticipantAnswer = function (pollId, participant, answerParticipant) {
   const part = this.participants[pollId];
   if (typeof part !== 'undefined') {
     part.answers[participant] = answerParticipant;
   }
 }
-
-
+ 
+ 
 */
 
 // Export the Data class for use in other modules

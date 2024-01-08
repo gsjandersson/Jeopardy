@@ -39,8 +39,6 @@ export default {
   },
   created: function () {
     this.pollId = this.$route.params.pollId
-    this.row = this.$route.params.row
-    this.col = this.$route.params.col
 
     socket.emit("pageLoaded", this.lang);
 
@@ -53,13 +51,7 @@ export default {
       clearInterval(this.countdownInterval);
       setTimeout(() => {
         socket.emit('allParticipantsGoToAnswerResult', this.pollId);
-        console.log("------ all answers ------");
-        console.log("pollId: " + this.pollId);
-        console.log("row: " + this.row);
-        console.log("col: " + this.col);
-        console.log("------ end all answers ------");
-        console.log(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`)
-        this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
+        this.$router.push(`/QuestionResultView/${this.pollId}`);
       }, 100);
     });
 
@@ -67,23 +59,19 @@ export default {
     console.log("---------- NEW QUESTION ----------")
     console.log("----------------------------------")
 
-    console.log("------ display question ------")
-    console.log("pollId: " + this.pollId)
-    console.log("row: " + this.row)
-    console.log("col: " + this.col)
-    console.log("------ end display question ------")
-
     socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
-    socket.emit("getDisplayQuestionData", { pollId: this.pollId, row: this.row, col: this.col });
+    socket.emit("getDisplayQuestionData", this.pollId);
+
+    socket.emit('questionCompleted', this.pollId);
 
     socket.on("displayQuestionData", (data) => {
       this.question = data.question;
       this.correctAnswer = data.correctAnswer;
       this.hiddenAnswer = data.correctAnswer.replace(/[^ ]/g, '_');
+      this.row = data.currentQuestion.row;
+      this.col = data.currentQuestion.col;
     });
-
-    socket.emit('questionCompleted', { pollId: this.pollId, row: this.row, col: this.col });
 
     this.startCountdown();
 
@@ -97,15 +85,9 @@ export default {
         } else {
           clearInterval(this.countdownInterval);
           socket.emit('allParticipantsGoToAnswerResult', this.pollId);
-          console.log("------ countdown over ------")
-          console.log("pollId: " + this.pollId)
-          console.log("row: " + this.row)
-          console.log("col: " + this.col)
-          console.log("------ end countdown over ------")
-
-          console.log(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`)
-          // this.$router.push({ name: "QuestionResultView", params:{ pollId: this.pollId, row: this.row, col: this.col }});
-          this.$router.push(`/QuestionResultView/${this.pollId}/${this.row}/${this.col}`);
+          
+          socket.emit('questionCompleted', this.pollId);
+          this.$router.push(`/QuestionResultView/${this.pollId}`);
         }
       }, 1000); // Update every 1000ms (1 second)
     },

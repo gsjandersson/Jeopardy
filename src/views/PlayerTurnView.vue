@@ -48,7 +48,7 @@
       socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
       socket.on('goToQuestion', (d) => {
-        this.$router.push(`/DisplayQuestion/${this.pollId}/${d.row}/${d.col}`);
+        this.$router.push(`/DisplayQuestion/${this.pollId}`);
       });
   
       // Listen for initialization data from the server

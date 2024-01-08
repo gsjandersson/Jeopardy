@@ -1,8 +1,7 @@
 <template>
   <header>
-    <h1> You have submitted your answer. </h1>
-    <h2> Waiting for the other participants to answer. </h2>
-
+    <h1> {{ uiLabels.youHaveSubmittedAnswer }} </h1>
+    <h2> {{ uiLabels.waitingForOtherPlayersAnswer }} </h2>
   </header>
 </template>
 
@@ -35,10 +34,6 @@ export default {
 
     this.pollId = this.$route.params.pollId
     this.participant = this.$route.params.participantName
-    this.row = this.$route.params.row
-    this.col = this.$route.params.col
-
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
     socket.on("init", (labels) => {
       this.uiLabels = labels
@@ -53,21 +48,31 @@ export default {
       }
     });
 
+    socket.on("currentQuestion", (question) => {
+      console.log("Submit view current question socket on registered")
+      this.row = question.row;
+      this.col = question.col;
+    });
+
+    socket.emit("checkParticipantAnswerCorrect", { pollId: this.pollId, participantName: this.participant})
+    
+    socket.emit("participantAnswerRegistered", this.pollId, this.participant);
+
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
+
+    socket.emit("getCurrentQuestion", this.pollId);
+
     // Emit an event to the server when the page is loaded
     socket.emit("pageLoaded", this.lang);
 
-    socket.emit("checkParticipantAnswerCorrect", { pollId: this.pollId, participantName: this.participant, row: this.row, col: this.col })
-
     //socket.emit("getSubmitViewData", { pollId: this.pollId, row: this.row, col: this.col, participantName: this.participant });
-
-    socket.emit("participantAnswerRegistered", { pollId: this.pollId, row: this.row, col: this.col })
 
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
     answerView() {
       console.log(this.redirectRoute)
-      this.$router.push(`/${this.redirectRoute}/${this.pollId}/${this.participant}/${this.row}`);
+      this.$router.push(`/${this.redirectRoute}/${this.pollId}/${this.participant}`);
     }
   }
 }
