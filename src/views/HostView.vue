@@ -17,7 +17,7 @@
         <div class="column">
           <h2>Jeopardy ID</h2>
             <h1> {{ pollId }}</h1>
-            <img :src="qrCodeUrl" alt="QR Code">
+            <img :src="qrCodeUrl" alt="QR Code" style="width: 60%">
             <h3> {{ uiLabels.scanToJoin }}</h3>
         </div>
 
@@ -44,7 +44,7 @@ const socket = io(sessionStorage.getItem("ipAdressSocket"));
 
 export default {
   // Component name and imported components
-  name: 'JCreateInfo',
+  name: 'HostView',
 
   // Initial data properties
   data: function () {
@@ -152,5 +152,9 @@ export default {
 
 main {
   overflow: scroll;
+}
+
+li {
+  list-style-type: none;
 }
 </style>

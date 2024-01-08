@@ -75,6 +75,7 @@ Data.prototype.createTestQuiz = function () {
     ];
     poll.categories = ["Color", "Sweet Treats", "Traditions", "Characters", "Songs and Stories"];
     poll.isJoinable = false;
+    poll.currentQuestion = { row: null, col: null };
     poll.isActive = false;
     this.polls["testquiz"] = poll;
 
@@ -100,8 +101,8 @@ Data.prototype.createPoll = function (pollId, lang = "en", questionNo = 5, categ
       completed: false,
       numberAnswers: 0
     }))),
-      // ha koll på completed
-      poll.categories = Array.from({ length: categoryNo }, () => "");
+    poll.currentQuestion = { row: null, col: null };
+    poll.categories = Array.from({ length: categoryNo }, () => "");
     poll.isJoinable = false;
     poll.isActive = false;
     this.polls[pollId] = poll;
@@ -358,10 +359,26 @@ Data.prototype.participantAnswerRegistered = function (pollId, row, col) {
     poll.questions[row][col].numberAnswers += 1
     const numberAnswers = poll.questions[row][col].numberAnswers
     if (numberAnswers == part.allParticipants.length) {
-      return (true);
+      return true;
     }
   }
-  return (false);
+  return false;
+}
+
+Data.prototype.updateCurrentQuestion = function (pollId, row, col) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    poll.currentQuestion.row = row;
+    poll.currentQuestion.col = col;
+  }
+}
+
+Data.prototype.getCurrentQuestion = function (pollId) {
+  const poll = this.polls[pollId];
+  if (typeof poll !== 'undefined') {
+    return poll.currentQuestion;
+  }
+  return null;
 }
 
 Data.prototype.resetAnswerCount = function (pollId) {
@@ -428,7 +445,7 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
     categoryNo = 5;
   }
   
-
+  poll.currentQuestion = { row: null, col: null };
   poll.isJoinable = false;
   poll.isActive = false;
   this.polls[pollId] = poll;
