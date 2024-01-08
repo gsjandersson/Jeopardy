@@ -9,13 +9,11 @@
       <h1> {{ uiLabels.Winnertitle }} </h1>
     </header>
 
-    <h4>{{ uiLabels.Leaderboard }}</h4>
-    <ul style="list-style-type: none;">
-      <li v-for="(part, index) in participantsAndCashTotal" :key="index"
-        style="display: inline-block; margin-right: 15px; font-size: 25px; font-weight: bold;">
+    <div class="podium">
+      <div v-for="(part, index) in participantsAndCashTotal" :key="index" class="podium-item">
         {{ part.name }}: {{ part.cashTotal }}$
-      </li>
-    </ul>
+    </div>
+    </div>
 
   </body>
 </template>
@@ -67,12 +65,43 @@ export default {
   }
 }
 </script>
-  
-<style scoped>
-/* Scoped styles for the component */
+
+<style>
+.podium {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.podium-item {
+  width: 200px;;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+/* Specific styles for winner, second, and third place */
+.podium-item:nth-child(1) {
+  font-size: 40px;
+  font-weight: bold;
+  color: gold;
+  ;
+}
+
+.podium-item:nth-child(2) {
+  font-size: 30px;
+  font-weight: bold;
+  color: silver;
+}
+
+.podium-item:nth-child(3) {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(172, 92, 35)
+}
 
 ol {
-  text-align: left;
+  text-align: center;
   display: inline-block;
 }
 
