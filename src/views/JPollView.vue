@@ -114,6 +114,7 @@ export default {
     handleClick(rowNo, colNo) {
       let question = this.questions[rowNo][colNo]
       if (question.completed === false && question.question !== "" && this.participantName == this.participantTurn) {
+        socket.emit("updateCurrentQuestion", { pollId: this.pollId, row: rowNo, col: colNo })
         socket.emit('updateTurnOrder', (this.pollId))
         socket.emit('allParticipantsGoToQuestion', { pollId: this.pollId, row: rowNo, col: colNo })
       }

@@ -29,13 +29,17 @@ function sockets(io, socket, data) {
     socket.emit("displayQuestionData", { question: question, correctAnswer: correctAnswer });
   });
 
-  socket.on("getQuestionResultViewData", function (d) {
-    const question = data.getQuestion(d.pollId, d.row, d.col);
-    const correctAnswer = data.getCorrectAnswer(d.pollId, d.row, d.col);
-    const participantsAndCashTotal = data.getParticipantsAndCashTotal(d.pollId);
-    const allQuestionsCompleted = data.allQuestionsCompleted(d.pollId);
+  socket.on("getQuestionResultViewData", function (pollId) {
+    const currentQuestion = data.getCurrentQuestion(pollId);
+    const row = currentQuestion.row;
+    const col = currentQuestion.col;
+    const question = data.getQuestion(pollId, row, col);
+    const correctAnswer = data.getCorrectAnswer(pollId, row, col);
+    const participantsAndCashTotal = data.getParticipantsAndCashTotal(pollId);
+    const allQuestionsCompleted = data.allQuestionsCompleted(pollId);
     socket.emit("questionResultViewData", { question: question, correctAnswer: correctAnswer, 
-      participantsAndCashTotal: participantsAndCashTotal, allQuestionsCompleted: allQuestionsCompleted });
+      participantsAndCashTotal: participantsAndCashTotal, allQuestionsCompleted: allQuestionsCompleted, 
+      currentQuestion: currentQuestion });
   });
 
   socket.on("getJPollViewData", function (d) {
@@ -56,6 +60,14 @@ function sockets(io, socket, data) {
   socket.on("checkParticipantAnswerCorrect", function (d) {
     const isCorrect = data.checkParticipantAnswerCorrect(d.pollId, d.participantName, d.row, d.col);
     socket.emit("isParticipantAnswerCorrect", isCorrect);
+  });
+
+  socket.on("updateCurrentQuestion", function (d) {
+    data.updateCurrentQuestion(d.pollId, d.row, d.col);
+  });
+
+  socket.on("getCurrentQuestion", function (pollId) {
+    socket.emit("currentQuestion", data.getCurrentQuestion(pollId));
   });
 
 

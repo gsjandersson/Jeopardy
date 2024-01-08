@@ -45,8 +45,6 @@ export default {
   },
   created: function () {
     this.pollId = this.$route.params.pollId
-    this.row = this.$route.params.row
-    this.col = this.$route.params.col
 
     console.log("---------question result view:---------")
     console.log("pollId: " + this.pollId)
@@ -54,11 +52,11 @@ export default {
     console.log("col: " + this.col)
     console.log("-------question result view end-------")
 
-    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
-
     socket.on("init", (labels) => {
       this.uiLabels = labels;
     });
+
+    socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
 
     socket.emit("pageLoaded", this.lang);
 
@@ -71,9 +69,11 @@ export default {
       this.correctAnswer = data.correctAnswer;
       this.participantsAndCashTotal = data.participantsAndCashTotal;
       this.allQuestionsCompleted = data.allQuestionsCompleted;
+      this.row = data.currentQuestion.row;
+      this.col = data.currentQuestion.col;
     });
 
-    socket.emit("getQuestionResultViewData", { pollId: this.pollId, row: this.row, col: this.col });
+    socket.emit("getQuestionResultViewData", this.pollId);
 
     this.startCountdown();
 
