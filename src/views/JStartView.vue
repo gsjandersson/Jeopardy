@@ -46,6 +46,7 @@ import io from 'socket.io-client';
 // Gustav: 192.168.50.152
 // steph phone: 172.20.10.3
 // cafe bamå steph: "192.168.2.182"
+// Stephonie: 172.20.10.3
 const ipAdress = "172.20.10.3";
 sessionStorage.setItem("ipAdress", ipAdress);
 sessionStorage.setItem("ipAdressSocket", ipAdress + ":3000");
