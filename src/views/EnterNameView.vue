@@ -116,7 +116,7 @@ export default {
           }
         }
 
-        if (this.participantName === "") {
+        if (!this.participantName || this.participantName.trim() === "") {
           this.errorNameEmptyMessage = true;
         }
         else {
