@@ -34,12 +34,12 @@ export default {
   },
   methods: {
     saveQuestion() {
-      console.log(this.newQuestion);
-      console.log(this.newAnswer);
-      this.$emit("saveQuestion", {question: this.newQuestion, answer: this.newAnswer});
-      this.newAnswer = "";
-      this.newQuestion = "";
-      this.$emit('closeQuestionModal');
+      if (this.newQuestion !== "" && this.newAnswer !== "") {
+        this.$emit("saveQuestion", {question: this.newQuestion, answer: this.newAnswer});
+        this.newAnswer = "";
+        this.newQuestion = "";
+        this.$emit('closeQuestionModal');
+      }
 
       // skicka tillbaks till boardview
 

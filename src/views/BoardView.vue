@@ -85,7 +85,6 @@ export default {
       chosenQuestionRow: "",
       chosenQuestionCol: "",
       chosenCategoryCol: ""
-
     };
   },
   created: function () {

@@ -93,5 +93,6 @@
 	"youHaveSubmittedAnswer": "You have submitted your answer",
 	"waitingForOtherPlayersAnswer": "Waiting for other players to submit their answers",
 	"participantAnswes": "Participant answers",
-	"answered": "answered"
+	"answered": "answered",
+	"answerHidden": "The answer is"
 }

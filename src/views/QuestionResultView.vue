@@ -7,7 +7,7 @@
     <header>
       <h1> {{ uiLabels.questionResult }} </h1>
       <h2> {{ uiLabels.correctAnswerWas }} </h2>
-      <h2>{{ correctAnswer }}</h2>
+      <h2> {{ uiLabels.answerHidden }} {{ correctAnswer }}</h2>
     </header>
 
     <hr>
