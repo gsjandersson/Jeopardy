@@ -94,6 +94,9 @@
 	"waitingForOtherPlayersAnswer": "Väntar för andra spelares svar",
 	"participantAnswers": "Deltagares svar",
 	"answered": "svarade",
-	"answerHidden": "Svaret är"
+	"answerHidden": "Svaret är",
+	"writeQuestion": "Skriv fråga",
+	"writeAnswer": "Skriv svar",
+	"writeCategory": "Skriv kategori"
 }
 	

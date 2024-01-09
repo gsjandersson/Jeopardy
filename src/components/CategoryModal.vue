@@ -25,7 +25,7 @@ export default {
   data: function () {
     return {
       // Initial data properties
-      uiLabels: {},
+      uiLabelsCat: {},
       categoryName: '', // New data property for the category name
     };
   },

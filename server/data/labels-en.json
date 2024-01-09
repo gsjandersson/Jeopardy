@@ -94,5 +94,8 @@
 	"waitingForOtherPlayersAnswer": "Waiting for other players to submit their answers",
 	"participantAnswes": "Participant answers",
 	"answered": "answered",
-	"answerHidden": "The answer is"
+	"answerHidden": "The answer is",
+	"writeQuestion": "Write a question",
+	"writeAnswer": "Write an answer",
+	"writeCategory": "Write a category"
 }

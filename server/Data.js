@@ -525,7 +525,8 @@ Data.prototype.autoGenerateQuiz = async function (pollId, lang, topic, questionN
       questions: Array.from({ length: questionNo }, () => ({
         question: "",
         answer: "",
-        completed: false
+        completed: false,
+        numberAnswers: 0
       }))
     }))
   };
