@@ -56,11 +56,15 @@
         this.uiLabels = labels
       })
 
+      socket.on("turnOrderUpdated", (participant) => {
+        this.participantTurn = participant
+      });
+
       socket.on('participantTurn', (participant) =>
         this.participantTurn = participant
       );
   
-      socket.emit('getParticipantTurn', (this.pollId))
+      socket.emit('getParticipantTurn', this.pollId)
     
     },
     // Methods for language switching and toggling the navigation menu
@@ -82,6 +86,7 @@
       exitCreatorMode() {
         socket.emit("updateJoinable", { pollId: this.pollId, makeJoinable: false });
         socket.emit("allParticipantsGoToHome", this.pollId)
+        socket.emit('leavePoll', { pollId: this.pollId, participantName: undefined });
         this.$router.push('/');
       }, 
     }

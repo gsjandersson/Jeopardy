@@ -91,6 +91,8 @@
 	"closeButton": "Spara och stäng",
 	"quizTopic": "Quizämne för autogenerering",
 	"youHaveSubmittedAnswer": "Du har skickat in ditt svar",
-	"waitingForOtherPlayersAnswer": "Väntar för andra spelares svar"
+	"waitingForOtherPlayersAnswer": "Väntar för andra spelares svar",
+	"participantAnswers": "Deltagares svar",
+	"answered": "svarade"
 }
 	

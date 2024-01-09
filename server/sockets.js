@@ -36,10 +36,11 @@ function sockets(io, socket, data) {
     const correctAnswer = data.getCorrectAnswer(pollId);
     const participantsAndCashTotal = data.getParticipantsAndCashTotal(pollId);
     const allQuestionsCompleted = data.allQuestionsCompleted(pollId);
+    const allParticipantAnswers = data.getAllParticipantAnswers(pollId);
     socket.emit("questionResultViewData", {
       question: question, correctAnswer: correctAnswer,
       participantsAndCashTotal: participantsAndCashTotal, allQuestionsCompleted: allQuestionsCompleted,
-      currentQuestion: currentQuestion
+      currentQuestion: currentQuestion, allParticipantAnswers: allParticipantAnswers
     });
   });
 
@@ -72,9 +73,11 @@ function sockets(io, socket, data) {
   });
 
   socket.on("leavePoll", function (d) {
-    data.removeParticipant(d.pollId, d.participantName);
+    if (d.participantName !== undefined) {
+      data.removeParticipant(d.pollId, d.participantName);
+    }
+    socket.disconnect(true);
     io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
-    socket.leave(d.pollId);
   });
 
   socket.on("checkParticipantAnswerCorrect", function (d) {
@@ -144,6 +147,7 @@ function sockets(io, socket, data) {
 
   socket.on('updateTurnOrder', function (pollId) {
     data.updateTurnOrder(pollId)
+    io.to(pollId).emit('turnOrderUpdated', data.getParticipantTurn(pollId))
   });
 
   socket.on('getParticipantTurn', function (pollId) {

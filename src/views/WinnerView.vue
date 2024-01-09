@@ -60,6 +60,7 @@ export default {
   // Methods for language switching and toggling the navigation menu
   methods: {
     exitCreatorMode() {
+      socket.emit("leavePoll", { pollId: this.pollId, participantName: undefined })
       this.$router.push('/');
     }
   }

@@ -78,7 +78,6 @@ export default {
     //////////////////////////////////////////////////////////////////
     socket.on('goToBoard', () => {
       this.waitingMessage = false;
-      socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participantName });
       this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`);
     });
     //////////////////////////////////////////////////////////////////
@@ -127,6 +126,7 @@ export default {
           this.errorNameEmptyMessage = false;
 
           if (this.isActive) {
+            socket.emit('joinPoll', { pollId: this.pollId, participantName: undefined })
             this.waitingMessage = true;
           }
           else {

@@ -174,6 +174,13 @@ Data.prototype.submitAnswer = function (pollId, participantName, answer) {
   }
 }
 
+Data.prototype.getAllParticipantAnswers = function (pollId) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    return part.answers;
+  }
+}
+
 Data.prototype.checkParticipantAnswerCorrect = function (pollId, participantName) {
   const part = this.participants[pollId];
   const poll = this.polls[pollId];
@@ -221,7 +228,11 @@ Data.prototype.removeParticipant = function (pollId, participantName) {
   if (typeof part !== 'undefined') {
     const index = part.allParticipants.indexOf(participantName);
     if (index > -1) {
+      console.log("participant removed before", part.allParticipants)
       part.allParticipants.splice(index, 1);
+      console.log("participant removed after", part.allParticipants)
+      delete part.answers[participantName];
+      delete part.cashTotal[participantName];
     }
   }
 }
@@ -250,6 +261,7 @@ Data.prototype.newParticipant = function (pollId, participantName) {
   if (typeof part !== 'undefined' && typeof poll !== 'undefined' && !this.participants[pollId].allParticipants.includes(participantName)) {
     part.allParticipants.push(participantName);
     part.cashTotal[participantName] = 0;
+    part.answers[participantName] = "";
   }
 }
 

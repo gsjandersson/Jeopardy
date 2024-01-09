@@ -7,9 +7,18 @@
     <header>
       <h1> {{ uiLabels.questionResult }} </h1>
       <h2> {{ uiLabels.correctAnswerWas }} </h2>
-      <h3>{{ correctAnswer }}</h3>
+      <h2>{{ correctAnswer }}</h2>
     </header>
 
+    <hr>
+    <div style="display: flex; flex-wrap: wrap;">
+      <div v-for="(answer, participantName) in allParticipantAnswers" :key="participantName" style="flex: 1;">
+        <h2>{{ participantName }} {{ uiLabels.answered }}</h2>
+        <h3>{{ answer }}</h3>
+      </div>
+    </div>
+
+    <hr>
     <div v-if="!allQuestionsCompleted">
     <h4>{{ uiLabels.Leaderboard }}</h4>
     <ul style="list-style-type: none;">
@@ -19,6 +28,8 @@
       </li>
     </ul>
   </div>
+
+
 
   </body>
 </template>
@@ -42,7 +53,8 @@ export default {
       countdown: 10,
       participantsAndCashTotal: [],
       allQuestionsCompleted: false,
-      countdownInterval: null
+      countdownInterval: null,
+      allParticipantAnswers: {}
     }
   },
   created: function () {
@@ -61,6 +73,7 @@ export default {
       this.correctAnswer = data.correctAnswer;
       this.participantsAndCashTotal = data.participantsAndCashTotal;
       this.allQuestionsCompleted = data.allQuestionsCompleted;
+      this.allParticipantAnswers = data.allParticipantAnswers;
       this.row = data.currentQuestion.row;
       this.col = data.currentQuestion.col;
     });
@@ -94,6 +107,7 @@ export default {
     exitCreatorMode() {
       socket.emit("allParticipantsGoToHome", this.pollId)
       socket.emit("updateJoinable", { pollId: this.pollId, makeJoinable: false });
+      socket.emit("leavePoll", { pollId: this.pollId, participantName: undefined });
       this.$router.push('/');
     }
   }

@@ -86,9 +86,6 @@ export default {
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
-    exitCreatorMode() {
-      this.$router.push('/');
-    },
     submitAnswer: function () {
       console.log("answer submitted by " + this.participant);
       console.log("answer " + this.answer);

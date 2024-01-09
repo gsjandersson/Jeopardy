@@ -91,5 +91,7 @@
 	"waitingMessage": "Host has already started the game, please wait until the players have finished the question round",
 	"closeButton": "Save and Close",
 	"youHaveSubmittedAnswer": "You have submitted your answer",
-	"waitingForOtherPlayersAnswer": "Waiting for other players to submit their answers"
+	"waitingForOtherPlayersAnswer": "Waiting for other players to submit their answers",
+	"participantAnswes": "Participant answers",
+	"answered": "answered"
 }

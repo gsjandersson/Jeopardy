@@ -123,6 +123,7 @@ export default {
     exitCreatorMode() {
       socket.emit("allParticipantsGoToHome", this.pollId)
       socket.emit("updateJoinable", {pollId: this.pollId, makeJoinable: false});
+      socket.emit('leavePoll', { pollId: this.pollId, participantName: undefined });
       this.$router.push('/');
     }
   }

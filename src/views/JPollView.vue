@@ -100,12 +100,16 @@ export default {
       this.participantTurn = d.participantTurn;
     });
 
-    socket.emit("getJPollViewData", {pollId: this.pollId, participantName: this.participantName});
+    socket.on("turnOrderUpdated", (participant) => {
+        this.participantTurn = participant
+    });
+
+    socket.emit("getJPollViewData", { pollId: this.pollId, participantName: this.participantName });
 
     socket.on("goToHome", () => {
-          window.alert("Host has ended the quiz, let's see who won!");
-          this.$router.push(`/WinnerView/${this.pollId}`);
-        });
+      window.alert("Host has ended the quiz, let's see who won!");
+      this.$router.push(`/WinnerView/${this.pollId}`);
+    });
 
     socket.on('goToQuestion', () => {
       console.log("go to question j poll view")
@@ -124,6 +128,10 @@ export default {
       }
     },
     exit() {
+      if (this.participantName == this.participantTurn) {
+        socket.emit('updateTurnOrder', this.pollId)
+      }
+      socket.emit('leavePoll', { pollId: this.pollId, participantName: this.participantName});
       this.$router.push('/');
     }
   }
