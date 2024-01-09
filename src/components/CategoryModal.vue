@@ -16,8 +16,6 @@
     </template>
 
 
-
-
 <script>
 
 export default {
@@ -33,10 +31,11 @@ export default {
   },
   methods: {
     saveCategory() {
-      console.log(this.categoryName);
-      this.$emit("saveCategory", this.categoryName)
-      this.categoryName = "";
-      this.$emit('closeCategoryModal');
+      if (this.categoryName !== "") {
+        this.$emit("saveCategory", this.categoryName);
+        this.categoryName = "";
+        this.$emit('closeCategoryModal');
+      }
   
     },
     closeCategoryModal() {
