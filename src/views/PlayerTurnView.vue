@@ -80,6 +80,8 @@
         socket.emit("switchLanguage", this.lang)
       },
       exitCreatorMode() {
+        socket.emit("updateJoinable", { pollId: this.pollId, makeJoinable: false });
+        socket.emit("allParticipantsGoToHome", this.pollId)
         this.$router.push('/');
       }, 
     }

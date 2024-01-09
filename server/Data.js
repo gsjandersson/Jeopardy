@@ -216,6 +216,16 @@ Data.prototype.getParticipantAnswer = function (pollId, participantName) {
   console.log("Could not get participant answer: participants for the poll is undefined");
 }
 
+Data.prototype.removeParticipant = function (pollId, participantName) {
+  const part = this.participants[pollId];
+  if (typeof part !== 'undefined') {
+    const index = part.allParticipants.indexOf(participantName);
+    if (index > -1) {
+      part.allParticipants.splice(index, 1);
+    }
+  }
+}
+
 Data.prototype.getAllQuestions = function (pollId) {
   const poll = this.polls[pollId];
   if (typeof poll !== 'undefined') {

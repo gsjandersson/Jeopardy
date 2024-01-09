@@ -69,6 +69,11 @@ export default {
       this.col = data.currentQuestion.col;
     });
 
+    socket.on("goToHome", () => {
+          window.alert("Host has ended the quiz, let's see who won!");
+          this.$router.push(`/WinnerView/${this.pollId}`);
+        });
+
     socket.emit("getQuestionViewData", this.pollId);
 
     socket.on('goToAnswerResult', () => {

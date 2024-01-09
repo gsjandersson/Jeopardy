@@ -42,6 +42,11 @@ export default {
       this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
     });
 
+    socket.on("goToHome", () => {
+          window.alert("Host has ended the quiz, let's see who won!");
+          this.$router.push(`/WinnerView/${this.pollId}`);
+        });
+
     socket.on("goToWinnerView", () => {
       this.$router.push(`/WinnerView/${this.pollId}`);
     });

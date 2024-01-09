@@ -54,6 +54,11 @@ export default {
       this.col = question.col;
     });
 
+    socket.on("goToHome", () => {
+          window.alert("Host has ended the quiz, let's see who won!");
+          this.$router.push(`/WinnerView/${this.pollId}`);
+        });
+
     socket.emit("checkParticipantAnswerCorrect", { pollId: this.pollId, participantName: this.participant})
     
     socket.emit("participantAnswerRegistered", this.pollId, this.participant);

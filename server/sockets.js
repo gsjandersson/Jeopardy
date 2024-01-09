@@ -59,6 +59,24 @@ function sockets(io, socket, data) {
   });
 
   ////////////////// UPDATERADE (SMÅ EMITS) ///////////////////////
+  socket.on("allParticipantsGoToHome", function (pollId) {
+    io.to(pollId).emit("goToHome");
+  });
+
+  socket.on('joinPoll', function (d) {
+    socket.join(d.pollId);
+    if (d.participantName !== undefined) {
+      data.newParticipant(d.pollId, d.participantName);
+    }
+    io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
+  });
+
+  socket.on("leavePoll", function (d) {
+    data.removeParticipant(d.pollId, d.participantName);
+    io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
+    socket.leave(d.pollId);
+  });
+
   socket.on("checkParticipantAnswerCorrect", function (d) {
     const isCorrect = data.checkParticipantAnswerCorrect(d.pollId, d.participantName);
     socket.emit("isParticipantAnswerCorrect", isCorrect);
@@ -86,14 +104,6 @@ function sockets(io, socket, data) {
 
   socket.on('createPoll', function (d) {
     socket.emit('pollCreated', data.createPoll(d.pollId, d.lang, d.questionNo, d.categoryNo));
-  });
-
-  socket.on('joinPoll', function (d) {
-    socket.join(d.pollId);
-    if (d.participantName !== undefined) {
-      data.newParticipant(d.pollId, d.participantName);
-    }
-    io.to(d.pollId).emit('participantUpdate', data.getParticipants(d.pollId));
   });
 
   socket.on('getParticipants', function (pollId) {

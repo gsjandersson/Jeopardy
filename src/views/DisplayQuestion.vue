@@ -1,10 +1,6 @@
 <template>
   <body>
 
-    <div>
-      <button id="homescreenButtonTopLeft" v-on:click="exitCreatorMode">{{ uiLabels.exit }}</button>
-    </div>
-
     <header>
       {{ uiLabels.questionIs }}
       <h1> {{ question }} </h1>
@@ -90,10 +86,6 @@ export default {
           this.$router.push(`/QuestionResultView/${this.pollId}`);
         }
       }, 1000); // Update every 1000ms (1 second)
-    },
-    exitCreatorMode() {
-      socket.emit("updateJoinable", { pollId: this.pollId, makeJoinable: false });
-      this.$router.push('/');
     }
   }
 }

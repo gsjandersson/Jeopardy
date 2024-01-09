@@ -102,6 +102,11 @@ export default {
 
     socket.emit("getJPollViewData", {pollId: this.pollId, participantName: this.participantName});
 
+    socket.on("goToHome", () => {
+          window.alert("Host has ended the quiz, let's see who won!");
+          this.$router.push(`/WinnerView/${this.pollId}`);
+        });
+
     socket.on('goToQuestion', () => {
       console.log("go to question j poll view")
       this.$router.push(`/QuestionView/${this.pollId}/${this.participantName}`);

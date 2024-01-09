@@ -121,6 +121,7 @@ export default {
       this.$router.push('/PlayerTurnView/' + this.pollId);
     },
     exitCreatorMode() {
+      socket.emit("allParticipantsGoToHome", this.pollId)
       socket.emit("updateJoinable", {pollId: this.pollId, makeJoinable: false});
       this.$router.push('/');
     }

@@ -60,11 +60,17 @@ export default {
       this.$router.push(`/jPollView/${this.pollId}/${this.participantName}`)
     });
 
+    socket.on("goToHome", () => {
+          window.alert("Host has ended the quiz");
+          this.$router.push('/');
+        });
+
 
   },
   // Methods for language switching and toggling the navigation menu
   methods: {
     exitCreatorMode() {
+      socket.emit('leavePoll', { pollId: this.pollId, participantName: this.participantName });
       this.$router.push('/');
     }
   }

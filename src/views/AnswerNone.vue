@@ -28,13 +28,9 @@
     
         socket.emit("pageLoaded", this.lang);
 
-        
-
         socket.on("currentQuestion", (data) => {
           this.row = data.row;
         });
-
-        socket.emit("getCurrentQuestion", this.pollId);
 
         socket.on("init", (labels) => {
           this.uiLabels = labels;
@@ -45,6 +41,11 @@
         });
 
         socket.on("goToWinnerView", () => {
+          this.$router.push(`/WinnerView/${this.pollId}`);
+        });
+
+        socket.on("goToHome", () => {
+          window.alert("Host has ended the quiz, let's see who won!");
           this.$router.push(`/WinnerView/${this.pollId}`);
         });
 

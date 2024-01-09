@@ -23,6 +23,7 @@ export default {
   created: function () {
     this.pollId = this.$route.params.pollId
     this.participant = this.$route.params.participantName
+    
     socket.emit('joinPoll', { pollId: this.pollId, participantName: this.participant })
 
     socket.emit("pageLoaded", this.lang);
@@ -39,6 +40,10 @@ export default {
     socket.on('goToBoard', () => {
       this.$router.push(`/jPollView/${this.pollId}/${this.participant}`);
     });
+    socket.on("goToHome", () => {
+          window.alert("Host has ended the quiz, let's see who won!");
+          this.$router.push(`/WinnerView/${this.pollId}`);
+        });
 
     socket.on("goToWinnerView", () => {
       this.$router.push(`/WinnerView/${this.pollId}`);

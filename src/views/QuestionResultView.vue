@@ -10,6 +10,7 @@
       <h3>{{ correctAnswer }}</h3>
     </header>
 
+    <div v-if="!allQuestionsCompleted">
     <h4>{{ uiLabels.Leaderboard }}</h4>
     <ul style="list-style-type: none;">
       <li v-for="(part, index) in participantsAndCashTotal" :key="index"
@@ -17,6 +18,7 @@
         {{ part.name }}: {{ part.cashTotal }}$
       </li>
     </ul>
+  </div>
 
   </body>
 </template>
@@ -90,6 +92,7 @@ export default {
       }, 1000); // Update every 1000ms (1 second)
     },
     exitCreatorMode() {
+      socket.emit("allParticipantsGoToHome", this.pollId)
       socket.emit("updateJoinable", { pollId: this.pollId, makeJoinable: false });
       this.$router.push('/');
     }
